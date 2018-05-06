@@ -1,0 +1,3 @@
+C:/Users/matyas/Dev/pa2/sem/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/matyas/Dev/pa2/sem/cmake-build-debug/CMakeFiles/sem.dir
+C:/Users/matyas/Dev/pa2/sem/cmake-build-debug/CMakeFiles/rebuild_cache.dir

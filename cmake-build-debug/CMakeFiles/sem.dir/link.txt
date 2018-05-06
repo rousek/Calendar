@@ -1,0 +1,3 @@
+"C:\DevTools\JetBrains\CLion 2017.2.3\bin\cmake\bin\cmake.exe" -E remove -f CMakeFiles\sem.dir/objects.a
+C:\DevTools\MiniGW\bin\ar.exe cr CMakeFiles\sem.dir/objects.a @CMakeFiles\sem.dir\objects1.rsp
+C:\DevTools\MiniGW\bin\g++.exe -g   -Wl,--whole-archive CMakeFiles\sem.dir/objects.a -Wl,--no-whole-archive  -o sem.exe -Wl,--out-implib,libsem.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\sem.dir\linklibs.rsp
