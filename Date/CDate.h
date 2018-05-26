@@ -92,9 +92,11 @@ public:
     /**
      *
      * @param fn Function which loads date from istream and validates it.
+     * @param required If false, then throws EmptyLineException on empty line.
+     * If true then requires date even after.
      * @return CDate
      */
-    static CDate RequestDateFromUser(std::function<CDate (std::istream &)> fn);
+    static CDate RequestDateFromUser(std::function<CDate (std::istream &)> fn, bool required);
 
     /**
      * @param date CDate providing year, month and day
@@ -116,6 +118,14 @@ public:
      * @return ostream &
      */
     std::ostream & PrintTime(std::ostream & stream) const;
+
+    /**
+     * Adds one month to date. Check for invalid dates must be
+     * done manually i. e. 29. 1. 2001 + Month will throw error.
+     * Year overflows automatically.
+     * @return CDate with one more month.
+     */
+    CDate nextMonth() const;
 
     friend std::ostream & operator << (std::ostream & stream, const CDate & date);
 

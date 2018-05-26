@@ -4,19 +4,20 @@
 
 #include <string>
 #include <vector>
-#include "CDate.h"
-#include "CEventBase.h"
+#include "../Date/CDate.h"
+#include "CEvent.h"
+#include "../utils/utils.h"
 
 
-CEventBase::CEventBase(const std::string & title, const std::string & place, const std::string & summary,
-                       const CDate & start, const CDate & end) :
-        m_Title(title), m_Place(place), m_Summary(summary), m_Start(start), m_End(end)
+CEvent::CEvent(const std::string & title, const std::string & place, const std::string & summary,
+                       const CDate & start, const CDate & end, CEventTransferBase * tr, CEventRepeatBase * rp) :
+        m_Title(title), m_Place(place), m_Summary(summary), m_Start(start), m_End(end), m_Transfer(tr), m_Repeat(rp)
 {
     if (end <= start)
         throw std::invalid_argument("Event must end after it starts!");
 }
 
-std::chrono::minutes CEventBase::GetDuration() const
+std::chrono::minutes CEvent::GetDuration() const
 {
     double diff = difftime(m_End.Count(), m_Start.Count());
     auto secs = std::chrono::seconds((int)diff);
@@ -24,32 +25,31 @@ std::chrono::minutes CEventBase::GetDuration() const
     return std::chrono::duration_cast<std::chrono::minutes>(secs);
 }
 
-bool CEventBase::TestDay(const CDate & date) const
+CEvent * CEvent::InteractiveCreator()
 {
-
-}
-
-std::vector<CDate> CEventBase::TestRange(const CDate & from, const CDate & to) const
-{
-
-}
-
-
-CEventBase * CEventBase::InteractiveCreator()
-{
-    CDate date, timeStart, timeEnd;
+    CDate dateStart, dateEnd, timeStart, timeEnd;
     std::string title, place, summary;
 
     std::cout << "Date:" << std::endl;
-    date = CDate::RequestDateFromUser(CDate::ReadDate);
+    dateStart = CDate::RequestDateFromUser(CDate::ReadDate, true);
+
+    std::cout << "End date (press enter if date is same):" << std::endl;
+    try
+    {
+        dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
+    }
+    catch (const EmptyLineException & e)
+    {
+        dateEnd = dateStart;
+    }
 
     std::cout << "Start time:" << std::endl;
-    timeStart = CDate::RequestDateFromUser(CDate::ReadTime);
+    timeStart = CDate::RequestDateFromUser(CDate::ReadTime, true);
 
     std::cout << "End time:" << std::endl;
     while(true)
     {
-        timeEnd = CDate::RequestDateFromUser(CDate::ReadTime);
+        timeEnd = CDate::RequestDateFromUser(CDate::ReadTime, true);
 
         if (timeEnd > timeStart)
             break;
@@ -68,17 +68,19 @@ CEventBase * CEventBase::InteractiveCreator()
     getline(std::cin, place);
 
 
-    return new CEventBase
+    return new CEvent
             (
                     title,
                     place,
                     summary,
-                    CDate::CombineDateTime(date, timeStart),
-                    CDate::CombineDateTime(date, timeEnd)
+                    CDate::CombineDateTime(dateStart, timeStart),
+                    CDate::CombineDateTime(dateEnd, timeEnd),
+                    NULL,
+                    NULL
             );
 }
 
-std::ostream & operator<<(std::ostream & s, const CEventBase & ev)
+std::ostream & operator<<(std::ostream & s, const CEvent & ev)
 {
     s << "Title: " << ev.getTitle() << std::endl;
     s << "Place: " << ev.getPlace() << std::endl;
@@ -90,20 +92,10 @@ std::ostream & operator<<(std::ostream & s, const CEventBase & ev)
 
     s << std::endl;
 
-    if (!ev.m_People.empty())
-    {
-        s << "Participants:";
-
-        for (const std::string & part: ev.m_People)
-            s << " " << part;
-
-        s << std::endl;
-    }
-
     return s;
 }
 
-void CEventBase::PrintDuration(std::ostream & s) const
+std::ostream & CEvent::PrintDuration(std::ostream & s) const
 {
     auto duration = GetDuration();
     auto days = duration.count() / (60 * 24);
@@ -126,7 +118,7 @@ void CEventBase::PrintDuration(std::ostream & s) const
     }
 }
 
-std::ostream & operator<<(std::ostream & s, const CEventBase * ev)
+std::ostream & operator<<(std::ostream & s, const CEvent * ev)
 {
     if (ev == NULL)
         return s << "null";
@@ -134,7 +126,7 @@ std::ostream & operator<<(std::ostream & s, const CEventBase * ev)
         return s << *ev;
 }
 
-std::vector<std::string> CEventBase::GetSearchable::operator()(CEventBase * const & ev) const
+std::vector<std::string> CEvent::GetSearchable::operator()(CEvent * const & ev) const
 {
     return {ev->getPlace(), ev->getTitle()};
 }

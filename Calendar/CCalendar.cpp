@@ -7,17 +7,17 @@
 
 CCalendar::~CCalendar()
 {
-    for (CEventBase * ev: m_Events)
+    for (CEvent * ev: m_Events)
         delete ev;
 }
 
-void CCalendar::AddEvent(CEventBase * ev)
+void CCalendar::AddEvent(CEvent * ev)
 {
     m_Events.push_back(ev);
     m_Suggestions.Insert(ev);
 }
 
-void CCalendar::RemoveEvent(CEventBase * ev)
+void CCalendar::RemoveEvent(CEvent * ev)
 {
     for (auto it = m_Events.begin(); it != m_Events.end(); it++)
         if (*it == ev)
@@ -31,7 +31,7 @@ void CCalendar::RemoveEvent(CEventBase * ev)
     delete ev;
 }
 
-std::vector<CEventBase *> CCalendar::Search(const std::string & name) const
+std::vector<CEvent *> CCalendar::Search(const std::string & name) const
 {
     return m_Suggestions.Suggest(name);
 }

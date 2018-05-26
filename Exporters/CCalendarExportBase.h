@@ -5,7 +5,7 @@
 #ifndef SEM_CCALENDAREXPORTBASE_H
 #define SEM_CCALENDAREXPORTBASE_H
 
-#include "CCalendar.h"
+#include "../Calendar/CCalendar.h"
 #include <fstream>
 
 class CCalendarExportBase {

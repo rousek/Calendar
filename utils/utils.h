@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <string>
+#include <sstream>
 
 // Stolen from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 
@@ -33,5 +34,18 @@ static inline void trim(std::string & s)
     trimLeft(s);
     trimRight(s);
 }
+
+template <typename _T>
+static inline std::string toStr(const _T & it)
+{
+    std::stringstream ss;
+    ss << it;
+
+    return ss.str();
+}
+
+class EmptyLineException
+{
+};
 
 #endif //SEM_UTILS_H
