@@ -31,9 +31,10 @@ CEvent * CEvent::InteractiveCreator()
     std::string title, place, summary;
 
     std::cout << "Date:" << std::endl;
+
     dateStart = CDate::RequestDateFromUser(CDate::ReadDate, true);
 
-    std::cout << "End date (press enter if date is same):" << std::endl;
+    std::cout << "End date (press enter if event ends on the same day):" << std::endl;
     try
     {
         dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
@@ -54,12 +55,11 @@ CEvent * CEvent::InteractiveCreator()
         if (timeEnd > timeStart)
             break;
         else
-            std::cout << "Event must end after it starts!";
+            std::cout << "Event must end after it starts!" << std::endl;
     }
 
     std::cout << "Title:" << std::endl;
     getline(std::cin, title);
-    std::cout << std::cin.gcount() << std::endl;
 
     std::cout << "Summary: " << std::endl;
     getline(std::cin, summary);
@@ -97,30 +97,12 @@ std::ostream & operator<<(std::ostream & s, const CEvent & ev)
 
 std::ostream & CEvent::PrintDuration(std::ostream & s) const
 {
-    auto duration = GetDuration();
-    auto days = duration.count() / (60 * 24);
-    auto hours = duration.count() / 60 - days * 24;
-    auto mins = duration.count() % 60;
-
-    if (days > 0)
-    {
-        s << days << ((days == 1) ? " day, " : " days, ");
-    }
-
-    if (hours > 0)
-    {
-        s << hours << ((hours == 1) ? " hour, " : " hours, ");
-    }
-
-    if (mins > 0)
-    {
-        s << mins << ((mins == 1) ? " minute" : " minutes");
-    }
+    s << CDate::GetFormattedDuration(GetDuration().count());
 }
 
 std::ostream & operator<<(std::ostream & s, const CEvent * ev)
 {
-    if (ev == NULL)
+    if (ev == nullptr)
         return s << "null";
     else
         return s << *ev;

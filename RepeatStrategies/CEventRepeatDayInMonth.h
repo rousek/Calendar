@@ -22,6 +22,7 @@ public:
      * E. g. -1 in January means 31. In February 28 and 29
      * for non-leap and leap respectively.
      * Throws invalid_argument if out of boundaries.
+     * Event will not trigger if day is 30 and month is February.
      */
     explicit CEventRepeatDayInMonth(int day) : m_Day(day)
     {

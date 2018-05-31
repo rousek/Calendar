@@ -7,6 +7,7 @@
 #include "Calendar/CCalendar.h"
 #include "UI/CCommandInterpreter.h"
 #include "utils/utils.h"
+#include "RepeatStrategies/CEventRepeatAfter.h"
 
 
 using namespace std;
@@ -65,6 +66,15 @@ void DateTest()
 
     assert(a == b);
 
+    timeS.seekg(0);
+    dateS.seekg(0);
+
+    assert(time == CDate::ReadTime(timeS));
+    assert(date == CDate::ReadDate(dateS));
+
+
+    assert(CDate::DurationToMinutes("1 hour, 1 hours") == CDate::DurationToMinutes("2 hours"));
+    assert(CDate::DurationToMinutes("1500 minute, 1 hours").count() == 1560);
 }
 
 
@@ -74,20 +84,18 @@ int main()
 
     DateTest();
 
-    return 0;
-
     tm david = {0};
-    david.tm_hour = 12;
+    david.tm_hour = 10;
     david.tm_min = 32;
-    david.tm_mon = 10;
+    david.tm_mon = 1;
     david.tm_mday = 5;
-    david.tm_year = 118;
+    david.tm_year = 100;
 
     tm david2 = david;
     david2.tm_min = 36;
-    david2.tm_hour = 9;
-    david2.tm_mday = 1;
-    david2.tm_mon = 11;
+    david2.tm_hour = 19;
+    //david2.tm_mday = 2;
+    //david2.tm_mon = 2;
 
     CEvent * ev = new CEvent(
             "Narozeniny u me doma",
@@ -95,8 +103,8 @@ int main()
             "Moje narozeniny",
             CDate(david),
             CDate(david2),
-            NULL,
-            NULL);
+            nullptr,
+            nullptr);
 
     CEvent * ev2 = new CEvent(
             "Narozeniny",
@@ -104,20 +112,29 @@ int main()
             "Moje narozeniny",
             CDate(david),
             CDate(david2),
-            NULL,
-            NULL);
+            nullptr,
+            nullptr);
 
     //cout << ev << endl;
 
-    cout << CEvent::InteractiveCreator() << endl;
+    //cout << CEvent::InteractiveCreator() << endl;
 
     cal.AddEvent(ev);
     cal.AddEvent(ev2);
 
     auto found = cal.Search("narozeniny u");
 
-    for (int i = 0; i < found.size(); i++)
-        cout << found[i] << endl;
+    /*
+    for (auto i : found)
+        cout << i << endl;
+        */
+
+    CEventRepeatBase * repeat = new CEventRepeatAfter(std::chrono::minutes(3));
+
+
+
+    for (auto a : repeat->TestRange(CDate(david), CDate(david), CDate(david2)))
+        cout << a << endl;
 
     return 0;
 }

@@ -39,31 +39,36 @@ public:
     /**
      * @return Year of date. Integer.
      */
-    int getYear() const;
+    int GetYear() const;
 
     /**
      * @return Month of date. Integer 1-12.
      */
-    int getMonth() const;
+    int GetMonth() const;
 
     /**
      * @return Day of date. Integer 1-31 (depending on month).
      */
-    int getDay() const;
+    int GetDay() const;
     /**
      * @return Hour of date. Integer 0-23.
      */
-    int getHour() const;
+    int GetHour() const;
 
     /**
      * @return Minute of date. Integer 0-59.
      */
-    int getMinute() const;
+    int GetMinute() const;
 
     /**
      * @return time_t value. Useful for date arithmetics.
      */
     time_t Count() const;
+
+    /**
+     * @return copy of underlying tm struct.
+     */
+    tm GetTm()  const;
 
     bool operator == (const CDate & d2) const;
     bool operator < (const CDate & d2) const;
@@ -106,6 +111,20 @@ public:
     static CDate CombineDateTime(const CDate & date, const CDate & time);
 
     /**
+     * Converts duration in minutes into human readable format.
+     * @param minutesCount Number of minutes.
+     * @return string like this: "X days, Y hours, Z minutes"
+     */
+    static std::string GetFormattedDuration(long long int minutesCount);
+
+    /**
+     * Converts duration string to std::chrono::minutes.
+     * @param duration String like this: "1 days, 4 hours, 2 minutes, 3 days". Does not support seconds.
+     * @return duration in minutes.
+     */
+    static std::chrono::minutes DurationToMinutes(std::string duration);
+
+    /**
      * Print year, month and day in format set by CDate::DATE_FORMAT
      * @param stream
      * @return ostream &
@@ -138,6 +157,11 @@ public:
      * C++11 polyfill of chrono::weeks
      */
     typedef std::chrono::duration<int64_t, std::ratio<604800>> Weeks;
+
+    /**
+     * C++11 polyfill of chrono::months
+     */
+    typedef std::chrono::duration<int64_t, std::ratio<2629746>> Months;
 private:
     tm m_Date;
 

@@ -29,12 +29,15 @@ static inline void trimRight(std::string &s)
     }).base(), s.end());
 }
 
-static inline void trim(std::string & s)
+static inline std::string & trim(std::string & s)
 {
     trimLeft(s);
     trimRight(s);
+    return s;
 }
 
+
+// Stolen from Progtest
 template <typename _T>
 static inline std::string toStr(const _T & it)
 {
@@ -44,6 +47,22 @@ static inline std::string toStr(const _T & it)
     return ss.str();
 }
 
+
+static inline std::vector<std::string> split(const std::string &s, char delim) {
+    std::vector<std::string> result;
+    std::stringstream ss(s);
+    std::string item;
+    while (getline(ss, item, delim))
+    {
+        trim(item);
+        result.push_back(item);
+    }
+    return result;
+}
+
+/**
+ * Thrown in some cases when stream has empy line in it.
+ */
 class EmptyLineException
 {
 };
