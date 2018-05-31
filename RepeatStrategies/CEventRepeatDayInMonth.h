@@ -35,8 +35,6 @@ public:
     std::string ToStr() const override;
 private:
     int m_Day;
-
-    static int MonthLength(int month, int year);
 };
 
 

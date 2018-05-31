@@ -25,6 +25,12 @@ public:
     CDate();
 
     /**
+     * Initializes date from date string.
+     * @param str Date string in format "dd. mm. yyyy hh:MM".
+     */
+    CDate(const std::string & str);
+
+    /**
      * Initialize date with this tm struct.
      * @param tm tm stuct to use
      */
@@ -125,6 +131,13 @@ public:
     static std::chrono::minutes DurationToMinutes(std::string duration);
 
     /**
+     * @param month
+     * @param year
+     * @return Length of month in year.
+     */
+    static int MonthLength(int month, int year);
+
+    /**
      * Print year, month and day in format set by CDate::DATE_FORMAT
      * @param stream
      * @return ostream &
@@ -138,13 +151,6 @@ public:
      */
     std::ostream & PrintTime(std::ostream & stream) const;
 
-    /**
-     * Adds one month to date. Check for invalid dates must be
-     * done manually i. e. 29. 1. 2001 + Month will throw error.
-     * Year overflows automatically.
-     * @return CDate with one more month.
-     */
-    CDate nextMonth() const;
 
     friend std::ostream & operator << (std::ostream & stream, const CDate & date);
 
@@ -167,6 +173,7 @@ private:
 
     static const char TIME_FORMAT[];
     static const char DATE_FORMAT[];
+    static const char WHOLE_FORMAT[];
 };
 
 #endif //SEM_CDATE_H

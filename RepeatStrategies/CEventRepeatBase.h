@@ -12,6 +12,8 @@
 class CEventRepeatBase
 {
 public:
+    std::vector<CDate> m_Additional;
+    std::vector<CDate> m_Skipped;
     virtual ~CEventRepeatBase() = default;
     virtual std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const = 0;
     virtual std::string ToStr() const = 0;

@@ -9,11 +9,24 @@
 
 const char CDate::TIME_FORMAT[] = "%H:%M";
 const char CDate::DATE_FORMAT[] = "%d. %m. %Y";
+const char CDate::WHOLE_FORMAT[] = "%d. %m. %Y %H:%M";
 
 CDate::CDate()
 {
     m_Date = {0};
     m_Date.tm_isdst = -1;
+}
+
+CDate::CDate(const std::string &str)
+{
+    m_Date = {0};
+
+    std::stringstream ss(str);
+    ss >> std::get_time(&m_Date, WHOLE_FORMAT);
+    m_Date.tm_isdst = -1;
+
+    if (mktime(&m_Date) == -1)
+        throw std::invalid_argument("Invalid date!");
 }
 
 CDate::CDate(const tm & tm)
@@ -63,21 +76,6 @@ time_t CDate::Count() const
 tm CDate::GetTm() const
 {
     return m_Date;
-}
-
-CDate CDate::nextMonth() const
-{
-    tm cpy = m_Date;
-
-    cpy.tm_mon++;
-
-    if (cpy.tm_mon == 12)
-    {
-        cpy.tm_mon = 0;
-        cpy.tm_year++;
-    }
-
-    return CDate(cpy);
 }
 
 bool CDate::operator == (const CDate & d2) const
@@ -220,11 +218,7 @@ std::ostream & CDate::PrintTime(std::ostream & stream) const
 
 std::ostream & operator << (std::ostream & stream, const CDate & date)
 {
-    date.PrintDate(stream);
-    stream << " ";
-    date.PrintTime(stream);
-
-    return stream;
+    return stream << std::put_time(&date.m_Date, CDate::WHOLE_FORMAT);
 }
 
 std::chrono::minutes CDate::DurationToMinutes(std::string duration) {
@@ -257,4 +251,29 @@ std::chrono::minutes CDate::DurationToMinutes(std::string duration) {
     }
 
     return mins;
+}
+
+
+int CDate::MonthLength(int month, int year)
+{
+    switch(month)
+    {
+        case 1: return 31;
+        case 2:
+            if (year % 4 || (!(year % 100) && year % 400))
+                return 28;
+            else
+                return 29;
+        case 3: return 31;
+        case 4: return 30;
+        case 5: return 31;
+        case 6: return 30;
+        case 7: return 31;
+        case 8: return 31;
+        case 9: return 30;
+        case 10: return 31;
+        case 11: return 30;
+        case 12: return 31;
+        default: throw std::invalid_argument("Wrong month: " + toStr(month));
+    }
 }

@@ -181,30 +181,44 @@ CEventRepeatBase * CEvent::ReadRepetition(std::istream & s)
 
     auto parts = split(line, ' ');
 
-    if (parts.empty())
-        throw std::invalid_argument("Invalid input!");
+    try
+    {
+        if (parts.empty())
+            throw 0;
 
-    if (parts.size() == 1)
-    {
-        if (parts[0] == "none")
-            return new CEventRepeatDisabled();
-    }
-    else if (parts.size() == 2)
-    {
-        if (parts[0] == "month_day")
+        if (parts.size() == 1)
         {
-            int day = parseInt(parts[1]);
-            return new CEventRepeatDayInMonth(day);
+            if (parts[0] == "none")
+                return new CEventRepeatDisabled();
+        }
+        else if (parts.size() == 2)
+        {
+            if (parts[0] == "month_day")
+            {
+                int day = parseInt(parts[1]);
+                return new CEventRepeatDayInMonth(day);
+            }
+        }
+        else
+        {
+            if (parts[0] == "after")
+            {
+                const int offset = 6; // Offset in line after string "after "
+                auto duration = CDate::DurationToMinutes(line.substr(offset));
+                return new CEventRepeatAfter(duration);
+            }
         }
     }
-    else
+    catch (...)
     {
-        if (parts[0] == "after")
-        {
-            const int offset = 6; // Offset in line after string "after "
-            auto duration = CDate::DurationToMinutes(line.substr(offset));
-            return new CEventRepeatAfter(duration);
-        }
+        const char help[] =
+                "Invalid input!\n"
+                "Valid options are:\n"
+                "\"none\"\n"
+                "\"month_day day\" where day is day of month. Negative values are also accepted.\n"
+                "\"after duration\" where duration is string representation of duration i.e. \"1 day, 1 month, 2 hours\"\n";
+
+        throw std::invalid_argument(help);
     }
 }
 
