@@ -11,36 +11,39 @@
 #include "../TransferStrategies/CEventTransferBase.h"
 #include "../RepeatStrategies/CEventRepeatBase.h"
 
-/**
- *
- */
 class CEvent
 {
-protected:
+private:
+    int m_ID;
     std::string m_Title;
     std::string m_Place;
     std::string m_Summary;
 
     CDate m_Start;
     CDate m_End;
-    CEventTransferBase * m_Transfer;
+    int m_Priority;
     CEventRepeatBase * m_Repeat;
 
 public:
-    CEvent(const std::string & title, const std::string & place, const std::string & summary,
-               const CDate & start, const CDate & end, CEventTransferBase * tr, CEventRepeatBase * rp);
+    CEvent(int id, const std::string & title, const std::string & place, const std::string & summary,
+               const CDate & start, const CDate & end, int priority, CEventRepeatBase * rp);
 
+    ~CEvent();
 
     std::chrono::minutes GetDuration() const;
 
-    const std::string & getTitle() const { return m_Title; }
-    const std::string & getPlace() const { return m_Place; }
-    const std::string & getSummary() const { return m_Summary; }
+    void SetID(int id) { m_ID = id; }
+    int GetID() const { return m_ID; }
+    std::string GetTitle() const { return m_Title; }
+    std::string GetPlace() const { return m_Place; }
+    std::string GetSummary() const { return m_Summary; }
+    std::string DurationString() const;
 
-    std::ostream & PrintDuration(std::ostream & s) const;
+    bool InteractiveEditor();
 
-    CEvent * InteractiveEditor();
-    static CEvent * InteractiveCreator();
+    static CEvent * InteractiveCreator(int id);
+
+    static CEventRepeatBase * ReadRepetition(std::istream & s);
 
     friend std::ostream & operator<<(std::ostream & s, const CEvent & ev);
 

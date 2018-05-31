@@ -32,6 +32,7 @@ public:
 
     ~CEventRepeatDayInMonth() override = default;
     std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    std::string ToStr() const override;
 private:
     int m_Day;
 

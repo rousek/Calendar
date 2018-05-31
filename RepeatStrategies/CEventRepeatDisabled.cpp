@@ -11,3 +11,8 @@ std::vector<CDate> CEventRepeatDisabled::TestRange(const CDate & date, const CDa
     else
         return {};
 }
+
+std::string CEventRepeatDisabled::ToStr() const
+{
+    return "none";
+}

@@ -131,6 +131,11 @@ public:
         return res;
     }
 
+    void Clear()
+    {
+        m_Suggestions.clear();
+    }
+
 private:
     std::multimap<std::string, T> m_Suggestions;
 

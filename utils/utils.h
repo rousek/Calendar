@@ -60,6 +60,14 @@ static inline std::vector<std::string> split(const std::string &s, char delim) {
     return result;
 }
 
+
+static inline int parseInt(const std::string & str)
+{
+    std::string::size_type sz;
+
+    return std::stoi(str, &sz);
+}
+
 /**
  * Thrown in some cases when stream has empy line in it.
  */

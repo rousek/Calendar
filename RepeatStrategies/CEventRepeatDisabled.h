@@ -11,8 +11,9 @@
 class CEventRepeatDisabled : public CEventRepeatBase
 {
 public:
-    virtual ~CEventRepeatDisabled() override {}
-    virtual std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    ~CEventRepeatDisabled() override {}
+    std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    std::string ToStr() const override;
 };
 
 

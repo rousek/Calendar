@@ -14,6 +14,7 @@ class CEventRepeatBase
 public:
     virtual ~CEventRepeatBase() = default;
     virtual std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const = 0;
+    virtual std::string ToStr() const = 0;
 };
 
 

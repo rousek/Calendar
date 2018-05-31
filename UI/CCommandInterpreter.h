@@ -30,7 +30,7 @@ public:
      * @param command
      * @param params
      */
-    void Interpret(const std::string & command, const std::string & params);
+    void Interpret(const std::string & command, const std::vector<std::string> & params);
     /**
      * Asks user if they want to continue.
      * @return User's option.

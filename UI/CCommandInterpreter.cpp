@@ -15,6 +15,9 @@ void CCommandInterpreter::PrintHelp()
 {
     std::cout << "Available commands are:" << std::endl << std::endl;
 
+    std::cout << "help" << std::endl;
+    std::cout << "Prints this help." << std::endl << std::endl;
+
     std::cout << "add" << std::endl;
     std::cout << "This command runs interactive editor" << std::endl;
     std::cout << "which will help you create event and" << std::endl;
@@ -46,14 +49,14 @@ void CCommandInterpreter::PrintHelp()
 
     std::cout << "export [mode] file_name" << std::endl;
     std::cout << "Exports whole calendar into file." << std::endl;
-    std::cout << "Supported modes are default and ical." << std::endl << std::endl;
+    std::cout << "Supported modes are \"default\" and \"ics\"." << std::endl << std::endl;
 
     std::cout << "import [mode] file_name" << std::endl;
     std::cout << "Imports events from file. Does not" << std::endl;
     std::cout << "remove existing events (if there are any)." << std::endl;
     std::cout << "When there is ID collision, imported" << std::endl;
     std::cout << "event is assigned new ID." << std::endl;
-    std::cout << "Supported modes are default and ical." << std::endl << std::endl;
+    std::cout << "Supported modes are \"default\" and \"ics\"." << std::endl << std::endl;
 }
 
 void CCommandInterpreter::GetNext()
@@ -63,15 +66,66 @@ void CCommandInterpreter::GetNext()
 
     std::cin >> command;
     getline(std::cin, params);
-    trim(params);
 
-    Interpret(command, params);
+    Interpret(command, split(params, ' '));
 }
 
-void CCommandInterpreter::Interpret(const std::string & command, const std::string & params)
+void CCommandInterpreter::Interpret(const std::string & command, const std::vector<std::string> & params)
 {
-    std::cout << command << std::endl;
-    std::cout << params << std::endl;
+    if (command == "help")
+    {
+        PrintHelp();
+    }
+    else if (command == "add")
+    {
+        if (params.size() != 0)
+            return PrintHelp();
+
+        m_Calendar.CreateEvent();
+    }
+    else if (command == "edit")
+    {
+        int evtID;
+
+        if (params.size() != 1)
+            return PrintHelp();
+
+        evtID = parseInt(params[0]);
+        m_Calendar.EditEvent(evtID);
+    }
+    else if (command == "delete")
+    {
+        int evtID;
+
+        if (params.size() != 1)
+            return PrintHelp();
+
+        evtID = parseInt(params[0]);
+        m_Calendar.RemoveEvent(evtID);
+    }
+    else if (command == "clear")
+    {
+        if (params.size() != 0)
+            return PrintHelp();
+
+        m_Calendar.Clear();
+    }
+    else if (command == "zoom")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+    else if (command == "show")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+    else if (command == "export")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+    else if (command == "import")
+    {
+        std::cout << "TODO" << std::endl;
+    }
 }
 
 bool CCommandInterpreter::RequestConfirm()

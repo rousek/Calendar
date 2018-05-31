@@ -32,3 +32,8 @@ int CEventRepeatDayInMonth::MonthLength(int month, int year)
         default: throw std::invalid_argument("Wrong month: " + toStr(month));
     }
 }
+
+std::string CEventRepeatDayInMonth::ToStr() const
+{
+    return toStr("month_day ") + toStr(m_Day);
+}

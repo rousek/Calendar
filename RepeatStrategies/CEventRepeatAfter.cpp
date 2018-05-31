@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "CEventRepeatAfter.h"
+#include "../utils/utils.h"
 
 std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &from, const CDate &to) const
 {
@@ -31,4 +32,9 @@ std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &
     }
 
     return results;
+}
+
+std::string CEventRepeatAfter::ToStr() const
+{
+    return toStr("after ") + CDate::GetFormattedDuration(m_After.count());
 }
