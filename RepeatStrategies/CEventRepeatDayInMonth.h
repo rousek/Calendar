@@ -14,6 +14,8 @@
  */
 class CEventRepeatDayInMonth : public CEventRepeatBase
 {
+protected:
+    std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
 public:
     /**
      * Constructor
@@ -31,7 +33,9 @@ public:
     }
 
     ~CEventRepeatDayInMonth() override = default;
-    std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+
+    CEventRepeatBase * Clone() const override { return new CEventRepeatDayInMonth(*this); }
+
     std::string ToStr() const override;
 private:
     int m_Day;

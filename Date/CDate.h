@@ -168,6 +168,8 @@ public:
      * C++11 polyfill of chrono::months
      */
     typedef std::chrono::duration<int64_t, std::ratio<2629746>> Months;
+
+    typedef std::pair<CDate, CDate> Interval;
 private:
     tm m_Date;
 

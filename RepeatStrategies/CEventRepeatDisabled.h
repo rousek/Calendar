@@ -10,9 +10,11 @@
 
 class CEventRepeatDisabled : public CEventRepeatBase
 {
+protected:
+    std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
 public:
-    ~CEventRepeatDisabled() override {}
-    std::vector<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    ~CEventRepeatDisabled() override = default;
+    CEventRepeatBase * Clone() const override { return new CEventRepeatDisabled(*this); }
     std::string ToStr() const override;
 };
 

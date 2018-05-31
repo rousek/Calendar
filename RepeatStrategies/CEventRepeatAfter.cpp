@@ -6,7 +6,7 @@
 #include "CEventRepeatAfter.h"
 #include "../utils/utils.h"
 
-std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &from, const CDate &to) const
+std::set<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &from, const CDate &to) const
 {
     if (date > to) // Event starts after given interval
         return {};
@@ -17,7 +17,7 @@ std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &
     // Get offset from date of event in minutes.
     int offset = static_cast<int>(std::ceil(diffMins.count() / m_After.count()) * m_After.count());
 
-    std::vector<CDate> results;
+    std::set<CDate> results;
 
     time_t timestamp = date.Count() + offset * 60;
     CDate tmpDate = CDate(timestamp);
@@ -25,7 +25,7 @@ std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &
 
     while (tmpDate <= to)
     {
-        results.push_back(tmpDate);
+        results.insert(tmpDate);
 
         timestamp += interval;
         tmpDate = CDate(timestamp);

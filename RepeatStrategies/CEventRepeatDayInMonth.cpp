@@ -4,15 +4,15 @@
 
 #include "CEventRepeatDayInMonth.h"
 
-std::vector<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CDate &from, const CDate &to) const
+std::set<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CDate &from, const CDate &to) const
 {
     if (date > to)
         return {};
 
-    std::vector<CDate> results;
+    std::set<CDate> results;
 
     if (date >= from)
-        results.push_back(date);
+        results.insert(date);
 
     tm tm = from.GetTm();
     int day;
@@ -34,12 +34,12 @@ std::vector<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CD
             if (m_Day < 0)
             {
                 if (current.GetDay() == CDate::MonthLength(current.GetMonth(), current.GetYear()) + m_Day + 1)
-                    results.push_back(current);
+                    results.insert(current);
             }
             else
             {
                 if (current.GetDay() == m_Day)
-                    results.push_back(current);
+                    results.insert(current);
             }
         }
 

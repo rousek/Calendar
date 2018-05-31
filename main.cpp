@@ -80,8 +80,6 @@ void DateTest()
 int main()
 {
     cout << CDate("11. 05. 1997 11:45") << endl;
-    return 0;
-
 
     CCalendar cal;
 
@@ -142,7 +140,7 @@ int main()
 
     cout << CDate(david) << endl;
     cout << CDate(david2) << endl << endl;
-    for (auto a : repeat1->TestRange(CDate(david), CDate(david), CDate(david2)))
+    for (auto a : repeat1->TestRangeWithExceptions(CDate(david), CDate(david), CDate(david2)))
         cout << a << endl;
 
 
