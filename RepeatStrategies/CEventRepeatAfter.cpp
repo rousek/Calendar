@@ -10,12 +10,11 @@ std::vector<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &
     if (date > to) // Event starts after given interval
         return {};
 
-
     auto diffSecs = std::chrono::seconds(from.Count() - date.Count());
     auto diffMins = std::chrono::duration_cast<std::chrono::minutes>(diffSecs);
 
     // Get offset from date of event in minutes.
-    int offset = std::ceil(diffMins.count() / m_After.count()) * m_After.count();
+    int offset = dynamic_cast<int>(std::ceil(diffMins.count() / m_After.count()) * m_After.count());
 
     std::vector<CDate> results;
 

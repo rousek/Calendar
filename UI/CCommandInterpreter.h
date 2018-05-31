@@ -18,6 +18,8 @@
 class CCommandInterpreter
 {
 public:
+    CCommandInterpreter();
+    void PrintHelp();
     /**
      * Reads a word from cin and then rest of the line.
      * Runs Interpret on it.
@@ -29,6 +31,11 @@ public:
      * @param params
      */
     void Interpret(const std::string & command, const std::string & params);
+    /**
+     * Asks user if they want to continue.
+     * @return User's option.
+     */
+    static bool RequestConfirm();
 private:
     CCalendar m_Calendar;
 };

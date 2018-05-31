@@ -80,6 +80,8 @@ void DateTest()
 
 int main()
 {
+    CCommandInterpreter().PrintHelp();
+
     CCalendar cal;
 
     DateTest();
@@ -132,9 +134,10 @@ int main()
     CEventRepeatBase * repeat = new CEventRepeatAfter(std::chrono::minutes(3));
 
 
-
+/*
     for (auto a : repeat->TestRange(CDate(david), CDate(david), CDate(david2)))
         cout << a << endl;
+*/
 
     return 0;
 }
