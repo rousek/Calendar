@@ -25,9 +25,9 @@ public:
     void CreateEvent();
     std::map<int, CEvent *>::const_iterator FindEvent(int ID) const;
     void RemoveEvent(const std::map<int, CEvent *>::const_iterator & it);
-    void RemoveEvent(int ID) : RemoveEvent(FindEvent(ID)) {}
+    void RemoveEvent(int ID) { RemoveEvent(FindEvent(ID)); }
     void EditEvent(const std::map<int, CEvent *>::const_iterator & it);
-    void EditEvent(int ID) : EditEvent(FindEvent(ID)) {}
+    void EditEvent(int ID) { EditEvent(FindEvent(ID)); }
     void Clear();
 
     std::vector<CEvent *> SearchEvents(const std::string & name) const;

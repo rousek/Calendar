@@ -127,26 +127,3 @@ void CCommandInterpreter::Interpret(const std::string & command, const std::vect
         std::cout << "TODO" << std::endl;
     }
 }
-
-bool CCommandInterpreter::RequestConfirm()
-{
-    std::cout << "Are you sure you want to continue? (Y/n)" << std::endl;
-
-    while(true)
-    {
-        char answer;
-
-        if (!(std::cin >> answer) || (answer != 'Y' && answer != 'n'))
-        {
-            std::cout << "Invalid input!" << std::endl;
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-
-        if (answer == 'Y')
-            return true;
-        if (answer == 'n')
-            return false;
-
-    }
-}

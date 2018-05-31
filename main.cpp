@@ -8,6 +8,7 @@
 #include "UI/CCommandInterpreter.h"
 #include "utils/utils.h"
 #include "RepeatStrategies/CEventRepeatAfter.h"
+#include "RepeatStrategies/CEventRepeatDayInMonth.h"
 
 
 using namespace std;
@@ -80,8 +81,6 @@ void DateTest()
 
 int main()
 {
-    CCommandInterpreter().PrintHelp();
-
     CCalendar cal;
 
     DateTest();
@@ -93,28 +92,32 @@ int main()
     david.tm_mday = 5;
     david.tm_year = 100;
 
+
     tm david2 = david;
+    david2.tm_year = 101;
     david2.tm_min = 36;
     david2.tm_hour = 19;
-    //david2.tm_mday = 2;
-    //david2.tm_mon = 2;
+    david2.tm_mday = 2;
+    david2.tm_mon = 9;
 
     CEvent * ev = new CEvent(
+            0,
             "Narozeniny u me doma",
             "Doma",
             "Moje narozeniny",
             CDate(david),
             CDate(david2),
-            nullptr,
+            1,
             nullptr);
 
     CEvent * ev2 = new CEvent(
+            1,
             "Narozeniny",
             "Doma",
             "Moje narozeniny",
             CDate(david),
             CDate(david2),
-            nullptr,
+            1,
             nullptr);
 
     //cout << ev << endl;
@@ -124,7 +127,7 @@ int main()
     cal.AddEvent(ev);
     cal.AddEvent(ev2);
 
-    auto found = cal.Search("narozeniny u");
+    auto found = cal.SearchEvents("narozeniny u");
 
     /*
     for (auto i : found)
@@ -132,6 +135,13 @@ int main()
         */
 
     CEventRepeatBase * repeat = new CEventRepeatAfter(std::chrono::minutes(3));
+
+    CEventRepeatBase * repeat1 = new CEventRepeatDayInMonth(-5);
+
+    cout << CDate(david) << endl;
+    cout << CDate(david2) << endl << endl;
+    for (auto a : repeat1->TestRange(CDate(david), CDate(david), CDate(david2)))
+        cout << a << endl;
 
 
 /*

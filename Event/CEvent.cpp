@@ -7,6 +7,12 @@
 #include "../Date/CDate.h"
 #include "CEvent.h"
 #include "../utils/utils.h"
+#include "../RepeatStrategies/CEventRepeatDisabled.h"
+#include "../RepeatStrategies/CEventRepeatDayInMonth.h"
+#include "../RepeatStrategies/CEventRepeatAfter.h"
+
+int CEvent::MIN_PRIORITY = 1;
+int CEvent::MAX_PRIORITY = 10;
 
 CEvent::CEvent(int id,
                const std::string & title,
@@ -37,9 +43,18 @@ CEvent::~CEvent()
 std::chrono::minutes CEvent::GetDuration() const
 {
     double diff = difftime(m_End.Count(), m_Start.Count());
-    auto secs = std::chrono::seconds(dynamic_cast<int>(diff));
+    auto secs = std::chrono::seconds(static_cast<int>(diff));
 
     return std::chrono::duration_cast<std::chrono::minutes>(secs);
+}
+
+bool CEvent::InteractiveEditor()
+{
+
+    if (requestConfirm("Do you want to save changes?"))
+    {
+
+    }
 }
 
 CEvent * CEvent::InteractiveCreator(int ID)
@@ -100,7 +115,7 @@ CEvent * CEvent::InteractiveCreator(int ID)
         }
     }
 
-    std::cout << "Priority (1 - 10): " << std::endl;
+    std::cout << "Priority " << MIN_PRIORITY << " - " << MAX_PRIORITY << " (including): " << std::endl;
     while(true)
     {
         try
@@ -108,11 +123,14 @@ CEvent * CEvent::InteractiveCreator(int ID)
             std::string tmp;
             getline(std::cin, tmp);
             priority = parseInt(tmp);
+            if (priority < MIN_PRIORITY || priority > MAX_PRIORITY)
+                throw 0;
             break;
         }
         catch (...)
         {
-            std::cout << "Invalid input! Please type in number in the interval of 1 - 10 (including)." << std::endl;
+            std::cout << "Invalid input! Please type in number in the interval of "
+                      << MIN_PRIORITY << " - " << MAX_PRIORITY << "." << std::endl;
         }
     }
 
@@ -137,8 +155,8 @@ std::ostream & operator<<(std::ostream & s, const CEvent & ev)
     s << "Starts on: " << ev.m_Start << std::endl;
     s << "Ends on: " << ev.m_End << std::endl;
     s << "Duration: " << ev.DurationString() << std::endl;
-    s << "Priority: " << m_Priority << std::endl;
-    s << "Repetition: " << m_Repeat->ToStr() << std::endl;
+    s << "Priority: " << ev.m_Priority << std::endl;
+    s << "Repetition: " << ev.m_Repeat->ToStr() << std::endl;
 
     return s;
 }
@@ -161,8 +179,33 @@ CEventRepeatBase * CEvent::ReadRepetition(std::istream & s)
     std::string line;
     getline(s, line);
 
+    auto parts = split(line, ' ');
 
+    if (parts.empty())
+        throw std::invalid_argument("Invalid input!");
 
+    if (parts.size() == 1)
+    {
+        if (parts[0] == "none")
+            return new CEventRepeatDisabled();
+    }
+    else if (parts.size() == 2)
+    {
+        if (parts[0] == "month_day")
+        {
+            int day = parseInt(parts[1]);
+            return new CEventRepeatDayInMonth(day);
+        }
+    }
+    else
+    {
+        if (parts[0] == "after")
+        {
+            const int offset = 6; // Offset in line after string "after "
+            auto duration = CDate::DurationToMinutes(line.substr(offset));
+            return new CEventRepeatAfter(duration);
+        }
+    }
 }
 
 std::vector<std::string> CEvent::GetSearchable::operator()(CEvent * const & ev) const

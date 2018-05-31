@@ -68,6 +68,8 @@ static inline int parseInt(const std::string & str)
     return std::stoi(str, &sz);
 }
 
+bool requestConfirm(const std::string & msg);
+
 /**
  * Thrown in some cases when stream has empy line in it.
  */

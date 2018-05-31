@@ -49,6 +49,9 @@ public:
 
     friend std::ostream & operator<<(std::ostream & s, const CEvent * ev);
 
+    static int MIN_PRIORITY;
+    static int MAX_PRIORITY;
+
     struct GetSearchable
     {
         std::vector<std::string> operator()(CEvent * const & ev) const;
