@@ -4,9 +4,9 @@
 
 #include "CEventRepeatDisabled.h"
 
-std::set<CDate> CEventRepeatDisabled::TestRange(const CDate & date, const CDate & from, const CDate & to) const
+std::set<CDate> CEventRepeatDisabled::TestRange(const CDate & date, const CDate::Interval & interval) const
 {
-    if (date >= from && date <= to)
+    if (date >= interval.first && date <= interval.second)
         return {date};
     else
         return {};

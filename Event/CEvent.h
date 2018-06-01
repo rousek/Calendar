@@ -30,16 +30,17 @@ public:
 
     ~CEvent();
 
-    std::chrono::minutes GetDuration() const;
+    CDuration GetDuration() const;
 
     void SetID(int id) { m_ID = id; }
     int GetID() const { return m_ID; }
     std::string GetTitle() const { return m_Title; }
     std::string GetPlace() const { return m_Place; }
     std::string GetSummary() const { return m_Summary; }
-    std::string DurationString() const;
 
     bool InteractiveEditor();
+
+    std::set<CDate::Interval> FindInInterval(const CDate::Interval & interval) const;
 
     static CEvent * InteractiveCreator(int id);
 

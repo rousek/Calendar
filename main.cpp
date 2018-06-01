@@ -9,38 +9,12 @@
 #include "utils/utils.h"
 #include "RepeatStrategies/CEventRepeatAfter.h"
 #include "RepeatStrategies/CEventRepeatDayInMonth.h"
+#include "UI/CViewYear.h"
+#include "UI/CViewMonth.h"
 
 
 using namespace std;
 
-
-class CViewBase
-{
-public:
-    virtual void Draw() const;
-    virtual void Previous();
-    virtual void Next();
-
-    void Help()
-    {
-    }
-};
-
-class CViewDay : public CViewBase
-{
-
-};
-
-
-class CViewWeek : public CViewBase
-{
-
-};
-
-class CViewMonth : public CViewBase
-{
-
-};
 
 void DateTest()
 {
@@ -72,82 +46,60 @@ void DateTest()
     assert(date == CDate::ReadDate(dateS));
 
 
-    assert(CDate::DurationToMinutes("1 hour, 1 hours") == CDate::DurationToMinutes("2 hours"));
-    assert(CDate::DurationToMinutes("1500 minute, 1 hours").count() == 1560);
+    assert(CDuration("1 hour, 1 hours") == CDuration("2 hours"));
+    assert(CDuration("1500 minute, 1 hours").GetSeconds() == CDuration::Minutes(1560).GetSeconds());
+}
+
+void CalendarTest()
+{
+    CCalendar cal;
+    stringstream ss("after 1 day");
+
+    CEvent * obed = new CEvent
+            (
+                    0,
+                    "Obed",
+                    "domov skola restaurace kancelar",
+                    "Normalni obed",
+                    CDate("01. 01. 2018 11:30"),
+                    CDate("01. 01. 2018 12:00"),
+                    1,
+                    CEvent::ReadRepetition(ss)
+            );
+
+    /*
+    for (auto a : obed->FindInInterval(make_pair(CDate("01. 01. 2018 12:31"), CDate("02. 01. 2018 11:30"))))
+        cout << a << endl;
+        */
+
+    ss = stringstream("month_day 31"); // last day in month
+
+    CEvent * schuzka = new CEvent
+            (
+                    1,
+                    "Schuzka s klientem",
+                    "kancelar",
+                    "pravidelna schuzka",
+                    CDate("01. 01. 2018 12:20"),
+                    CDate("01. 01. 2018 15:20"),
+                    9,
+                    CEvent::ReadRepetition(ss)
+            );
+/*
+    for (auto a : schuzka->FindInInterval(make_pair(CDate("01. 01. 2018 12:19"), CDate("01. 12. 2018 12:30"))))
+        cout << a << endl;
+*/
+    cal.AddEvent(obed);
+    cal.AddEvent(schuzka);
+
+    CViewMonth().Draw(cal, CDate("01. 01. 2018 12:20"));
 }
 
 
 int main()
 {
-    cout << CDate("11. 05. 1997 11:45") << endl;
-
-    CCalendar cal;
-
+    CalendarTest();
     DateTest();
-
-    tm david = {0};
-    david.tm_hour = 10;
-    david.tm_min = 32;
-    david.tm_mon = 1;
-    david.tm_mday = 5;
-    david.tm_year = 100;
-
-
-    tm david2 = david;
-    david2.tm_year = 101;
-    david2.tm_min = 36;
-    david2.tm_hour = 19;
-    david2.tm_mday = 2;
-    david2.tm_mon = 9;
-
-    CEvent * ev = new CEvent(
-            0,
-            "Narozeniny u me doma",
-            "Doma",
-            "Moje narozeniny",
-            CDate(david),
-            CDate(david2),
-            1,
-            nullptr);
-
-    CEvent * ev2 = new CEvent(
-            1,
-            "Narozeniny",
-            "Doma",
-            "Moje narozeniny",
-            CDate(david),
-            CDate(david2),
-            1,
-            nullptr);
-
-    //cout << ev << endl;
-
-    //cout << CEvent::InteractiveCreator() << endl;
-
-    cal.AddEvent(ev);
-    cal.AddEvent(ev2);
-
-    auto found = cal.SearchEvents("narozeniny u");
-
-    /*
-    for (auto i : found)
-        cout << i << endl;
-        */
-
-    CEventRepeatBase * repeat = new CEventRepeatAfter(std::chrono::minutes(3));
-
-    CEventRepeatBase * repeat1 = new CEventRepeatDayInMonth(-5);
-
-    cout << CDate(david) << endl;
-    cout << CDate(david2) << endl << endl;
-    for (auto a : repeat1->TestRangeWithExceptions(CDate(david), CDate(david), CDate(david2)))
-        cout << a << endl;
-
-
-/*
-    for (auto a : repeat->TestRange(CDate(david), CDate(david), CDate(david2)))
-        cout << a << endl;
-*/
 
     return 0;
 }

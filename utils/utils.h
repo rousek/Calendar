@@ -9,6 +9,9 @@
 #include <string>
 #include <sstream>
 
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+
 // Stolen from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 
 // trim from start (in place)
@@ -46,7 +49,6 @@ static inline std::string toStr(const _T & it)
 
     return ss.str();
 }
-
 
 static inline std::vector<std::string> split(const std::string &s, char delim) {
     std::vector<std::string> result;

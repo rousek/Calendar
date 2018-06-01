@@ -26,56 +26,110 @@ CDate::CDate(const std::string &str)
     m_Date.tm_isdst = -1;
 
     if (mktime(&m_Date) == -1)
-        throw std::invalid_argument("Invalid date!");
+        throw std::invalid_argument("Invalid date string!");
 }
 
 CDate::CDate(const tm & tm)
 {
     m_Date = tm;
     m_Date.tm_isdst = -1;
-    m_Date.tm_sec = 0;
 
     if (mktime(&m_Date) == -1)
-        throw std::invalid_argument("Invalid date!");
+        throw std::invalid_argument("Invalid date 2!");
 }
 
-CDate::CDate(time_t number) : CDate(*gmtime(&number))
+CDate::CDate(time_t number)
 {
-}
+    if (number < 0)
+        throw std::invalid_argument("Date must be at least 01. 01. 1970!");
+    if (number > std::numeric_limits<time_t>::max())
+        throw std::invalid_argument("Date is too big!");
 
-int CDate::GetYear() const
-{
-    return m_Date.tm_year + 1900;
-}
-
-int CDate::GetMonth() const
-{
-    return m_Date.tm_mon + 1;
-}
-
-int CDate::GetDay() const
-{
-    return m_Date.tm_mday;
-}
-
-int CDate::GetHour() const
-{
-    return m_Date.tm_hour;
-}
-
-int CDate::GetMinute() const
-{
-    return m_Date.tm_min;
+    //number -= _timezone;
+    m_Date.tm_isdst = -1;
+    //m_Date = *gmtime(&number);
+    m_Date = *localtime(&number);
 }
 
 time_t CDate::Count() const
 {
-    return mktime(const_cast<tm*>(&m_Date));
+    tm cpy = m_Date;
+    return mktime(&cpy);
 }
 
 tm CDate::GetTm() const
 {
     return m_Date;
+}
+
+CDate& CDate::SetYear(int y)
+{
+    if (y >= 1970)
+    {
+        m_Date.tm_year = y - 1900;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Year must be at least 1970!");
+    }
+}
+
+CDate& CDate::SetMonth(int m)
+{
+    if (m > 0 && m < 13)
+    {
+        m_Date.tm_mon = m - 1;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Month must be between 1 and 12!");
+    }
+}
+
+CDate& CDate::SetDay(int d)
+{
+    if (d >= 1 && d <= MonthLength(GetMonth(), GetYear()))
+    {
+        m_Date.tm_mday = d;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid day!");
+    }
+}
+
+CDate& CDate::SetHour(int h)
+{
+    if (h >= 0 && h < 24)
+    {
+        m_Date.tm_hour = h;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid hour!");
+    }
+}
+
+CDate& CDate::SetMinute(int m)
+{
+    if (m >= 0 && m < 60)
+    {
+        m_Date.tm_min = m;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid minute!");
+    }
 }
 
 bool CDate::operator == (const CDate & d2) const
@@ -91,6 +145,57 @@ bool CDate::operator <= (const CDate & d2) const
 bool CDate::operator < (const CDate & d2) const
 {
     return Count() < d2.Count();
+}
+
+CDate CDate::operator+(const CDuration &duration) const
+{
+    tm cpy(GetTm());
+    cpy.tm_mon = 0;
+    cpy.tm_hour++; // UNIX timestamp starts at 01:00
+    cpy.tm_year = 70;
+    cpy.tm_isdst = -1;
+
+    time_t timestamp = mktime(&cpy);
+    if (timestamp == -1)
+        throw std::invalid_argument("Invalid date 3!");
+
+    CDuration dayAndTime = CDuration::Seconds(timestamp + duration.GetSeconds());
+    CDuration::Separated separated(dayAndTime.Separate());
+
+    tm cpyFinal(GetTm());
+    cpyFinal.tm_year += duration.GetYears();
+    cpyFinal.tm_mon += duration.GetMonths();
+    // Days begin at index 1.
+    cpyFinal.tm_mday = static_cast<int>(separated.weeks * CDuration::DAYS_IN_WEEK + separated.days + 1);
+    // Hours don't but it didn't work any other way lol.
+    cpyFinal.tm_hour = static_cast<int>(separated.hours);
+    cpyFinal.tm_min = static_cast<int>(separated.minutes);
+    cpyFinal.tm_sec = static_cast<int>(separated.seconds);
+
+    return CDate(cpyFinal);
+}
+
+CDate& CDate::operator+=(const CDuration &duration)
+{
+    CDate newDate = operator+(duration);
+    m_Date = newDate.m_Date;
+
+    return *this;
+}
+
+CDate CDate::operator-(const CDuration &duration) const
+{
+    return operator+(-duration);
+}
+
+CDate& CDate::operator-=(const CDuration &duration)
+{
+    return operator+=(-duration);
+}
+
+CDuration CDate::operator-(const CDate &d2) const
+{
+    return CDuration::Seconds(Count() - d2.Count());
 }
 
 CDate CDate::ReadDate(std::istream & s)
@@ -175,35 +280,29 @@ CDate CDate::CombineDateTime(const CDate & date, const CDate & time)
     return CDate(tm);
 }
 
-std::string CDate::GetFormattedDuration(long long int minutesCount)
+CDate CDate::StartOfMonth(int month, int year)
 {
-    std::stringstream ss;
-    auto days = minutesCount / (60 * 24);
-    auto hours = minutesCount / 60 - days * 24;
-    auto mins = minutesCount % 60;
+    tm tm = {0};
+    tm.tm_isdst = -1;
+    tm.tm_mday = 1;
+    tm.tm_mon = month - 1;
+    tm.tm_year = year - 1900;
 
-    std::string delim("");
+    return CDate(tm);
+}
 
-    if (days > 0)
-    {
-        ss << days << ((days == 1) ? " day" : " days");
-        delim = ", ";
-    }
+CDate CDate::EndOfMonth(int month, int year)
+{
+    tm tm = {0};
+    tm.tm_isdst = -1;
+    tm.tm_mday = MonthLength(month, year);
+    tm.tm_mon = month - 1;
+    tm.tm_year = year - 1900;
+    tm.tm_hour = 23;
+    tm.tm_min = 59;
+    tm.tm_sec = 59;
 
-    if (hours > 0)
-    {
-        ss << delim;
-        ss << hours << ((hours == 1) ? " hour" : " hours");
-        delim = ", ";
-    }
-
-    if (mins > 0)
-    {
-        ss << delim;
-        ss << mins << ((mins == 1) ? " minute" : " minutes");
-    }
-
-    return ss.str();
+    return CDate(tm);
 }
 
 std::ostream & CDate::PrintDate(std::ostream & stream) const
@@ -221,36 +320,9 @@ std::ostream & operator << (std::ostream & stream, const CDate & date)
     return stream << std::put_time(&date.m_Date, CDate::WHOLE_FORMAT);
 }
 
-std::chrono::minutes CDate::DurationToMinutes(std::string duration) {
-    std::chrono::minutes mins(0);
-    using namespace std;
-
-    std::vector<std::string> parts = split(duration, ',');
-
-    for (auto part : parts)
-    {
-        std::stringstream ss(part);
-        int number;
-        std::string unit;
-
-        if (!(ss >> number) || !(ss >> unit))
-            throw std::invalid_argument("Invalid duration string!");
-
-        if (unit == "month" || unit == "months")
-            mins += std::chrono::duration_cast<std::chrono::minutes>(CDate::Months(number));
-        else if (unit == "week" || unit == "weeks")
-            mins += std::chrono::duration_cast<std::chrono::minutes>(CDate::Weeks(number));
-        else if (unit == "day" || unit == "days")
-            mins += std::chrono::duration_cast<std::chrono::minutes>(CDate::Days(number));
-        else if (unit == "hour" || unit == "hours")
-            mins += std::chrono::duration_cast<std::chrono::minutes>(std::chrono::hours(number));
-        else if (unit == "minute" || unit == "minutes")
-            mins += std::chrono::minutes(number);
-        else
-            throw std::invalid_argument("Invalid duration string!");
-    }
-
-    return mins;
+std::ostream & operator << (std::ostream & stream, const CDate::Interval & interval)
+{
+    return stream << interval.first << " - " << interval.second;
 }
 
 
@@ -276,4 +348,34 @@ int CDate::MonthLength(int month, int year)
         case 12: return 31;
         default: throw std::invalid_argument("Wrong month: " + toStr(month));
     }
+}
+
+char const * CDate::MonthStringShort(int month)
+{
+    static const char MONTHS[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+
+    return MONTHS[month - 1];
+}
+
+char const * CDate::MonthStringLong(int month)
+{
+    static const char MONTHS[12][10] = {"January", "February", "March", "April", "May",
+                                        "June", "July", "August", "September", "October",
+                                        "November", "December"};
+
+    return MONTHS[month - 1];
+}
+
+char const * CDate::WeekdayStringShort(int weekday)
+{
+    static const char WEEKDAYS[12][4] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
+    return WEEKDAYS[weekday];
+}
+
+char const * CDate::WeekdayStringLong(int weekday)
+{
+    static const char WEEKDAYS[12][10] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+
+    return WEEKDAYS[weekday];
 }

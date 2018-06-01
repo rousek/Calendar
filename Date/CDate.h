@@ -11,6 +11,7 @@
 #include <functional>
 #include <ratio>
 #include <chrono>
+#include "CDuration.h"
 
 /**
  * Wrapper of tm struct defining useful methods like read/write format
@@ -45,36 +46,46 @@ public:
     /**
      * @return Year of date. Integer.
      */
-    int GetYear() const;
+    int GetYear() const { return m_Date.tm_year + 1900; }
 
     /**
      * @return Month of date. Integer 1-12.
      */
-    int GetMonth() const;
+    int GetMonth() const { return m_Date.tm_mon + 1; }
 
     /**
      * @return Day of date. Integer 1-31 (depending on month).
      */
-    int GetDay() const;
+    int GetDay() const { return m_Date.tm_mday; }
     /**
      * @return Hour of date. Integer 0-23.
      */
-    int GetHour() const;
+    int GetHour() const { return m_Date.tm_hour; }
 
     /**
      * @return Minute of date. Integer 0-59.
      */
-    int GetMinute() const;
+    int GetMinute() const { return m_Date.tm_min; }
 
+    /**
+     * @return Return number of days since Sunday.
+     */
+    int GetWeekDay() const { return m_Date.tm_wday; }
     /**
      * @return time_t value. Useful for date arithmetics.
      */
     time_t Count() const;
-
     /**
      * @return copy of underlying tm struct.
      */
     tm GetTm()  const;
+
+    CDate & SetYear(int y);
+    CDate & SetMonth(int m);
+    CDate & SetDay(int d);
+    CDate & SetHour(int h);
+    CDate & SetMinute(int m);
+
 
     bool operator == (const CDate & d2) const;
     bool operator < (const CDate & d2) const;
@@ -83,6 +94,28 @@ public:
     bool operator != (const CDate & d2) const { return !operator==(d2); }
     bool operator > (const CDate & d2) const { return !operator<=(d2); }
     bool operator >= (const CDate & d2) const { return !operator<(d2); }
+
+    CDate operator+(const CDuration & duration) const;
+    CDate & operator+=(const CDuration & duration);
+    CDate operator-(const CDuration & duration) const;
+    CDate & operator-=(const CDuration & duration);
+
+    CDuration operator-(const CDate & d2) const;
+
+    /**
+     * Print year, month and day in format set by CDate::DATE_FORMAT
+     * @param stream
+     * @return ostream &
+     */
+    std::ostream & PrintDate(std::ostream & stream) const;
+
+    /**
+     * Print hour and minute in format set by CDate::TIME_FORMAT
+     * @param stream
+     * @return ostream &
+     */
+    std::ostream & PrintTime(std::ostream & stream) const;
+
 
     /**
      * Reads year, month, day in format set by DATE_FORMAT.
@@ -116,19 +149,8 @@ public:
      */
     static CDate CombineDateTime(const CDate & date, const CDate & time);
 
-    /**
-     * Converts duration in minutes into human readable format.
-     * @param minutesCount Number of minutes.
-     * @return string like this: "X days, Y hours, Z minutes"
-     */
-    static std::string GetFormattedDuration(long long int minutesCount);
-
-    /**
-     * Converts duration string to std::chrono::minutes.
-     * @param duration String like this: "1 days, 4 hours, 2 minutes, 3 days". Does not support seconds.
-     * @return duration in minutes.
-     */
-    static std::chrono::minutes DurationToMinutes(std::string duration);
+    static CDate StartOfMonth(int month, int year);
+    static CDate EndOfMonth(int month, int year);
 
     /**
      * @param month
@@ -137,39 +159,19 @@ public:
      */
     static int MonthLength(int month, int year);
 
-    /**
-     * Print year, month and day in format set by CDate::DATE_FORMAT
-     * @param stream
-     * @return ostream &
-     */
-    std::ostream & PrintDate(std::ostream & stream) const;
+    static char const * MonthStringShort(int month);
+    static char const * MonthStringLong(int month);
 
-    /**
-     * Print hour and minute in format set by CDate::TIME_FORMAT
-     * @param stream
-     * @return ostream &
-     */
-    std::ostream & PrintTime(std::ostream & stream) const;
+    static char const * WeekdayStringShort(int weekday);
+    static char const * WeekdayStringLong(int weekday);
 
+
+    typedef std::pair<CDate, CDate> Interval;
 
     friend std::ostream & operator << (std::ostream & stream, const CDate & date);
 
-    /**
-     * C++11 polyfill of chrono::days
-     */
-    typedef std::chrono::duration<int64_t, std::ratio<86400>> Days;
+    friend std::ostream & operator << (std::ostream & stream, const CDate::Interval & interval);
 
-    /**
-     * C++11 polyfill of chrono::weeks
-     */
-    typedef std::chrono::duration<int64_t, std::ratio<604800>> Weeks;
-
-    /**
-     * C++11 polyfill of chrono::months
-     */
-    typedef std::chrono::duration<int64_t, std::ratio<2629746>> Months;
-
-    typedef std::pair<CDate, CDate> Interval;
 private:
     tm m_Date;
 

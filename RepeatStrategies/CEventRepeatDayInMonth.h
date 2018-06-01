@@ -15,7 +15,7 @@
 class CEventRepeatDayInMonth : public CEventRepeatBase
 {
 protected:
-    std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
     /**
      * Constructor
@@ -39,6 +39,10 @@ public:
     std::string ToStr() const override;
 private:
     int m_Day;
+
+    void Positive(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
+
+    void Negative(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
 };
 
 

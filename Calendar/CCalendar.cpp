@@ -19,16 +19,20 @@ CCalendar::~CCalendar()
 
 void CCalendar::AddEvent(CEvent * ev)
 {
-    if (ev->GetID() >= m_EventCounter)
-        m_EventCounter = ev->GetID() + 1;
+    int ID = ev->GetID();
 
+    if (ID >= m_EventCounter)
+        m_EventCounter = ID + 1;
+    else
+        ev->SetID(m_EventCounter++);
+
+    m_Events.insert(std::make_pair(ID, ev));
     m_Suggestions.Insert(ev);
 }
 
 void CCalendar::CreateEvent()
 {
     CEvent * ev = CEvent::InteractiveCreator(m_EventCounter);
-    m_EventCounter++;
     AddEvent(ev);
 }
 
@@ -76,4 +80,19 @@ std::vector<CEvent *> CCalendar::SearchEvents(const std::string & name) const
 {
     return m_Suggestions.Suggest(name);
 }
+
+std::map<CDate::Interval, CEvent *> CCalendar::FindInInterval(const CDate::Interval & interval) const
+{
+    std::map<CDate::Interval, CEvent *> results;
+
+    for (auto pair : m_Events)
+    {
+        CEvent * ev = pair.second;
+
+        for (auto instance : ev->FindInInterval(interval))
+            results.insert(make_pair(instance, ev));
+    }
+
+    return results;
+};
 

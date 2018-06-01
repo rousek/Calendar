@@ -40,12 +40,17 @@ CEvent::~CEvent()
     delete m_Repeat;
 }
 
-std::chrono::minutes CEvent::GetDuration() const
+CDuration CEvent::GetDuration() const
 {
     double diff = difftime(m_End.Count(), m_Start.Count());
-    auto secs = std::chrono::seconds(static_cast<int>(diff));
+    return CDuration::Seconds(static_cast<int>(diff));
+}
 
-    return std::chrono::duration_cast<std::chrono::minutes>(secs);
+std::set<CDate::Interval> CEvent::FindInInterval(const CDate::Interval & interval) const
+{
+    auto beginnings = m_Repeat->TestRangeWithExceptions(m_Start, interval);
+
+    return CEventRepeatBase::MakeIntervals(beginnings, GetDuration());
 }
 
 bool CEvent::InteractiveEditor()
@@ -154,17 +159,13 @@ std::ostream & operator<<(std::ostream & s, const CEvent & ev)
     s << "Summary: " << ev.GetSummary() << std::endl;
     s << "Starts on: " << ev.m_Start << std::endl;
     s << "Ends on: " << ev.m_End << std::endl;
-    s << "Duration: " << ev.DurationString() << std::endl;
+    s << "Duration: " << ev.GetDuration() << std::endl;
     s << "Priority: " << ev.m_Priority << std::endl;
     s << "Repetition: " << ev.m_Repeat->ToStr() << std::endl;
 
     return s;
 }
 
-std::string CEvent::DurationString() const
-{
-    return CDate::GetFormattedDuration(GetDuration().count());
-}
 
 std::ostream & operator<<(std::ostream & s, const CEvent * ev)
 {
@@ -204,7 +205,7 @@ CEventRepeatBase * CEvent::ReadRepetition(std::istream & s)
             if (parts[0] == "after")
             {
                 const int offset = 6; // Offset in line after string "after "
-                auto duration = CDate::DurationToMinutes(line.substr(offset));
+                CDuration duration = CDuration(line.substr(offset));
                 return new CEventRepeatAfter(duration);
             }
         }

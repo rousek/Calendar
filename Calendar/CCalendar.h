@@ -28,6 +28,7 @@ public:
     void RemoveEvent(int ID) { RemoveEvent(FindEvent(ID)); }
     void EditEvent(const std::map<int, CEvent *>::const_iterator & it);
     void EditEvent(int ID) { EditEvent(FindEvent(ID)); }
+    std::map<CDate::Interval, CEvent *> FindInInterval(const CDate::Interval & interval) const;
     void Clear();
 
     std::vector<CEvent *> SearchEvents(const std::string & name) const;

@@ -3,31 +3,34 @@
 //
 
 #include <cmath>
+#include <sstream>
 #include "CEventRepeatAfter.h"
 #include "../utils/utils.h"
 
-std::set<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &from, const CDate &to) const
+std::set<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate::Interval & interval) const
 {
+    CDate from = MAX(interval.first, date);
+    CDate to = interval.second;
+    
     if (date > to) // Event starts after given interval
         return {};
 
-    auto diffSecs = std::chrono::seconds(from.Count() - date.Count());
-    auto diffMins = std::chrono::duration_cast<std::chrono::minutes>(diffSecs);
-
-    // Get offset from date of event in minutes.
-    int offset = static_cast<int>(std::ceil(diffMins.count() / m_After.count()) * m_After.count());
-
+    long long timeToStart = from.Count() - date.Count();
+    long long intervalSecs = m_Interval.GetSize();
+    // Get offset from date of event in seconds.
+    long long offset = static_cast<int>(std::ceil(timeToStart / intervalSecs)) * intervalSecs;
     std::set<CDate> results;
 
-    time_t timestamp = date.Count() + offset * 60;
+    time_t timestamp = date.Count() + offset;
     CDate tmpDate = CDate(timestamp);
-    long long interval = m_After.count() * 60;
 
     while (tmpDate <= to)
     {
-        results.insert(tmpDate);
 
-        timestamp += interval;
+        if (tmpDate >= from)
+            results.insert(tmpDate);
+
+        timestamp += intervalSecs;
         tmpDate = CDate(timestamp);
     }
 
@@ -36,5 +39,5 @@ std::set<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate &fro
 
 std::string CEventRepeatAfter::ToStr() const
 {
-    return toStr("after ") + CDate::GetFormattedDuration(m_After.count());
+    return toStr("after ") + toStr(m_Interval);
 }

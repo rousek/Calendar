@@ -11,7 +11,7 @@
 class CEventRepeatDisabled : public CEventRepeatBase
 {
 protected:
-    std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
     ~CEventRepeatDisabled() override = default;
     CEventRepeatBase * Clone() const override { return new CEventRepeatDisabled(*this); }

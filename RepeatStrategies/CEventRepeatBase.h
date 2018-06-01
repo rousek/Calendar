@@ -12,7 +12,7 @@
 class CEventRepeatBase
 {
 protected:
-    virtual std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const = 0;
+    virtual std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const = 0;
 public:
     std::set<CDate> m_Additional;
     std::set<CDate> m_Skipped;
@@ -20,8 +20,8 @@ public:
     virtual std::string ToStr() const = 0;
     virtual CEventRepeatBase * Clone() const = 0;
 
-    virtual std::set<CDate> TestRangeWithExceptions(const CDate & date, const CDate & from, const CDate & to);
-    static std::set<std::pair<CDate, CDate>> MakeIntervals(const std::set<CDate> & beginnings, const std::chrono::minutes & duration);
+    virtual std::set<CDate> TestRangeWithExceptions(const CDate & date, const CDate::Interval & interval);
+    static std::set<std::pair<CDate, CDate>> MakeIntervals(const std::set<CDate> & beginnings, const CDuration & duration);
 };
 
 

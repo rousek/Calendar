@@ -4,8 +4,11 @@
 
 #include "CEventRepeatDayInMonth.h"
 
-std::set<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CDate &from, const CDate &to) const
+std::set<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CDate::Interval & interval) const
 {
+    CDate from = interval.first;
+    CDate to = interval.second;
+
     if (date > to)
         return {};
 
@@ -14,51 +17,76 @@ std::set<CDate> CEventRepeatDayInMonth::TestRange(const CDate &date, const CDate
     if (date >= from)
         results.insert(date);
 
-    tm tm = from.GetTm();
-    int day;
+    CDate current = from;
+    current.SetHour(date.GetHour()).SetMinute(date.GetMinute());
 
-    if (m_Day < 0)
-        day = CDate::MonthLength(from.GetMonth(), from.GetYear()) + m_Day + 1;
+    if (m_Day > 0)
+        Positive(date, to, results, current);
     else
-        day = m_Day;
+        Negative(date, to, results, current);
 
-    tm.tm_mday = day;
-    tm.tm_hour = date.GetHour();
-    tm.tm_min = date.GetMinute();
-    CDate current(tm);
+    return results;
+}
+
+void CEventRepeatDayInMonth::Negative(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const
+{
+    // -1 is last day of month.
+    int offset = m_Day + 1;
+    int monthLen = CDate::MonthLength(current.GetMonth(), current.GetYear());
+    int day = monthLen + offset;
+
+    if (day < 1)
+        {
+            // Set current to first day of next month.
+            current.SetDay(1);
+            current += CDuration::Months(1);
+
+            // Determine length of said day and date.
+            monthLen = CDate::MonthLength(current.GetMonth(), current.GetYear());
+            day = monthLen + offset;
+        }
+
+    current.SetDay(day);
 
     while (current <= to)
     {
-        if (current > date && current >= from)
+        if (current > date)
+            results.insert(current);
+
+        // Loop necessary in case m_Day is -31 and month is February.
+        while (true)
         {
-            if (m_Day < 0)
-            {
-                if (current.GetDay() == CDate::MonthLength(current.GetMonth(), current.GetYear()) + m_Day + 1)
-                    results.insert(current);
-            }
-            else
-            {
-                if (current.GetDay() == m_Day)
-                    results.insert(current);
-            }
+            // Set current to first day of next month.
+            current.SetDay(1);
+            current += CDuration::Months(1);
+
+            // Determine length of said day and date.
+            monthLen = CDate::MonthLength(current.GetMonth(), current.GetYear());
+            day = monthLen + offset;
+
+            if (day > 0)
+                break;
         }
 
-        tm.tm_mon++;
-        if (tm.tm_mon == 11)
-        {
-            tm.tm_mon = 0;
-            tm.tm_year++;
-        }
-
-        if (m_Day < 0)
-            tm.tm_mday = CDate::MonthLength(tm.tm_mon + 1, tm.tm_year + 1900) + m_Day + 1;
-        else
-            tm.tm_mday = m_Day;
-
-        current = CDate(tm);
+        current.SetDay(day);
     }
+}
 
-    return results;
+void CEventRepeatDayInMonth::Positive(const CDate &date, const CDate & to, std::set<CDate> &results, CDate current) const
+{
+    current.SetDay(m_Day);
+
+    while (current <= to)
+    {
+        if (current > date)
+            results.insert(current);
+
+        current += CDuration::Months(1);
+
+        // Date overflows into next month when it's invalid (30. 02. would be 01. 03. or 02. 03.)
+        if (current.GetDay() != m_Day)
+            current.SetDay(m_Day);
+    }
 }
 
 std::string CEventRepeatDayInMonth::ToStr() const

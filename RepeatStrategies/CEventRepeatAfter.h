@@ -9,16 +9,16 @@
 
 class CEventRepeatAfter : public CEventRepeatBase {
 protected:
-    std::set<CDate> TestRange(const CDate & date, const CDate & from, const CDate & to) const override;
+    std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
-    explicit CEventRepeatAfter(const std::chrono::minutes & mins) : m_After(mins)
+    explicit CEventRepeatAfter(const CDuration & duration) : m_Interval(duration)
     {
     }
     CEventRepeatBase * Clone() const override { return new CEventRepeatAfter(*this); }
     ~CEventRepeatAfter() override = default;
     std::string ToStr() const override;
 private:
-    std::chrono::minutes m_After;
+    CDuration m_Interval;
 };
 
 
