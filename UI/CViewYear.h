@@ -6,15 +6,17 @@
 #define SEM_CVIEWYEAR_H
 
 
-#include "CViewBase.h"
+#include "CViewTime.h"
 
-class CViewYear : public CViewBase
+class CViewYear : public CViewTime
 {
 public:
-    ~CViewYear() = default;
-    void Draw(const CCalendar & calendar, const CDate & date) const override;
-    CDate Previous(const CDate & date) const override;
-    CDate Next(const CDate & date) const override;
+    using CViewTime::CViewTime;
+    ~CViewYear() override = default;
+    CEvent * Find(int ID) const override;
+    void Update() override;
+    void Previous() override;
+    void Next() override;
 };
 
 

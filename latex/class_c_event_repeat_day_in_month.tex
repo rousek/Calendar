@@ -1,0 +1,91 @@
+\hypertarget{class_c_event_repeat_day_in_month}{}\section{C\+Event\+Repeat\+Day\+In\+Month Class Reference}
+\label{class_c_event_repeat_day_in_month}\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+
+
+{\ttfamily \#include $<$C\+Event\+Repeat\+Day\+In\+Month.\+h$>$}
+
+Inheritance diagram for C\+Event\+Repeat\+Day\+In\+Month\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_c_event_repeat_day_in_month}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_event_repeat_day_in_month_a161460e3eeb9fa2a027d39004828a760}{C\+Event\+Repeat\+Day\+In\+Month}} (int day)
+\item 
+\mbox{\hyperlink{class_c_event_repeat_day_in_month_a37483901cea40744356c63cc491f759a}{$\sim$\+C\+Event\+Repeat\+Day\+In\+Month}} () override=default
+\item 
+\mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}} $\ast$ \mbox{\hyperlink{class_c_event_repeat_day_in_month_a329373945107435d629ecc2491ce8b38}{Clone}} () const override
+\item 
+std\+::string \mbox{\hyperlink{class_c_event_repeat_day_in_month_a5ec4554d0d7c1c9a50cd1f37f0d76673}{To\+Str}} () const override
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::set$<$ \mbox{\hyperlink{class_c_date}{C\+Date}} $>$ \mbox{\hyperlink{class_c_event_repeat_day_in_month_a84de2696efb387af591bff04f37fd7ed}{Test\+Range}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&date, const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&interval) const override
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Allows expressions like 10. day in month. Or last day of month. 
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_event_repeat_day_in_month_a161460e3eeb9fa2a027d39004828a760}\label{class_c_event_repeat_day_in_month_a161460e3eeb9fa2a027d39004828a760}} 
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\subsubsection{\texorpdfstring{C\+Event\+Repeat\+Day\+In\+Month()}{CEventRepeatDayInMonth()}}
+{\footnotesize\ttfamily C\+Event\+Repeat\+Day\+In\+Month\+::\+C\+Event\+Repeat\+Day\+In\+Month (\begin{DoxyParamCaption}\item[{int}]{day }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}
+
+Constructor 
+\begin{DoxyParams}{Parameters}
+{\em day} & Non-\/zero number between -\/31 and 31. Negative value means from the back. E. g. -\/1 in January means 31. In February 28 and 29 for non-\/leap and leap respectively. Throws invalid\+\_\+argument if out of boundaries. Event will not trigger if day is 30 and month is February. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_event_repeat_day_in_month_a37483901cea40744356c63cc491f759a}\label{class_c_event_repeat_day_in_month_a37483901cea40744356c63cc491f759a}} 
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!````~C\+Event\+Repeat\+Day\+In\+Month@{$\sim$\+C\+Event\+Repeat\+Day\+In\+Month}}
+\index{````~C\+Event\+Repeat\+Day\+In\+Month@{$\sim$\+C\+Event\+Repeat\+Day\+In\+Month}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\subsubsection{\texorpdfstring{$\sim$\+C\+Event\+Repeat\+Day\+In\+Month()}{~CEventRepeatDayInMonth()}}
+{\footnotesize\ttfamily C\+Event\+Repeat\+Day\+In\+Month\+::$\sim$\+C\+Event\+Repeat\+Day\+In\+Month (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [default]}}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_event_repeat_day_in_month_a329373945107435d629ecc2491ce8b38}\label{class_c_event_repeat_day_in_month_a329373945107435d629ecc2491ce8b38}} 
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!Clone@{Clone}}
+\index{Clone@{Clone}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\subsubsection{\texorpdfstring{Clone()}{Clone()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}}$\ast$ C\+Event\+Repeat\+Day\+In\+Month\+::\+Clone (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c_event_repeat_base_a73b079543ea6d97d38933b6a7544e349}{C\+Event\+Repeat\+Base}}.
+
+\mbox{\Hypertarget{class_c_event_repeat_day_in_month_a84de2696efb387af591bff04f37fd7ed}\label{class_c_event_repeat_day_in_month_a84de2696efb387af591bff04f37fd7ed}} 
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!Test\+Range@{Test\+Range}}
+\index{Test\+Range@{Test\+Range}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\subsubsection{\texorpdfstring{Test\+Range()}{TestRange()}}
+{\footnotesize\ttfamily std\+::set$<$ \mbox{\hyperlink{class_c_date}{C\+Date}} $>$ C\+Event\+Repeat\+Day\+In\+Month\+::\+Test\+Range (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{date,  }\item[{const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&}]{interval }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c_event_repeat_base_ad8371820b1c9771c93b452e4c80f4cea}{C\+Event\+Repeat\+Base}}.
+
+\mbox{\Hypertarget{class_c_event_repeat_day_in_month_a5ec4554d0d7c1c9a50cd1f37f0d76673}\label{class_c_event_repeat_day_in_month_a5ec4554d0d7c1c9a50cd1f37f0d76673}} 
+\index{C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}!To\+Str@{To\+Str}}
+\index{To\+Str@{To\+Str}!C\+Event\+Repeat\+Day\+In\+Month@{C\+Event\+Repeat\+Day\+In\+Month}}
+\subsubsection{\texorpdfstring{To\+Str()}{ToStr()}}
+{\footnotesize\ttfamily std\+::string C\+Event\+Repeat\+Day\+In\+Month\+::\+To\+Str (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [override]}, {\ttfamily [virtual]}}
+
+
+
+Implements \mbox{\hyperlink{class_c_event_repeat_base_acf60d2b0890fdb3e701c944b26186197}{C\+Event\+Repeat\+Base}}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Repeat\+Strategies/\mbox{\hyperlink{_c_event_repeat_day_in_month_8h}{C\+Event\+Repeat\+Day\+In\+Month.\+h}}\item 
+Repeat\+Strategies/\mbox{\hyperlink{_c_event_repeat_day_in_month_8cpp}{C\+Event\+Repeat\+Day\+In\+Month.\+cpp}}\end{DoxyCompactItemize}

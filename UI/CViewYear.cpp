@@ -5,9 +5,9 @@
 #include "CViewYear.h"
 
 
-void CViewYear::Draw(const CCalendar &calendar, const CDate &date) const
+void CViewYear::Update()
 {
-    int year = date.GetYear();
+    int year = m_Date.GetYear();
     int total = 0;
 
     std::cout << "*************** -" << year << "- ***************" << std::endl;
@@ -17,20 +17,25 @@ void CViewYear::Draw(const CCalendar &calendar, const CDate &date) const
         int count = 0;
 
         auto interval = std::make_pair(CDate::StartOfMonth(month, year), CDate::EndOfMonth(month, year));
-        count = calendar.FindInInterval(interval).size();
+        count = m_Calendar.FindInInterval(interval).size();
         total += count;
 
-        std::cout << month << ") " << CDate::MonthStringShort(month) << " - " << count << " events" << std::endl;
+        std::cout << month << ") " << CDate::MonthStringShort(month) << " - " << count << std::endl;
     }
     std::cout << "Total " << total << std::endl;
 }
 
-CDate CViewYear::Next(const CDate &date) const
+CEvent* CViewYear::Find(int ID) const
 {
-    return date + CDuration::Years(1);
+    throw std::invalid_argument("This view mode does not support this feature!");
 }
 
-CDate CViewYear::Previous(const CDate &date) const
+void CViewYear::Previous()
 {
-    return date - CDuration::Years(1);
+    m_Date -= CDuration::Years(1);
+}
+
+void CViewYear::Next()
+{
+    m_Date += CDuration::Years(1);
 }

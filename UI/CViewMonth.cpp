@@ -2,13 +2,14 @@
 // Created by matyas on 06/01/2018.
 //
 
+#include <iomanip>
 #include "CViewMonth.h"
 
 
-void CViewMonth::Draw(const CCalendar &calendar, const CDate &date) const
+void CViewMonth::Update()
 {
-    int month = date.GetMonth();
-    int year = date.GetYear();
+    int month = m_Date.GetMonth();
+    int year = m_Date.GetYear();
 
     // 01. XX. XXXX 00:00
     CDate start = CDate::StartOfMonth(month, year);
@@ -20,19 +21,32 @@ void CViewMonth::Draw(const CCalendar &calendar, const CDate &date) const
 
     while (start < endOfMonth)
     {
-        int count = calendar.FindInInterval(std::make_pair(start, end)).size();
+        int count = m_Calendar.FindInInterval(std::make_pair(start, end)).size();
+        int day = start.GetDay();
+        int weekday = start.GetWeekDay();
+
+        std::cout << std::setw(2) << day << ") " << CDate::WeekdayStringShort(weekday) << " - " << count << std::endl;
 
         start = end;
         end += CDuration::Days(1);
+        total += count;
     }
+
+    std::cout << "Total " << total << std::endl;
 }
 
-CDate CViewMonth::Next(const CDate &date) const
+
+CEvent* CViewMonth::Find(int ID) const
 {
-    return date + CDuration::Months(1);
+    throw std::invalid_argument("This view mode does not support this feature!");
 }
 
-CDate CViewMonth::Previous(const CDate &date) const
+void CViewMonth::Previous()
 {
-    return date - CDuration::Months(1);
+    m_Date -= CDuration::Months(1);
+}
+
+void CViewMonth::Next()
+{
+    m_Date += CDuration::Months(1);
 }

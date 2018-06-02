@@ -5,13 +5,96 @@
 #include <iostream>
 #include "../utils/utils.h"
 #include "CCommandInterpreter.h"
+#include "CViewWeek.h"
+#include "CViewMonth.h"
+#include "CViewYear.h"
 
-CCommandInterpreter::CCommandInterpreter()
+CCommandInterpreter::CCommandInterpreter() :
+        m_Position(CDate::Now()),
+        m_Views
+                {
+                new CViewWeek(m_Calendar, m_Position)
+                //new CViewMonth(m_Calendar, m_Position),
+                //new CViewYear(m_Calendar, m_Position)
+                }
+
 {
-    std::cout << "Welcome to Calendar!" << std::endl;
+    // Week view is default
+    m_ViewIndex = 0;
+    m_Commands.insert(std::make_pair("help", [this](const std::vector<std::string> & params) { Help(); }));
+    m_Commands.insert(std::make_pair("exit", [this](const std::vector<std::string> & params) { Exit(); }));
+    m_Commands.insert(std::make_pair("add", [this](const std::vector<std::string> & params) { Add(params); }));
+    m_Commands.insert(std::make_pair("edit", [this](const std::vector<std::string> & params) { Edit(params); }));
+    m_Commands.insert(std::make_pair("clear", [this](const std::vector<std::string> & params) { Clear(params); }));
+    m_Commands.insert(std::make_pair("delete", [this](const std::vector<std::string> & params) { Delete(params); }));
+    m_Commands.insert(std::make_pair("search", [this](const std::vector<std::string> & params) { Search(params); }));
+    m_Commands.insert(std::make_pair("next", [this](const std::vector<std::string> & params) { Next(params); }));
+    m_Commands.insert(std::make_pair("previous", [this](const std::vector<std::string> & params) { Previous(params); }));
+    m_Commands.insert(std::make_pair("zoom", [this](const std::vector<std::string> & params) { Zoom(params); }));
+    m_Commands.insert(std::make_pair("show", [this](const std::vector<std::string> & params) { Show(params); }));
+    m_Commands.insert(std::make_pair("export", [this](const std::vector<std::string> & params) { Export(params); }));
+    m_Commands.insert(std::make_pair("import", [this](const std::vector<std::string> & params) { Import(params); }));
 }
 
-void CCommandInterpreter::PrintHelp()
+CCommandInterpreter::~CCommandInterpreter()
+{
+    for (auto &view : m_Views)
+        delete view;
+}
+
+void CCommandInterpreter::Interpret(const std::string & command, const std::vector<std::string> & params)
+{
+    auto it = m_Commands.find(command);
+    if (it == m_Commands.end())
+    {
+        std::cout << "This command does not exist!" << std::endl;
+        Help();
+    }
+    else
+    {
+        auto fn = (*it).second;
+        fn(params);
+    }
+    /*
+    else if (command == "show")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+    else if (command == "export")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+    else if (command == "import")
+    {
+        std::cout << "TODO" << std::endl;
+    }
+     */
+}
+
+void CCommandInterpreter::Run()
+{
+    m_Stopped = false;
+
+    while (!m_Stopped)
+    {
+        std::string command;
+        std::string params;
+
+        std::cin >> command;
+        getline(std::cin, params);
+
+        Interpret(command, split(params, ' '));
+    }
+}
+
+void CCommandInterpreter::Welcome()
+{
+    std::cout << "Welcome to Calendar!" << std::endl;
+    std::cout << "Today is " << CDate::Now() << std::endl;
+    std::cout << "For help just type in \"help\" and press Enter." << std::endl;
+}
+
+void CCommandInterpreter::Help()
 {
     std::cout << "Available commands are:" << std::endl << std::endl;
 
@@ -24,15 +107,22 @@ void CCommandInterpreter::PrintHelp()
     std::cout << "add it to the calendar. Has no parameters." << std::endl << std::endl;
 
     std::cout << "edit event_id" << std::endl;
-    std::cout << "Every event has a unique id by which" << std::endl;
-    std::cout << "you can identify it. This runs" << std::endl;
+    std::cout << "Supported only in a few selected modes." << std::endl;
     std::cout << "Pass this id as parameter." << std::endl << std::endl;
 
     std::cout << "delete event_id" << std::endl;
     std::cout << "Delete event with given id." << std::endl << std::endl;
 
     std::cout << "clear" << std::endl;
-    std::cout << "Clears calendar. No parameters." << std::endl << std::endl;
+    std::cout << "Clears calendar." << std::endl << std::endl;
+
+    std::cout << "next" << std::endl;
+    std::cout << "Goes to next page of used view." << std::endl;
+    std::cout << "For example if calendar is showing weeks,"<< std::endl;
+    std::cout << "Then this will go to next week." << std::endl << std::endl;
+
+    std::cout << "previous" << std::endl;
+    std::cout << "Same as \"next\" but backwards." << std::endl << std::endl;
 
     std::cout << "zoom (in|out) [time_id]" << std::endl;
     std::cout << "Zooms into smaller timeframe." << std::endl;
@@ -54,76 +144,105 @@ void CCommandInterpreter::PrintHelp()
     std::cout << "import [mode] file_name" << std::endl;
     std::cout << "Imports events from file. Does not" << std::endl;
     std::cout << "remove existing events (if there are any)." << std::endl;
-    std::cout << "When there is ID collision, imported" << std::endl;
-    std::cout << "event is assigned new ID." << std::endl;
     std::cout << "Supported modes are \"default\" and \"ics\"." << std::endl << std::endl;
 }
 
-void CCommandInterpreter::GetNext()
+void CCommandInterpreter::Exit()
 {
-    std::string command;
-    std::string params;
-
-    std::cin >> command;
-    getline(std::cin, params);
-
-    Interpret(command, split(params, ' '));
+    m_Stopped = true;
 }
 
-void CCommandInterpreter::Interpret(const std::string & command, const std::vector<std::string> & params)
+void CCommandInterpreter::Add(const std::vector<std::string> &params)
 {
-    if (command == "help")
-    {
-        PrintHelp();
-    }
-    else if (command == "add")
-    {
-        if (params.size() != 0)
-            return PrintHelp();
+    if (!params.empty())
+        return Help();
 
-        m_Calendar.CreateEvent();
-    }
-    else if (command == "edit")
-    {
-        int evtID;
+    m_Calendar.CreateEvent();
+}
 
-        if (params.size() != 1)
-            return PrintHelp();
+void CCommandInterpreter::Edit(const std::vector<std::string> &params)
+{
+    int evtID;
 
-        evtID = parseInt(params[0]);
-        m_Calendar.EditEvent(evtID);
-    }
-    else if (command == "delete")
-    {
-        int evtID;
+    if (params.size() != 1)
+        return Help();
 
-        if (params.size() != 1)
-            return PrintHelp();
+    evtID = parseInt(params[0]);
+    m_Calendar.EditEvent(evtID);
+}
 
-        evtID = parseInt(params[0]);
-        m_Calendar.RemoveEvent(evtID);
-    }
-    else if (command == "clear")
-    {
-        if (params.size() != 0)
-            return PrintHelp();
+void CCommandInterpreter::Clear(const std::vector<std::string> &params)
+{
+    if (params.size() != 0)
+        return Help();
 
-        m_Calendar.Clear();
-    }
-    else if (command == "zoom")
+    m_Calendar.Clear();
+}
+
+void CCommandInterpreter::Delete(const std::vector<std::string> &params)
+{
+    int evtID;
+
+    if (params.size() != 1)
+        return Help();
+
+    evtID = parseInt(params[0]);
+
+    m_Calendar.RemoveEvent(evtID);
+}
+
+void CCommandInterpreter::Zoom(const std::vector<std::string> &params)
+{
+    int id = 0;
+
+    if (params.size() == 2)
     {
-        std::cout << "TODO" << std::endl;
+        try
+        {
+            id = parseInt(params[1]);
+        }
+        catch (...)
+        {
+            return Help();
+        }
     }
-    else if (command == "show")
+    else if (params.size() != 1)
+        return Help();
+
+    if (params[1] == "in")
     {
-        std::cout << "TODO" << std::endl;
+
+        if (m_ViewIndex == 0)
+            return;
     }
-    else if (command == "export")
-    {
-        std::cout << "TODO" << std::endl;
-    }
-    else if (command == "import")
-    {
-        std::cout << "TODO" << std::endl;
-    }
+}
+
+void CCommandInterpreter::Search(const std::vector<std::string> &params)
+{
+
+}
+
+void CCommandInterpreter::Next(const std::vector<std::string> &params)
+{
+
+}
+
+void CCommandInterpreter::Previous(const std::vector<std::string> &params)
+{
+
+}
+
+void CCommandInterpreter::Import(const std::vector<std::string> &params)
+{
+
+}
+
+void CCommandInterpreter::Export(const std::vector<std::string> &params)
+{
+
+}
+
+void CCommandInterpreter::Show(const std::vector<std::string> &params)
+{
+
 }

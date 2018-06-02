@@ -1,0 +1,492 @@
+\hypertarget{class_c_date}{}\section{C\+Date Class Reference}
+\label{class_c_date}\index{C\+Date@{C\+Date}}
+
+
+{\ttfamily \#include $<$C\+Date.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::pair$<$ \mbox{\hyperlink{class_c_date}{C\+Date}}, \mbox{\hyperlink{class_c_date}{C\+Date}} $>$ \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{Interval}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_date_abaab9d809338418c9a749ce479fcea61}{C\+Date}} ()
+\item 
+\mbox{\hyperlink{class_c_date_a208b6e697c2a65f42f398d2795d11115}{C\+Date}} (const std\+::string \&str)
+\item 
+\mbox{\hyperlink{class_c_date_a6c2d5510af2358d586b69b28adba03bf}{C\+Date}} (const tm \&tm)
+\item 
+\mbox{\hyperlink{class_c_date_a7e0bd9e23e35749322dee61812b2a604}{C\+Date}} (time\+\_\+t number)
+\item 
+int \mbox{\hyperlink{class_c_date_a27e6152eadf6eeb8aded10c7bbc30660}{Get\+Year}} () const
+\item 
+int \mbox{\hyperlink{class_c_date_ab35843343ac697ba7ff56c490a3a63aa}{Get\+Month}} () const
+\item 
+int \mbox{\hyperlink{class_c_date_a0ca574460424a4d3bd626de64077ea04}{Get\+Day}} () const
+\item 
+int \mbox{\hyperlink{class_c_date_a87aa91727803b813e167480856778f9a}{Get\+Hour}} () const
+\item 
+int \mbox{\hyperlink{class_c_date_a50240341813279851647f7317b177295}{Get\+Minute}} () const
+\item 
+int \mbox{\hyperlink{class_c_date_abef71ae78644a73ae1277680c93c0442}{Get\+Week\+Day}} () const
+\item 
+time\+\_\+t \mbox{\hyperlink{class_c_date_aa8f18dfb62e341afba7e7b55d8b63b68}{Count}} () const
+\item 
+tm \mbox{\hyperlink{class_c_date_aefc467c5b186c0d0c8499e32295eced2}{Get\+Tm}} () const
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_ae999d5eedbd66965ef1e69597bb089ff}{Set\+Year}} (int y)
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_adea44055d51cfb99ebdc8564c472f7a8}{Set\+Month}} (int m)
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_a35209c0b03fc6841fd08c8db4fee68a4}{Set\+Day}} (int d)
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_aa77cbbbcb5bad2663adadfd351d14f87}{Set\+Hour}} (int h)
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_a1d0fd38b1c94ea47359c325c4422dc31}{Set\+Minute}} (int m)
+\item 
+bool \mbox{\hyperlink{class_c_date_a28a838b34e2d39ce0eb4491c2361baf2}{operator==}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+bool \mbox{\hyperlink{class_c_date_a8a2db90f7b10e1bfc6a9075303721b00}{operator$<$}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+bool \mbox{\hyperlink{class_c_date_a4ef63cc76ace80f69dc86b2e9f64e4b8}{operator$<$=}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+bool \mbox{\hyperlink{class_c_date_a6f4dd69ce64b0fa9e654e55d54ead67d}{operator!=}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+bool \mbox{\hyperlink{class_c_date_aa85c9b1e8406ba15a19fb2e176392771}{operator$>$}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+bool \mbox{\hyperlink{class_c_date_a6737cc09a6d10d7d18f32759b8579ae2}{operator$>$=}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_ac45abf8f357a31af297a2602aecac529}{operator+}} (const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&duration) const
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_ac56d08174348a544b5c56add4e2634d4}{operator+=}} (const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&duration)
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_a7736d3c8fc1c10545ee0f0ce3397f260}{operator-\/}} (const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&duration) const
+\item 
+\mbox{\hyperlink{class_c_date}{C\+Date}} \& \mbox{\hyperlink{class_c_date_a42abd6ced54a740fa4f4d90c81845e0c}{operator-\/=}} (const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&duration)
+\item 
+\mbox{\hyperlink{class_c_duration}{C\+Duration}} \mbox{\hyperlink{class_c_date_aed1d924914698a4e64da455deb583656}{operator-\/}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&d2) const
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_date_aee82efe856e1ef96400c4d3db2854826}{Print\+Date}} (std\+::ostream \&stream) const
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_date_af1c7cb577d4136975d551323e48f5a26}{Print\+Time}} (std\+::ostream \&stream) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_acecb85381be6fa61d1416b52b506d023}{Read\+Date}} (std\+::istream \&s)
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_a73bd9b45b74115d1557f1729f996e16a}{Read\+Time}} (std\+::istream \&s)
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_ae3fb0fe31274b4485ff17a167bbfc508}{Request\+Date\+From\+User}} (std\+::function$<$ \mbox{\hyperlink{class_c_date}{C\+Date}}(std\+::istream \&)$>$ fn, bool required)
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_a28c167be273e16b93c80f5d59bd70dd9}{Combine\+Date\+Time}} (const \mbox{\hyperlink{class_c_date}{C\+Date}} \&date, const \mbox{\hyperlink{class_c_date}{C\+Date}} \&time)
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_a099ad9550e267ef4335138e3bb4729d8}{Start\+Of\+Month}} (int month, int year)
+\item 
+static \mbox{\hyperlink{class_c_date}{C\+Date}} \mbox{\hyperlink{class_c_date_ae4943e159d1375cf8e90474131d821a2}{End\+Of\+Month}} (int month, int year)
+\item 
+static int \mbox{\hyperlink{class_c_date_a5cba42ef155816c8d374d50e8149800d}{Month\+Length}} (int month, int year)
+\item 
+static char const  $\ast$ \mbox{\hyperlink{class_c_date_a4dc10a16bb273faf61c896c71f3f50de}{Month\+String\+Short}} (int month)
+\item 
+static char const  $\ast$ \mbox{\hyperlink{class_c_date_ae5b1a9098f964ba2243e6dd542f43891}{Month\+String\+Long}} (int month)
+\item 
+static char const  $\ast$ \mbox{\hyperlink{class_c_date_aff31350db373c3483a62b67f7467b578}{Weekday\+String\+Short}} (int weekday)
+\item 
+static char const  $\ast$ \mbox{\hyperlink{class_c_date_ad1fa158c041d965a156f8c0e26ff5cea}{Weekday\+String\+Long}} (int weekday)
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_date_a6101b1c471c7790dcb75f5746f719c5f}{operator$<$$<$}} (std\+::ostream \&stream, const \mbox{\hyperlink{class_c_date}{C\+Date}} \&date)
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_date_a4414c2f98725d7b2865080c5edc7ab62}{operator$<$$<$}} (std\+::ostream \&stream, const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&interval)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Wrapper of tm struct defining useful methods like read/write format and arithmetics. This implementation ignores seconds. 
+
+\subsection{Member Typedef Documentation}
+\mbox{\Hypertarget{class_c_date_af23472c977b14ed341b48183ec19d874}\label{class_c_date_af23472c977b14ed341b48183ec19d874}} 
+\index{C\+Date@{C\+Date}!Interval@{Interval}}
+\index{Interval@{Interval}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Interval}{Interval}}
+{\footnotesize\ttfamily typedef std\+::pair$<$\mbox{\hyperlink{class_c_date}{C\+Date}}, \mbox{\hyperlink{class_c_date}{C\+Date}}$>$ \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}}}
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_date_abaab9d809338418c9a749ce479fcea61}\label{class_c_date_abaab9d809338418c9a749ce479fcea61}} 
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{C\+Date()}{CDate()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily C\+Date\+::\+C\+Date (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Initialize date with zeroes as parameters. \mbox{\Hypertarget{class_c_date_a208b6e697c2a65f42f398d2795d11115}\label{class_c_date_a208b6e697c2a65f42f398d2795d11115}} 
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{C\+Date()}{CDate()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily C\+Date\+::\+C\+Date (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{str }\end{DoxyParamCaption})}
+
+Initializes date from date string. 
+\begin{DoxyParams}{Parameters}
+{\em str} & Date string in format \char`\"{}dd. mm. yyyy hh\+:\+M\+M\char`\"{}. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_date_a6c2d5510af2358d586b69b28adba03bf}\label{class_c_date_a6c2d5510af2358d586b69b28adba03bf}} 
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{C\+Date()}{CDate()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily C\+Date\+::\+C\+Date (\begin{DoxyParamCaption}\item[{const tm \&}]{tm }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Initialize date with this tm struct. 
+\begin{DoxyParams}{Parameters}
+{\em tm} & tm stuct to use \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{class_c_date_a7e0bd9e23e35749322dee61812b2a604}\label{class_c_date_a7e0bd9e23e35749322dee61812b2a604}} 
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\index{C\+Date@{C\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{C\+Date()}{CDate()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily C\+Date\+::\+C\+Date (\begin{DoxyParamCaption}\item[{time\+\_\+t}]{number }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+Initialize date with this time\+\_\+t. 
+\begin{DoxyParams}{Parameters}
+{\em number} & \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_date_a28c167be273e16b93c80f5d59bd70dd9}\label{class_c_date_a28c167be273e16b93c80f5d59bd70dd9}} 
+\index{C\+Date@{C\+Date}!Combine\+Date\+Time@{Combine\+Date\+Time}}
+\index{Combine\+Date\+Time@{Combine\+Date\+Time}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Combine\+Date\+Time()}{CombineDateTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+Combine\+Date\+Time (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{date,  }\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{time }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em date} & \mbox{\hyperlink{class_c_date}{C\+Date}} providing year, month and day \\
+\hline
+{\em time} & \mbox{\hyperlink{class_c_date}{C\+Date}} providing hour and minute \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Combined date and time 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_aa8f18dfb62e341afba7e7b55d8b63b68}\label{class_c_date_aa8f18dfb62e341afba7e7b55d8b63b68}} 
+\index{C\+Date@{C\+Date}!Count@{Count}}
+\index{Count@{Count}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Count()}{Count()}}
+{\footnotesize\ttfamily time\+\_\+t C\+Date\+::\+Count (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+time\+\_\+t value. Useful for date arithmetics. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_ae4943e159d1375cf8e90474131d821a2}\label{class_c_date_ae4943e159d1375cf8e90474131d821a2}} 
+\index{C\+Date@{C\+Date}!End\+Of\+Month@{End\+Of\+Month}}
+\index{End\+Of\+Month@{End\+Of\+Month}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{End\+Of\+Month()}{EndOfMonth()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+End\+Of\+Month (\begin{DoxyParamCaption}\item[{int}]{month,  }\item[{int}]{year }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_date_a0ca574460424a4d3bd626de64077ea04}\label{class_c_date_a0ca574460424a4d3bd626de64077ea04}} 
+\index{C\+Date@{C\+Date}!Get\+Day@{Get\+Day}}
+\index{Get\+Day@{Get\+Day}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Day()}{GetDay()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Day of date. Integer 1-\/31 (depending on month). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a87aa91727803b813e167480856778f9a}\label{class_c_date_a87aa91727803b813e167480856778f9a}} 
+\index{C\+Date@{C\+Date}!Get\+Hour@{Get\+Hour}}
+\index{Get\+Hour@{Get\+Hour}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Hour()}{GetHour()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Hour (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Hour of date. Integer 0-\/23. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a50240341813279851647f7317b177295}\label{class_c_date_a50240341813279851647f7317b177295}} 
+\index{C\+Date@{C\+Date}!Get\+Minute@{Get\+Minute}}
+\index{Get\+Minute@{Get\+Minute}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Minute()}{GetMinute()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Minute (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Minute of date. Integer 0-\/59. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_ab35843343ac697ba7ff56c490a3a63aa}\label{class_c_date_ab35843343ac697ba7ff56c490a3a63aa}} 
+\index{C\+Date@{C\+Date}!Get\+Month@{Get\+Month}}
+\index{Get\+Month@{Get\+Month}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Month()}{GetMonth()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Month (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Month of date. Integer 1-\/12. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_aefc467c5b186c0d0c8499e32295eced2}\label{class_c_date_aefc467c5b186c0d0c8499e32295eced2}} 
+\index{C\+Date@{C\+Date}!Get\+Tm@{Get\+Tm}}
+\index{Get\+Tm@{Get\+Tm}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Tm()}{GetTm()}}
+{\footnotesize\ttfamily tm C\+Date\+::\+Get\+Tm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\begin{DoxyReturn}{Returns}
+copy of underlying tm struct. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_abef71ae78644a73ae1277680c93c0442}\label{class_c_date_abef71ae78644a73ae1277680c93c0442}} 
+\index{C\+Date@{C\+Date}!Get\+Week\+Day@{Get\+Week\+Day}}
+\index{Get\+Week\+Day@{Get\+Week\+Day}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Week\+Day()}{GetWeekDay()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Week\+Day (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Return number of days since Sunday. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a27e6152eadf6eeb8aded10c7bbc30660}\label{class_c_date_a27e6152eadf6eeb8aded10c7bbc30660}} 
+\index{C\+Date@{C\+Date}!Get\+Year@{Get\+Year}}
+\index{Get\+Year@{Get\+Year}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Get\+Year()}{GetYear()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Get\+Year (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\begin{DoxyReturn}{Returns}
+Year of date. Integer. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a5cba42ef155816c8d374d50e8149800d}\label{class_c_date_a5cba42ef155816c8d374d50e8149800d}} 
+\index{C\+Date@{C\+Date}!Month\+Length@{Month\+Length}}
+\index{Month\+Length@{Month\+Length}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Month\+Length()}{MonthLength()}}
+{\footnotesize\ttfamily int C\+Date\+::\+Month\+Length (\begin{DoxyParamCaption}\item[{int}]{month,  }\item[{int}]{year }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em month} & \\
+\hline
+{\em year} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Length of month in year. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_ae5b1a9098f964ba2243e6dd542f43891}\label{class_c_date_ae5b1a9098f964ba2243e6dd542f43891}} 
+\index{C\+Date@{C\+Date}!Month\+String\+Long@{Month\+String\+Long}}
+\index{Month\+String\+Long@{Month\+String\+Long}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Month\+String\+Long()}{MonthStringLong()}}
+{\footnotesize\ttfamily char const  $\ast$ C\+Date\+::\+Month\+String\+Long (\begin{DoxyParamCaption}\item[{int}]{month }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_date_a4dc10a16bb273faf61c896c71f3f50de}\label{class_c_date_a4dc10a16bb273faf61c896c71f3f50de}} 
+\index{C\+Date@{C\+Date}!Month\+String\+Short@{Month\+String\+Short}}
+\index{Month\+String\+Short@{Month\+String\+Short}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Month\+String\+Short()}{MonthStringShort()}}
+{\footnotesize\ttfamily char const  $\ast$ C\+Date\+::\+Month\+String\+Short (\begin{DoxyParamCaption}\item[{int}]{month }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_date_a6f4dd69ce64b0fa9e654e55d54ead67d}\label{class_c_date_a6f4dd69ce64b0fa9e654e55d54ead67d}} 
+\index{C\+Date@{C\+Date}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator"!=()}{operator!=()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator!= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_date_ac45abf8f357a31af297a2602aecac529}\label{class_c_date_ac45abf8f357a31af297a2602aecac529}} 
+\index{C\+Date@{C\+Date}!operator+@{operator+}}
+\index{operator+@{operator+}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator+()}{operator+()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::operator+ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&}]{duration }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_ac56d08174348a544b5c56add4e2634d4}\label{class_c_date_ac56d08174348a544b5c56add4e2634d4}} 
+\index{C\+Date@{C\+Date}!operator+=@{operator+=}}
+\index{operator+=@{operator+=}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator+=()}{operator+=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::operator+= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&}]{duration }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_a7736d3c8fc1c10545ee0f0ce3397f260}\label{class_c_date_a7736d3c8fc1c10545ee0f0ce3397f260}} 
+\index{C\+Date@{C\+Date}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&}]{duration }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_aed1d924914698a4e64da455deb583656}\label{class_c_date_aed1d924914698a4e64da455deb583656}} 
+\index{C\+Date@{C\+Date}!operator-\/@{operator-\/}}
+\index{operator-\/@{operator-\/}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator-\/()}{operator-()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_duration}{C\+Duration}} C\+Date\+::operator-\/ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_a42abd6ced54a740fa4f4d90c81845e0c}\label{class_c_date_a42abd6ced54a740fa4f4d90c81845e0c}} 
+\index{C\+Date@{C\+Date}!operator-\/=@{operator-\/=}}
+\index{operator-\/=@{operator-\/=}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator-\/=()}{operator-=()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::operator-\/= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_duration}{C\+Duration}} \&}]{duration }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_a8a2db90f7b10e1bfc6a9075303721b00}\label{class_c_date_a8a2db90f7b10e1bfc6a9075303721b00}} 
+\index{C\+Date@{C\+Date}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$<$()}{operator<()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator$<$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_a4ef63cc76ace80f69dc86b2e9f64e4b8}\label{class_c_date_a4ef63cc76ace80f69dc86b2e9f64e4b8}} 
+\index{C\+Date@{C\+Date}!operator$<$=@{operator$<$=}}
+\index{operator$<$=@{operator$<$=}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$<$=()}{operator<=()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator$<$= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_a28a838b34e2d39ce0eb4491c2361baf2}\label{class_c_date_a28a838b34e2d39ce0eb4491c2361baf2}} 
+\index{C\+Date@{C\+Date}!operator==@{operator==}}
+\index{operator==@{operator==}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator==()}{operator==()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator== (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_date_aa85c9b1e8406ba15a19fb2e176392771}\label{class_c_date_aa85c9b1e8406ba15a19fb2e176392771}} 
+\index{C\+Date@{C\+Date}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$>$()}{operator>()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator$>$ (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_date_a6737cc09a6d10d7d18f32759b8579ae2}\label{class_c_date_a6737cc09a6d10d7d18f32759b8579ae2}} 
+\index{C\+Date@{C\+Date}!operator$>$=@{operator$>$=}}
+\index{operator$>$=@{operator$>$=}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$>$=()}{operator>=()}}
+{\footnotesize\ttfamily bool C\+Date\+::operator$>$= (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{d2 }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_date_aee82efe856e1ef96400c4d3db2854826}\label{class_c_date_aee82efe856e1ef96400c4d3db2854826}} 
+\index{C\+Date@{C\+Date}!Print\+Date@{Print\+Date}}
+\index{Print\+Date@{Print\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Print\+Date()}{PrintDate()}}
+{\footnotesize\ttfamily std\+::ostream \& C\+Date\+::\+Print\+Date (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream }\end{DoxyParamCaption}) const}
+
+Print year, month and day in format set by C\+Date\+::\+D\+A\+T\+E\+\_\+\+F\+O\+R\+M\+AT 
+\begin{DoxyParams}{Parameters}
+{\em stream} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ostream \& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_af1c7cb577d4136975d551323e48f5a26}\label{class_c_date_af1c7cb577d4136975d551323e48f5a26}} 
+\index{C\+Date@{C\+Date}!Print\+Time@{Print\+Time}}
+\index{Print\+Time@{Print\+Time}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Print\+Time()}{PrintTime()}}
+{\footnotesize\ttfamily std\+::ostream \& C\+Date\+::\+Print\+Time (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream }\end{DoxyParamCaption}) const}
+
+Print hour and minute in format set by C\+Date\+::\+T\+I\+M\+E\+\_\+\+F\+O\+R\+M\+AT 
+\begin{DoxyParams}{Parameters}
+{\em stream} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+ostream \& 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_acecb85381be6fa61d1416b52b506d023}\label{class_c_date_acecb85381be6fa61d1416b52b506d023}} 
+\index{C\+Date@{C\+Date}!Read\+Date@{Read\+Date}}
+\index{Read\+Date@{Read\+Date}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Read\+Date()}{ReadDate()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+Read\+Date (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Reads year, month, day in format set by D\+A\+T\+E\+\_\+\+F\+O\+R\+M\+AT. Throws invalid\+\_\+argument exception if format is incorrect. 
+\begin{DoxyParams}{Parameters}
+{\em s} & istream to be read \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_c_date}{C\+Date}} with set year, month and day 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a73bd9b45b74115d1557f1729f996e16a}\label{class_c_date_a73bd9b45b74115d1557f1729f996e16a}} 
+\index{C\+Date@{C\+Date}!Read\+Time@{Read\+Time}}
+\index{Read\+Time@{Read\+Time}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Read\+Time()}{ReadTime()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+Read\+Time (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+Reads hour, minute in format set by T\+I\+M\+E\+\_\+\+F\+O\+R\+M\+AT. Throws invalid\+\_\+argument exception if format is incorrect. 
+\begin{DoxyParams}{Parameters}
+{\em s} & istream to be read \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_c_date}{C\+Date}} with set hour and minute 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_ae3fb0fe31274b4485ff17a167bbfc508}\label{class_c_date_ae3fb0fe31274b4485ff17a167bbfc508}} 
+\index{C\+Date@{C\+Date}!Request\+Date\+From\+User@{Request\+Date\+From\+User}}
+\index{Request\+Date\+From\+User@{Request\+Date\+From\+User}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Request\+Date\+From\+User()}{RequestDateFromUser()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+Request\+Date\+From\+User (\begin{DoxyParamCaption}\item[{std\+::function$<$ \mbox{\hyperlink{class_c_date}{C\+Date}}(std\+::istream \&)$>$}]{fn,  }\item[{bool}]{required }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+\begin{DoxyParams}{Parameters}
+{\em fn} & Function which loads date from istream and validates it. \\
+\hline
+{\em required} & If false, then throws \mbox{\hyperlink{class_empty_line_exception}{Empty\+Line\+Exception}} on empty line. If true then requires date even after. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{class_c_date}{C\+Date}} 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_date_a35209c0b03fc6841fd08c8db4fee68a4}\label{class_c_date_a35209c0b03fc6841fd08c8db4fee68a4}} 
+\index{C\+Date@{C\+Date}!Set\+Day@{Set\+Day}}
+\index{Set\+Day@{Set\+Day}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Set\+Day()}{SetDay()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::\+Set\+Day (\begin{DoxyParamCaption}\item[{int}]{d }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_aa77cbbbcb5bad2663adadfd351d14f87}\label{class_c_date_aa77cbbbcb5bad2663adadfd351d14f87}} 
+\index{C\+Date@{C\+Date}!Set\+Hour@{Set\+Hour}}
+\index{Set\+Hour@{Set\+Hour}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Set\+Hour()}{SetHour()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::\+Set\+Hour (\begin{DoxyParamCaption}\item[{int}]{h }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_a1d0fd38b1c94ea47359c325c4422dc31}\label{class_c_date_a1d0fd38b1c94ea47359c325c4422dc31}} 
+\index{C\+Date@{C\+Date}!Set\+Minute@{Set\+Minute}}
+\index{Set\+Minute@{Set\+Minute}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Set\+Minute()}{SetMinute()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::\+Set\+Minute (\begin{DoxyParamCaption}\item[{int}]{m }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_adea44055d51cfb99ebdc8564c472f7a8}\label{class_c_date_adea44055d51cfb99ebdc8564c472f7a8}} 
+\index{C\+Date@{C\+Date}!Set\+Month@{Set\+Month}}
+\index{Set\+Month@{Set\+Month}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Set\+Month()}{SetMonth()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::\+Set\+Month (\begin{DoxyParamCaption}\item[{int}]{m }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_ae999d5eedbd66965ef1e69597bb089ff}\label{class_c_date_ae999d5eedbd66965ef1e69597bb089ff}} 
+\index{C\+Date@{C\+Date}!Set\+Year@{Set\+Year}}
+\index{Set\+Year@{Set\+Year}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Set\+Year()}{SetYear()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} \& C\+Date\+::\+Set\+Year (\begin{DoxyParamCaption}\item[{int}]{y }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_date_a099ad9550e267ef4335138e3bb4729d8}\label{class_c_date_a099ad9550e267ef4335138e3bb4729d8}} 
+\index{C\+Date@{C\+Date}!Start\+Of\+Month@{Start\+Of\+Month}}
+\index{Start\+Of\+Month@{Start\+Of\+Month}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Start\+Of\+Month()}{StartOfMonth()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_date}{C\+Date}} C\+Date\+::\+Start\+Of\+Month (\begin{DoxyParamCaption}\item[{int}]{month,  }\item[{int}]{year }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_date_ad1fa158c041d965a156f8c0e26ff5cea}\label{class_c_date_ad1fa158c041d965a156f8c0e26ff5cea}} 
+\index{C\+Date@{C\+Date}!Weekday\+String\+Long@{Weekday\+String\+Long}}
+\index{Weekday\+String\+Long@{Weekday\+String\+Long}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Weekday\+String\+Long()}{WeekdayStringLong()}}
+{\footnotesize\ttfamily char const  $\ast$ C\+Date\+::\+Weekday\+String\+Long (\begin{DoxyParamCaption}\item[{int}]{weekday }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_date_aff31350db373c3483a62b67f7467b578}\label{class_c_date_aff31350db373c3483a62b67f7467b578}} 
+\index{C\+Date@{C\+Date}!Weekday\+String\+Short@{Weekday\+String\+Short}}
+\index{Weekday\+String\+Short@{Weekday\+String\+Short}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{Weekday\+String\+Short()}{WeekdayStringShort()}}
+{\footnotesize\ttfamily char const  $\ast$ C\+Date\+::\+Weekday\+String\+Short (\begin{DoxyParamCaption}\item[{int}]{weekday }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_c_date_a6101b1c471c7790dcb75f5746f719c5f}\label{class_c_date_a6101b1c471c7790dcb75f5746f719c5f}} 
+\index{C\+Date@{C\+Date}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$<$$<$}{operator<<}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{date }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_c_date_a4414c2f98725d7b2865080c5edc7ab62}\label{class_c_date_a4414c2f98725d7b2865080c5edc7ab62}} 
+\index{C\+Date@{C\+Date}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!C\+Date@{C\+Date}}
+\subsubsection{\texorpdfstring{operator$<$$<$}{operator<<}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{stream,  }\item[{const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&}]{interval }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Date/\mbox{\hyperlink{_c_date_8h}{C\+Date.\+h}}\item 
+Date/\mbox{\hyperlink{_c_date_8cpp}{C\+Date.\+cpp}}\end{DoxyCompactItemize}

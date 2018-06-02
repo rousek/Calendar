@@ -9,6 +9,7 @@
 
 const char CDate::TIME_FORMAT[] = "%H:%M";
 const char CDate::DATE_FORMAT[] = "%d. %m. %Y";
+const char CDate::SHORT_DATE_FORMAT[] = "%d. %m.";
 const char CDate::WHOLE_FORMAT[] = "%d. %m. %Y %H:%M";
 
 CDate::CDate()
@@ -55,11 +56,6 @@ time_t CDate::Count() const
 {
     tm cpy = m_Date;
     return mktime(&cpy);
-}
-
-tm CDate::GetTm() const
-{
-    return m_Date;
 }
 
 CDate& CDate::SetYear(int y)
@@ -149,7 +145,7 @@ bool CDate::operator < (const CDate & d2) const
 
 CDate CDate::operator+(const CDuration &duration) const
 {
-    tm cpy(GetTm());
+    tm cpy(m_Date);
     cpy.tm_mon = 0;
     cpy.tm_hour++; // UNIX timestamp starts at 01:00
     cpy.tm_year = 70;
@@ -162,7 +158,7 @@ CDate CDate::operator+(const CDuration &duration) const
     CDuration dayAndTime = CDuration::Seconds(timestamp + duration.GetSeconds());
     CDuration::Separated separated(dayAndTime.Separate());
 
-    tm cpyFinal(GetTm());
+    tm cpyFinal(m_Date);
     cpyFinal.tm_year += duration.GetYears();
     cpyFinal.tm_mon += duration.GetMonths();
     // Days begin at index 1.
@@ -305,14 +301,35 @@ CDate CDate::EndOfMonth(int month, int year)
     return CDate(tm);
 }
 
-std::ostream & CDate::PrintDate(std::ostream & stream) const
+CDate CDate::Now()
 {
-    return stream << std::put_time(&m_Date, DATE_FORMAT);
+    time_t t;
+    time(&t);
+
+    return CDate(t);
 }
 
-std::ostream & CDate::PrintTime(std::ostream & stream) const
+
+std::string CDate::DateToStr() const
 {
-    return stream << std::put_time(&m_Date, TIME_FORMAT);
+    std::stringstream ss;
+    ss << std::put_time(&m_Date, DATE_FORMAT);
+    return ss.str();
+}
+
+std::string CDate::ShortDateToStr() const
+{
+    std::stringstream ss;
+    ss << std::put_time(&m_Date, SHORT_DATE_FORMAT);
+    return ss.str();
+}
+
+
+std::string CDate::TimeToStr() const
+{
+    std::stringstream ss;
+    ss << std::put_time(&m_Date, TIME_FORMAT);
+    return ss.str();
 }
 
 std::ostream & operator << (std::ostream & stream, const CDate & date)
@@ -352,7 +369,8 @@ int CDate::MonthLength(int month, int year)
 
 char const * CDate::MonthStringShort(int month)
 {
-    static const char MONTHS[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static const char MONTHS[12][4] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                       "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     return MONTHS[month - 1];
 }
@@ -375,7 +393,8 @@ char const * CDate::WeekdayStringShort(int weekday)
 
 char const * CDate::WeekdayStringLong(int weekday)
 {
-    static const char WEEKDAYS[12][10] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    static const char WEEKDAYS[12][10] = {"Sunday", "Monday", "Tuesday", "Wednesday",
+                                          "Thursday", "Friday", "Saturday"};
 
     return WEEKDAYS[weekday];
 }

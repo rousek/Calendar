@@ -11,6 +11,7 @@
 #include "RepeatStrategies/CEventRepeatDayInMonth.h"
 #include "UI/CViewYear.h"
 #include "UI/CViewMonth.h"
+#include "UI/CViewWeek.h"
 
 
 using namespace std;
@@ -92,7 +93,9 @@ void CalendarTest()
     cal.AddEvent(obed);
     cal.AddEvent(schuzka);
 
-    CViewMonth().Draw(cal, CDate("01. 01. 2018 12:20"));
+    CDate date = CDate("01. 01. 2018 12:20");
+
+    CViewWeek(cal, date).Update();
 }
 
 

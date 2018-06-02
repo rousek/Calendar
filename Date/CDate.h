@@ -75,10 +75,6 @@ public:
      * @return time_t value. Useful for date arithmetics.
      */
     time_t Count() const;
-    /**
-     * @return copy of underlying tm struct.
-     */
-    tm GetTm()  const;
 
     CDate & SetYear(int y);
     CDate & SetMonth(int m);
@@ -103,18 +99,23 @@ public:
     CDuration operator-(const CDate & d2) const;
 
     /**
-     * Print year, month and day in format set by CDate::DATE_FORMAT
-     * @param stream
-     * @return ostream &
+     * Return year, month and day in format set by CDate::DATE_FORMAT
+     * @return string
      */
-    std::ostream & PrintDate(std::ostream & stream) const;
+    std::string DateToStr() const;
 
     /**
-     * Print hour and minute in format set by CDate::TIME_FORMAT
-     * @param stream
-     * @return ostream &
+     * Return month and day in format set by CDate::DATE_FORMAT
+     * @return string
      */
-    std::ostream & PrintTime(std::ostream & stream) const;
+    std::string ShortDateToStr() const;
+
+
+    /**
+     * Return hour and minute in format set by CDate::TIME_FORMAT
+     * @return string
+     */
+    std::string TimeToStr() const;
 
 
     /**
@@ -151,6 +152,7 @@ public:
 
     static CDate StartOfMonth(int month, int year);
     static CDate EndOfMonth(int month, int year);
+    static CDate Now();
 
     /**
      * @param month
@@ -177,6 +179,7 @@ private:
 
     static const char TIME_FORMAT[];
     static const char DATE_FORMAT[];
+    static const char SHORT_DATE_FORMAT[];
     static const char WHOLE_FORMAT[];
 };
 

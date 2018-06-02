@@ -1,0 +1,96 @@
+\hypertarget{class_c_suggestor}{}\section{C\+Suggestor$<$ T, Extractor $>$ Class Template Reference}
+\label{class_c_suggestor}\index{C\+Suggestor$<$ T, Extractor $>$@{C\+Suggestor$<$ T, Extractor $>$}}
+
+
+{\ttfamily \#include $<$C\+Suggestor.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}} \& \mbox{\hyperlink{class_c_suggestor_a7dcad2589a3752d147b20c5fc208a655}{Insert}} (const T \&item)
+\item 
+\mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}} \& \mbox{\hyperlink{class_c_suggestor_a2ec0c6c48be4916eae4b939f23759a53}{Remove}} (const T \&item)
+\item 
+std\+::vector$<$ T $>$ \mbox{\hyperlink{class_c_suggestor_acc8fed68baf0287a5d4b8204dfc7f392}{Suggest}} (const std\+::string \&query) const
+\item 
+void \mbox{\hyperlink{class_c_suggestor_aed01dde97e7f7e316e79b0b05a238ac3}{Clear}} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename T, typename Extractor = C\+I\+D\+Extractor$<$\+T$>$$>$\newline
+class C\+Suggestor$<$ T, Extractor $>$}
+
+Template class managing lookups and sorting them. Parameter T is type of items stored and Extractor is functor which extracts vector of strings from item passed as parameter in operator(). The strings are then separated into terms and used to save items T. Class is defined in header file because it would not compile separated. 
+\begin{DoxyTemplParams}{Template Parameters}
+{\em T} & Items to be saved, removed and searched. \\
+\hline
+{\em Extractor} & Helper function to extract identifier strings from items T. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_suggestor_aed01dde97e7f7e316e79b0b05a238ac3}\label{class_c_suggestor_aed01dde97e7f7e316e79b0b05a238ac3}} 
+\index{C\+Suggestor@{C\+Suggestor}!Clear@{Clear}}
+\index{Clear@{Clear}!C\+Suggestor@{C\+Suggestor}}
+\subsubsection{\texorpdfstring{Clear()}{Clear()}}
+{\footnotesize\ttfamily template$<$typename T, typename Extractor = C\+I\+D\+Extractor$<$\+T$>$$>$ \\
+void \mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}$<$ T, Extractor $>$\+::Clear (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_suggestor_a7dcad2589a3752d147b20c5fc208a655}\label{class_c_suggestor_a7dcad2589a3752d147b20c5fc208a655}} 
+\index{C\+Suggestor@{C\+Suggestor}!Insert@{Insert}}
+\index{Insert@{Insert}!C\+Suggestor@{C\+Suggestor}}
+\subsubsection{\texorpdfstring{Insert()}{Insert()}}
+{\footnotesize\ttfamily template$<$typename T, typename Extractor = C\+I\+D\+Extractor$<$\+T$>$$>$ \\
+\mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}\& \mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}$<$ T, Extractor $>$\+::Insert (\begin{DoxyParamCaption}\item[{const T \&}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Name speaks for itself. 
+\begin{DoxyParams}{Parameters}
+{\em item} & Item to be inserted. No need for keys. Extractor takes care of that. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to self. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_suggestor_a2ec0c6c48be4916eae4b939f23759a53}\label{class_c_suggestor_a2ec0c6c48be4916eae4b939f23759a53}} 
+\index{C\+Suggestor@{C\+Suggestor}!Remove@{Remove}}
+\index{Remove@{Remove}!C\+Suggestor@{C\+Suggestor}}
+\subsubsection{\texorpdfstring{Remove()}{Remove()}}
+{\footnotesize\ttfamily template$<$typename T, typename Extractor = C\+I\+D\+Extractor$<$\+T$>$$>$ \\
+\mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}\& \mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}$<$ T, Extractor $>$\+::Remove (\begin{DoxyParamCaption}\item[{const T \&}]{item }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+Name speaks for itself. 
+\begin{DoxyParams}{Parameters}
+{\em item} & Item to be removed. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+reference to self. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_c_suggestor_acc8fed68baf0287a5d4b8204dfc7f392}\label{class_c_suggestor_acc8fed68baf0287a5d4b8204dfc7f392}} 
+\index{C\+Suggestor@{C\+Suggestor}!Suggest@{Suggest}}
+\index{Suggest@{Suggest}!C\+Suggestor@{C\+Suggestor}}
+\subsubsection{\texorpdfstring{Suggest()}{Suggest()}}
+{\footnotesize\ttfamily template$<$typename T, typename Extractor = C\+I\+D\+Extractor$<$\+T$>$$>$ \\
+std\+::vector$<$T$>$ \mbox{\hyperlink{class_c_suggestor}{C\+Suggestor}}$<$ T, Extractor $>$\+::Suggest (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{query }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+Finds items and sorts them by significance. The match is not always accurate as only one term of only one identifier must match only one term of query. Example\+:
+
+Database\+: 1 (ID = \{\char`\"{}\+Hello Worl\+D\char`\"{}, \char`\"{}w\+O\+Rl\+D\char`\"{}\}), 2 (ID = \{\char`\"{}\+Hello world from Czech Republic\char`\"{}\}), 3 (ID = \{\char`\"{}worlds\char`\"{}\})
+
+Query \char`\"{}world\char`\"{} results in \{1, 2\} while order is not given. Item 3 does not contain term \char`\"{}world\char`\"{} so it does not appear in results. Query \char`\"{}hello czech\char`\"{} returns \{2, 1\}. Item 2 must be first as the match is better. However item 1 matches at least one term and cannot be ignored.
+
+
+\begin{DoxyParams}{Parameters}
+{\em query} & string to be searched. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+vector of items sorted by significance. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+utils/\mbox{\hyperlink{_c_suggestor_8h}{C\+Suggestor.\+h}}\end{DoxyCompactItemize}

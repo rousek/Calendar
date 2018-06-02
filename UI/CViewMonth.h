@@ -6,14 +6,17 @@
 #define SEM_CVIEWMONTH_H
 
 
-#include "CViewBase.h"
+#include "CViewTime.h"
 
-class CViewMonth : public CViewBase {
+class CViewMonth : public CViewTime
+{
 public:
-    ~CViewMonth() = default;
-    void Draw(const CCalendar & calendar, const CDate & date) const override;
-    CDate Previous(const CDate & date) const override;
-    CDate Next(const CDate & date) const override;
+    using CViewTime::CViewTime;
+    ~CViewMonth() override = default;
+    CEvent * Find(int ID) const override;
+    void Update() override;
+    void Previous() override;
+    void Next() override;
 };
 
 

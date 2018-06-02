@@ -1,0 +1,169 @@
+\hypertarget{class_c_event}{}\section{C\+Event Class Reference}
+\label{class_c_event}\index{C\+Event@{C\+Event}}
+
+
+{\ttfamily \#include $<$C\+Event.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_c_event_1_1_get_searchable}{Get\+Searchable}}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_c_event_ad374d2c0160476ae18df3cf3673618f8}{C\+Event}} (int id, const std\+::string \&title, const std\+::string \&place, const std\+::string \&summary, const \mbox{\hyperlink{class_c_date}{C\+Date}} \&start, const \mbox{\hyperlink{class_c_date}{C\+Date}} \&end, int priority, \mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}} $\ast$rp)
+\item 
+\mbox{\hyperlink{class_c_event_ad088f3ce4e9585ce8fadafb5655511fb}{$\sim$\+C\+Event}} ()
+\item 
+\mbox{\hyperlink{class_c_duration}{C\+Duration}} \mbox{\hyperlink{class_c_event_ab4618cf318c9f54d538495d563394426}{Get\+Duration}} () const
+\item 
+void \mbox{\hyperlink{class_c_event_a451862c764badeee1c73db74d93e5d7c}{Set\+ID}} (int id)
+\item 
+int \mbox{\hyperlink{class_c_event_a59c9565b549ffaca271d4a627171bbde}{Get\+ID}} () const
+\item 
+std\+::string \mbox{\hyperlink{class_c_event_a745ad8ffd3f5dfb0bf34a4fe9b6de580}{Get\+Title}} () const
+\item 
+std\+::string \mbox{\hyperlink{class_c_event_a3a69c56877cd35d5b0199656801ddb58}{Get\+Place}} () const
+\item 
+std\+::string \mbox{\hyperlink{class_c_event_aa29013fcec20a717e1a9b6e8ab302fc9}{Get\+Summary}} () const
+\item 
+bool \mbox{\hyperlink{class_c_event_ac30388f117bc9681506d9f54e1f4fba8}{Interactive\+Editor}} ()
+\item 
+std\+::set$<$ \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} $>$ \mbox{\hyperlink{class_c_event_af68e8c2b9541d6471bfe75b8c81d2f98}{Find\+In\+Interval}} (const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&interval) const
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \mbox{\hyperlink{class_c_event}{C\+Event}} $\ast$ \mbox{\hyperlink{class_c_event_a2be888eac9b425f56bdb1dba6b5593db}{Interactive\+Creator}} (int id)
+\item 
+static \mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}} $\ast$ \mbox{\hyperlink{class_c_event_a5483d63b96f5c7804202159f5c0fea06}{Read\+Repetition}} (std\+::istream \&s)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static int \mbox{\hyperlink{class_c_event_ad20159365449be421368c23b0b6377e5}{M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY}} = 1
+\item 
+static int \mbox{\hyperlink{class_c_event_acba68da6e8b7dc00527313dc6e253c15}{M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY}} = 10
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_event_a660eccf6bdf9ccc6764389844758d339}{operator$<$$<$}} (std\+::ostream \&s, const \mbox{\hyperlink{class_c_event}{C\+Event}} \&ev)
+\item 
+std\+::ostream \& \mbox{\hyperlink{class_c_event_a5d65822e265f6f6537e4acab12bb9119}{operator$<$$<$}} (std\+::ostream \&s, const \mbox{\hyperlink{class_c_event}{C\+Event}} $\ast$ev)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{class_c_event_ad374d2c0160476ae18df3cf3673618f8}\label{class_c_event_ad374d2c0160476ae18df3cf3673618f8}} 
+\index{C\+Event@{C\+Event}!C\+Event@{C\+Event}}
+\index{C\+Event@{C\+Event}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{C\+Event()}{CEvent()}}
+{\footnotesize\ttfamily C\+Event\+::\+C\+Event (\begin{DoxyParamCaption}\item[{int}]{id,  }\item[{const std\+::string \&}]{title,  }\item[{const std\+::string \&}]{place,  }\item[{const std\+::string \&}]{summary,  }\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{start,  }\item[{const \mbox{\hyperlink{class_c_date}{C\+Date}} \&}]{end,  }\item[{int}]{priority,  }\item[{\mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}} $\ast$}]{rp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_event_ad088f3ce4e9585ce8fadafb5655511fb}\label{class_c_event_ad088f3ce4e9585ce8fadafb5655511fb}} 
+\index{C\+Event@{C\+Event}!````~C\+Event@{$\sim$\+C\+Event}}
+\index{````~C\+Event@{$\sim$\+C\+Event}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{$\sim$\+C\+Event()}{~CEvent()}}
+{\footnotesize\ttfamily C\+Event\+::$\sim$\+C\+Event (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+\subsection{Member Function Documentation}
+\mbox{\Hypertarget{class_c_event_af68e8c2b9541d6471bfe75b8c81d2f98}\label{class_c_event_af68e8c2b9541d6471bfe75b8c81d2f98}} 
+\index{C\+Event@{C\+Event}!Find\+In\+Interval@{Find\+In\+Interval}}
+\index{Find\+In\+Interval@{Find\+In\+Interval}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Find\+In\+Interval()}{FindInInterval()}}
+{\footnotesize\ttfamily std\+::set$<$ \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} $>$ C\+Event\+::\+Find\+In\+Interval (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{class_c_date_af23472c977b14ed341b48183ec19d874}{C\+Date\+::\+Interval}} \&}]{interval }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_event_ab4618cf318c9f54d538495d563394426}\label{class_c_event_ab4618cf318c9f54d538495d563394426}} 
+\index{C\+Event@{C\+Event}!Get\+Duration@{Get\+Duration}}
+\index{Get\+Duration@{Get\+Duration}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Get\+Duration()}{GetDuration()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_duration}{C\+Duration}} C\+Event\+::\+Get\+Duration (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const}
+
+\mbox{\Hypertarget{class_c_event_a59c9565b549ffaca271d4a627171bbde}\label{class_c_event_a59c9565b549ffaca271d4a627171bbde}} 
+\index{C\+Event@{C\+Event}!Get\+ID@{Get\+ID}}
+\index{Get\+ID@{Get\+ID}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Get\+I\+D()}{GetID()}}
+{\footnotesize\ttfamily int C\+Event\+::\+Get\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_event_a3a69c56877cd35d5b0199656801ddb58}\label{class_c_event_a3a69c56877cd35d5b0199656801ddb58}} 
+\index{C\+Event@{C\+Event}!Get\+Place@{Get\+Place}}
+\index{Get\+Place@{Get\+Place}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Get\+Place()}{GetPlace()}}
+{\footnotesize\ttfamily std\+::string C\+Event\+::\+Get\+Place (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_event_aa29013fcec20a717e1a9b6e8ab302fc9}\label{class_c_event_aa29013fcec20a717e1a9b6e8ab302fc9}} 
+\index{C\+Event@{C\+Event}!Get\+Summary@{Get\+Summary}}
+\index{Get\+Summary@{Get\+Summary}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Get\+Summary()}{GetSummary()}}
+{\footnotesize\ttfamily std\+::string C\+Event\+::\+Get\+Summary (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_event_a745ad8ffd3f5dfb0bf34a4fe9b6de580}\label{class_c_event_a745ad8ffd3f5dfb0bf34a4fe9b6de580}} 
+\index{C\+Event@{C\+Event}!Get\+Title@{Get\+Title}}
+\index{Get\+Title@{Get\+Title}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Get\+Title()}{GetTitle()}}
+{\footnotesize\ttfamily std\+::string C\+Event\+::\+Get\+Title (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+\mbox{\Hypertarget{class_c_event_a2be888eac9b425f56bdb1dba6b5593db}\label{class_c_event_a2be888eac9b425f56bdb1dba6b5593db}} 
+\index{C\+Event@{C\+Event}!Interactive\+Creator@{Interactive\+Creator}}
+\index{Interactive\+Creator@{Interactive\+Creator}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Interactive\+Creator()}{InteractiveCreator()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_event}{C\+Event}} $\ast$ C\+Event\+::\+Interactive\+Creator (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_event_ac30388f117bc9681506d9f54e1f4fba8}\label{class_c_event_ac30388f117bc9681506d9f54e1f4fba8}} 
+\index{C\+Event@{C\+Event}!Interactive\+Editor@{Interactive\+Editor}}
+\index{Interactive\+Editor@{Interactive\+Editor}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Interactive\+Editor()}{InteractiveEditor()}}
+{\footnotesize\ttfamily bool C\+Event\+::\+Interactive\+Editor (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{class_c_event_a5483d63b96f5c7804202159f5c0fea06}\label{class_c_event_a5483d63b96f5c7804202159f5c0fea06}} 
+\index{C\+Event@{C\+Event}!Read\+Repetition@{Read\+Repetition}}
+\index{Read\+Repetition@{Read\+Repetition}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Read\+Repetition()}{ReadRepetition()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{class_c_event_repeat_base}{C\+Event\+Repeat\+Base}} $\ast$ C\+Event\+::\+Read\+Repetition (\begin{DoxyParamCaption}\item[{std\+::istream \&}]{s }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_event_a451862c764badeee1c73db74d93e5d7c}\label{class_c_event_a451862c764badeee1c73db74d93e5d7c}} 
+\index{C\+Event@{C\+Event}!Set\+ID@{Set\+ID}}
+\index{Set\+ID@{Set\+ID}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{Set\+I\+D()}{SetID()}}
+{\footnotesize\ttfamily void C\+Event\+::\+Set\+ID (\begin{DoxyParamCaption}\item[{int}]{id }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\subsection{Friends And Related Function Documentation}
+\mbox{\Hypertarget{class_c_event_a660eccf6bdf9ccc6764389844758d339}\label{class_c_event_a660eccf6bdf9ccc6764389844758d339}} 
+\index{C\+Event@{C\+Event}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{operator$<$$<$}{operator<<}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{s,  }\item[{const \mbox{\hyperlink{class_c_event}{C\+Event}} \&}]{ev }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+\mbox{\Hypertarget{class_c_event_a5d65822e265f6f6537e4acab12bb9119}\label{class_c_event_a5d65822e265f6f6537e4acab12bb9119}} 
+\index{C\+Event@{C\+Event}!operator$<$$<$@{operator$<$$<$}}
+\index{operator$<$$<$@{operator$<$$<$}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{operator$<$$<$}{operator<<}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily std\+::ostream\& operator$<$$<$ (\begin{DoxyParamCaption}\item[{std\+::ostream \&}]{s,  }\item[{const \mbox{\hyperlink{class_c_event}{C\+Event}} $\ast$}]{ev }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [friend]}}
+
+
+
+\subsection{Member Data Documentation}
+\mbox{\Hypertarget{class_c_event_acba68da6e8b7dc00527313dc6e253c15}\label{class_c_event_acba68da6e8b7dc00527313dc6e253c15}} 
+\index{C\+Event@{C\+Event}!M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY@{M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY}}
+\index{M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY@{M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY}{MAX\_PRIORITY}}
+{\footnotesize\ttfamily int C\+Event\+::\+M\+A\+X\+\_\+\+P\+R\+I\+O\+R\+I\+TY = 10\hspace{0.3cm}{\ttfamily [static]}}
+
+\mbox{\Hypertarget{class_c_event_ad20159365449be421368c23b0b6377e5}\label{class_c_event_ad20159365449be421368c23b0b6377e5}} 
+\index{C\+Event@{C\+Event}!M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY@{M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY}}
+\index{M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY@{M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY}!C\+Event@{C\+Event}}
+\subsubsection{\texorpdfstring{M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY}{MIN\_PRIORITY}}
+{\footnotesize\ttfamily int C\+Event\+::\+M\+I\+N\+\_\+\+P\+R\+I\+O\+R\+I\+TY = 1\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Event/\mbox{\hyperlink{_c_event_8h}{C\+Event.\+h}}\item 
+Event/\mbox{\hyperlink{_c_event_8cpp}{C\+Event.\+cpp}}\end{DoxyCompactItemize}
