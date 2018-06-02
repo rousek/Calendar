@@ -5,6 +5,16 @@
 #include <algorithm>
 #include "CEventRepeatBase.h"
 
+void CEventRepeatBase::Transfer(const CDate &from, const CDate &to)
+{
+    auto it = m_Additional.find(from);
+    if (it != m_Additional.end())
+        m_Additional.erase(it);
+
+    m_Skipped.insert(from);
+    m_Additional.insert(to);
+}
+
 std::set<CDate> CEventRepeatBase::TestRangeWithExceptions(const CDate & date, const CDate::Interval & interval)
 {
     auto results = TestRange(date, interval);

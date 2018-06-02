@@ -33,15 +33,13 @@ public:
     }
 
     ~CEventRepeatDayInMonth() override = default;
-
+    bool Delete(const CDate & date) override;
     CEventRepeatBase * Clone() const override { return new CEventRepeatDayInMonth(*this); }
-
     std::string ToStr() const override;
 private:
     int m_Day;
 
     void Positive(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
-
     void Negative(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
 };
 

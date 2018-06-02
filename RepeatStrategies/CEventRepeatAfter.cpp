@@ -37,6 +37,12 @@ std::set<CDate> CEventRepeatAfter::TestRange(const CDate &date, const CDate::Int
     return results;
 }
 
+bool CEventRepeatAfter::Delete(const CDate &date)
+{
+    m_Skipped.insert(date);
+    return false;
+}
+
 std::string CEventRepeatAfter::ToStr() const
 {
     return toStr("after ") + toStr(m_Interval);

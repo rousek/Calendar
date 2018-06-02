@@ -9,19 +9,54 @@
 #include <set>
 #include "../Date/CDate.h"
 
+/**
+ * Base class handling special cases and serving as interface.
+ */
 class CEventRepeatBase
 {
 protected:
+    /**
+     * Beginnings of additional instances of event.
+     */
+    std::set<CDate> m_Additional;
+    /**
+     * Beginnings of skipped instances of event.
+     */
+    std::set<CDate> m_Skipped;
+    /**
+     *
+     * @param date Start of event.
+     * @param interval Timeframe within which to look for matches.
+     * @return Set of dates when event starts within interval.
+     */
     virtual std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const = 0;
 public:
-    std::set<CDate> m_Additional;
-    std::set<CDate> m_Skipped;
     virtual ~CEventRepeatBase() = default;
     virtual std::string ToStr() const = 0;
     virtual CEventRepeatBase * Clone() const = 0;
-
+    /**
+     * Delete instance of event.
+     * @param date Date of instance to be deleted.
+     * @return True if there are no more instances of event.
+     */
+    virtual bool Delete(const CDate & date) = 0;
+    /**
+     * Transfers instance of event from one date to another.
+     * @param from Start of event instance.
+     * @param to New start of event instance.
+     */
+    virtual void Transfer(const CDate & from, const CDate & to);
+    /**
+     * Calls TestRange and filters skipped dates while adding additional dates.
+     */
     virtual std::set<CDate> TestRangeWithExceptions(const CDate & date, const CDate::Interval & interval);
-    static std::set<std::pair<CDate, CDate>> MakeIntervals(const std::set<CDate> & beginnings, const CDuration & duration);
+    /**
+     * Simply converts list of beginnings into list of intervals.
+     * @param beginnings
+     * @param duration Duration of event.
+     * @return Set of intervals.
+     */
+    static std::set<CDate::Interval> MakeIntervals(const std::set<CDate> & beginnings, const CDuration & duration);
 };
 
 

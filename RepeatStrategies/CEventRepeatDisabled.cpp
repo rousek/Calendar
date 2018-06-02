@@ -12,6 +12,12 @@ std::set<CDate> CEventRepeatDisabled::TestRange(const CDate & date, const CDate:
         return {};
 }
 
+bool CEventRepeatDisabled::Delete(const CDate &date)
+{
+    m_Skipped.insert(date);
+    return true;
+}
+
 std::string CEventRepeatDisabled::ToStr() const
 {
     return "none";

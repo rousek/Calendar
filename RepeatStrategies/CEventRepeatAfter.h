@@ -7,13 +7,15 @@
 
 #include "CEventRepeatBase.h"
 
+/**
+ * Repeats event after given time period.
+ */
 class CEventRepeatAfter : public CEventRepeatBase {
 protected:
     std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
-    explicit CEventRepeatAfter(const CDuration & duration) : m_Interval(duration)
-    {
-    }
+    explicit CEventRepeatAfter(const CDuration & duration) : m_Interval(duration) {}
+    bool Delete(const CDate & date) override;
     CEventRepeatBase * Clone() const override { return new CEventRepeatAfter(*this); }
     ~CEventRepeatAfter() override = default;
     std::string ToStr() const override;

@@ -12,6 +12,7 @@
 #include "UI/CViewYear.h"
 #include "UI/CViewMonth.h"
 #include "UI/CViewWeek.h"
+#include "UI/CViewVector.h"
 
 
 using namespace std;
@@ -95,7 +96,19 @@ void CalendarTest()
 
     CDate date = CDate("01. 01. 2018 12:20");
 
-    CViewWeek(cal, date).Update();
+    //CViewWeek(cal, date).Update();
+
+    vector<CEvent *> schuzky;
+    for (int i = 0; i < 8; i++)
+        schuzky.push_back(obed);
+
+    CViewVector vec(schuzky);
+    vec.Update();
+    vec.Next();
+    vec.Next();
+    vec.Update();
+
+    cout << "cislo 6: " << vec.Find(6)->GetTitle() << endl;
 }
 
 

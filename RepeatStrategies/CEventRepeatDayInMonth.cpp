@@ -89,6 +89,12 @@ void CEventRepeatDayInMonth::Positive(const CDate &date, const CDate & to, std::
     }
 }
 
+bool CEventRepeatDayInMonth::Delete(const CDate & date)
+{
+    m_Skipped.insert(date);
+    return false;
+}
+
 std::string CEventRepeatDayInMonth::ToStr() const
 {
     return toStr("month_day ") + toStr(m_Day);
