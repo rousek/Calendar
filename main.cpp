@@ -7,13 +7,7 @@
 #include "Calendar/CCalendar.h"
 #include "UI/CCommandInterpreter.h"
 #include "utils/utils.h"
-#include "RepeatStrategies/CEventRepeatAfter.h"
-#include "RepeatStrategies/CEventRepeatDayInMonth.h"
-#include "UI/CViewYear.h"
-#include "UI/CViewMonth.h"
-#include "UI/CViewWeek.h"
-#include "UI/CViewVector.h"
-#include "RepeatStrategies/CEventRepeatUtils.h"
+#include "Event/CEventEditor.h"
 
 
 using namespace std;
@@ -89,7 +83,7 @@ int main()
                     CDate("01. 01. 2018 11:30"),
                     CDate("01. 01. 2018 12:00"),
                     1,
-                    RepetitionFromStr("after 1 day")
+                    CEventEditor::ParseRepeat("after 1 day")
             );
 
     CEvent * schuzka = new CEvent
@@ -100,7 +94,7 @@ int main()
                     CDate("01. 01. 2018 12:20"),
                     CDate("01. 01. 2018 15:20"),
                     9,
-                    RepetitionFromStr("month_day 31")
+                    CEventEditor::ParseRepeat("month_day 31")
             );
 
     in.m_Calendar.AddEvent(obed);
@@ -120,7 +114,7 @@ int main()
                         evtStart,
                         evtStart + CDuration::Hours(2),
                         1,
-                        RepetitionFromStr("none")
+                        CEventEditor::ParseRepeat("none")
         );
 
         evtStart += CDuration::Days(1);

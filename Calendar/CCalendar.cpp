@@ -5,7 +5,6 @@
 #include <vector>
 #include "CCalendar.h"
 #include "../utils/utils.h"
-#include "../RepeatStrategies/CEventRepeatUtils.h"
 
 CCalendar::~CCalendar()
 {
@@ -19,116 +18,6 @@ void CCalendar::AddEvent(CEvent * ev)
     m_Suggestions.Insert(ev);
 }
 
-void CCalendar::CreateEvent()
-{
-    CDate dateStart, dateEnd, timeStart, timeEnd;
-    std::string title, place, summary;
-    int priority;
-    CEventRepeatBase * repeat;
-
-    std::cout << "Date:" << std::endl;
-
-    dateStart = CDate::RequestDateFromUser(CDate::ReadDate, true);
-
-    std::cout << "End date (optional):" << std::endl;
-    try
-    {
-        dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
-    }
-    catch (const EmptyLineException & e)
-    {
-        dateEnd = dateStart;
-    }
-
-    std::cout << "Start time:" << std::endl;
-    timeStart = CDate::RequestDateFromUser(CDate::ReadTime, true);
-
-    std::cout << "End time:" << std::endl;
-    while(true)
-    {
-        timeEnd = CDate::RequestDateFromUser(CDate::ReadTime, true);
-
-        if (timeEnd > timeStart)
-            break;
-        else
-            std::cout << "Event must end after it starts!" << std::endl;
-    }
-
-    std::cout << "Title:" << std::endl;
-    getline(std::cin, title);
-
-    std::cout << "Summary: " << std::endl;
-    getline(std::cin, summary);
-
-    std::cout << "Place:" << std::endl;
-    getline(std::cin, place);
-
-    std::cout << "Repetition: " << std::endl;
-    while(true)
-    {
-        try
-        {
-            std::string line;
-            getline(std::cin, line);
-            repeat = RepetitionFromStr(line);
-            break;
-        }
-        catch (const std::invalid_argument & e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-    }
-
-    std::cout << "Priority " << CEvent::MIN_PRIORITY << " - " << CEvent::MAX_PRIORITY << " (including): " << std::endl;
-    priority = requestIntInInterval(CEvent::MIN_PRIORITY, CEvent::MAX_PRIORITY, true);
-
-    CEvent * event = new CEvent
-            (
-                    title,
-                    place,
-                    summary,
-                    CDate::CombineDateTime(dateStart, timeStart),
-                    CDate::CombineDateTime(dateEnd, timeEnd),
-                    priority,
-                    repeat
-            );
-
-    AddEvent(event);
-}
-
-void CCalendar::EditEvent(CEvent * ev)
-{
-}
-
-void CCalendar::EditEvent(const CEvent::Instance &instance)
-{
-    CEvent * event = instance.GetEvent();
-
-    if (event->InstancesLeft() > 1)
-    {
-        std::stringstream ss;
-        ss << "This event repeats itself " << event->GetRepeat() << "." << std::endl
-           << "Do you want to edit all instances?" << std::endl
-           << "If you press \"n\", this instance of " << std::endl
-           << "event will be edited separately.";
-
-        if (requestConfirm(ss.str()))
-        {
-            EditEvent(event);
-        }
-        else
-        {
-            CEvent * cpy = new CEvent(*event);
-            event->DeleteInstance(instance.GetTime().first);
-            EditEvent(cpy);
-            AddEvent(cpy);
-        }
-    }
-    else
-    {
-        EditEvent(event);
-    }
-}
 
 void CCalendar::DeleteEvent(CEvent * ev)
 {

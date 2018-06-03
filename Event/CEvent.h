@@ -8,7 +8,6 @@
 #include <string>
 #include <vector>
 #include "../Date/CDate.h"
-#include "../TransferStrategies/CEventTransferBase.h"
 #include "../RepeatStrategies/CEventRepeatBase.h"
 
 class CEvent

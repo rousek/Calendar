@@ -8,6 +8,7 @@
 #include "CViewWeek.h"
 #include "CViewMonth.h"
 #include "CViewYear.h"
+#include "../Event/CEventEditor.h"
 
 CCommandInterpreter::CCommandInterpreter() :
         m_Position(CDate::Now()),
@@ -58,6 +59,7 @@ void CCommandInterpreter::Interpret(const std::string & command, const std::vect
 void CCommandInterpreter::Run()
 {
     Welcome();
+    std::cout << std::endl;
     GetView()->Update();
 
     m_Stopped = false;
@@ -164,7 +166,7 @@ void CCommandInterpreter::Add(const std::vector<std::string> &params)
     if (!params.empty())
         return Help();
 
-    m_Calendar.CreateEvent();
+    CEventEditor::Create(m_Calendar);
 }
 
 void CCommandInterpreter::Edit(const std::vector<std::string> &params)
@@ -178,7 +180,7 @@ void CCommandInterpreter::Edit(const std::vector<std::string> &params)
     {
         evtID = parseInt(params[0]);
         CEvent::Instance ev = GetView()->Find(evtID);
-        m_Calendar.EditEvent(ev);
+        CEventEditor::Edit(m_Calendar, ev);
     }
     catch (const std::invalid_argument & e)
     {

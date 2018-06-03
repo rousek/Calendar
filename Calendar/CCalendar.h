@@ -15,12 +15,9 @@ class CCalendar
 public:
     ~CCalendar();
 
-    void CreateEvent();
     void AddEvent(CEvent * ev);
     void DeleteEvent(CEvent * ev);
     void DeleteEvent(const CEvent::Instance & instance);
-    void EditEvent(CEvent * ev);
-    void EditEvent(const CEvent::Instance & instance);
     std::vector<CEvent::Instance> FindInInterval(const CDate::Interval & interval) const;
     void Clear();
     std::vector<CEvent *> SearchEvents(const std::string & name) const;
