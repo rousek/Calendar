@@ -34,6 +34,8 @@ CCommandInterpreter::CCommandInterpreter() :
 
 CCommandInterpreter::~CCommandInterpreter()
 {
+    ClearSearch();
+
     for (auto &view : m_Views)
         delete view;
 }
@@ -51,20 +53,6 @@ void CCommandInterpreter::Interpret(const std::string & command, const std::vect
         auto fn = (*it).second;
         fn(params);
     }
-    /*
-    else if (command == "show")
-    {
-        std::cout << "TODO" << std::endl;
-    }
-    else if (command == "export")
-    {
-        std::cout << "TODO" << std::endl;
-    }
-    else if (command == "import")
-    {
-        std::cout << "TODO" << std::endl;
-    }
-     */
 }
 
 void CCommandInterpreter::Run()
@@ -86,7 +74,7 @@ void CCommandInterpreter::Run()
     }
 }
 
-CViewBase<CEvent *> * CCommandInterpreter::GetView()
+CViewBase<CEvent::Instance> * CCommandInterpreter::GetView()
 {
     if (m_SearchResults != nullptr)
         return m_SearchResults;
@@ -140,27 +128,22 @@ void CCommandInterpreter::Help()
     std::cout << "previous" << std::endl;
     std::cout << "Same as \"next\" but backwards." << std::endl << std::endl;
 
-    std::cout << "zoom (in|out) [time_id]" << std::endl;
-    std::cout << "Zooms into smaller timeframe." << std::endl;
+    std::cout << "zoom (in|out)" << std::endl;
+    std::cout << "Zooms into smaller or bigger timeframe." << std::endl;
     std::cout << "For example \"zoom in\" when calendar" << std::endl;
-    std::cout << "is showing a whole year would show a month" << std::endl;
-    std::cout << "instead. Optional parameter time_id would be" << std::endl;
-    std::cout << "number of month in year (January is 1)." << std::endl << std::endl;
+    std::cout << "is showing a whole year would show a month instead." << std::endl << std::endl;
 
-    std::cout << "show date_to_show [time_frame]" << std::endl;
+    std::cout << "show date_to_show" << std::endl;
     std::cout << "If time_frame is left blank, then shows" << std::endl;
     std::cout << "day which is given as parameter date_to_show." << std::endl;
-    std::cout << "time_frame can be year, month, week or day (default)." << std::endl;
     std::cout << "Date format is dd. mm. yyyy" << std::endl << std::endl;
 
-    std::cout << "export [mode] file_name" << std::endl;
-    std::cout << "Exports whole calendar into file." << std::endl;
-    std::cout << "Supported modes are \"default\" and \"ics\"." << std::endl << std::endl;
+    std::cout << "export file_name" << std::endl;
+    std::cout << "Exports whole calendar into file." << std::endl << std::endl;
 
-    std::cout << "import [mode] file_name" << std::endl;
+    std::cout << "import file_name" << std::endl;
     std::cout << "Imports events from file. Does not" << std::endl;
-    std::cout << "remove existing events (if there are any)." << std::endl;
-    std::cout << "Supported modes are \"default\" and \"ics\"." << std::endl << std::endl;
+    std::cout << "remove existing events (if there are any)." << std::endl << std::endl;
 }
 
 void CCommandInterpreter::Exit()
@@ -194,7 +177,7 @@ void CCommandInterpreter::Edit(const std::vector<std::string> &params)
     try
     {
         evtID = parseInt(params[0]);
-        CEvent * ev = GetView()->Find(evtID);
+        CEvent::Instance ev = GetView()->Find(evtID);
         m_Calendar.EditEvent(ev);
     }
     catch (const std::invalid_argument & e)
@@ -221,7 +204,7 @@ void CCommandInterpreter::Delete(const std::vector<std::string> &params)
     try
     {
         evtID = parseInt(params[0]);
-        CEvent * ev = GetView()->Find(evtID);
+        CEvent::Instance ev = GetView()->Find(evtID);
         m_Calendar.DeleteEvent(ev);
 
         // Update search results or view.
@@ -292,13 +275,20 @@ void CCommandInterpreter::Search(const std::vector<std::string> &params)
         return;
     }
 
-    ClearSearch();
-
     std::string query = join(params, " ");
     std::vector<CEvent *> results = m_Calendar.SearchEvents(query);
-    m_SearchQuery = params;
-    m_SearchResults = new CViewVector(results);
-    m_SearchResults->Update();
+    if (!results.empty())
+    {
+        ClearSearch();
+        m_SearchQuery = params;
+        m_SearchResults = new CViewVector(results);
+        m_SearchResults->Update();
+    }
+    else
+    {
+        std::cout << "No matching events were found!" << std::endl;
+        GetView()->Update();
+    }
 }
 
 void CCommandInterpreter::Next(const std::vector<std::string> &params)
@@ -336,7 +326,11 @@ void CCommandInterpreter::Previous(const std::vector<std::string> &params)
 void CCommandInterpreter::Show(const std::vector<std::string> &params)
 {
     if (params.empty())
-        return Help();
+    {
+        ClearSearch();
+        GetView()->Update();
+        return;
+    }
 
     std::string str = join(params, " ");
     std::stringstream ss(str);

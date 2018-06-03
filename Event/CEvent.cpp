@@ -7,10 +7,6 @@
 #include "../Date/CDate.h"
 #include "CEvent.h"
 #include "../utils/utils.h"
-#include "../RepeatStrategies/CEventRepeatDisabled.h"
-#include "../RepeatStrategies/CEventRepeatDayInMonth.h"
-#include "../RepeatStrategies/CEventRepeatAfter.h"
-#include "../RepeatStrategies/CEventRepeatUtils.h"
 
 const int CEvent::MIN_PRIORITY = 1;
 const int CEvent::MAX_PRIORITY = 10;
@@ -35,6 +31,17 @@ CEvent::CEvent(
         throw std::invalid_argument("Event must end after it starts!");
 }
 
+CEvent::CEvent(const CEvent *ev) :
+m_Title(ev->m_Title),
+m_Place(ev->m_Place),
+m_Summary(ev->m_Summary),
+m_Start(ev->m_Start),
+m_End(ev->m_End),
+m_Priority(ev->m_Priority),
+m_Repeat(ev->m_Repeat->Clone())
+{
+}
+
 CEvent::~CEvent()
 {
     delete m_Repeat;
@@ -46,11 +53,15 @@ CDuration CEvent::GetDuration() const
     return CDuration::Seconds(static_cast<int>(diff));
 }
 
-std::set<CDate::Interval> CEvent::FindInInterval(const CDate::Interval & interval) const
+std::vector<CEvent::Instance> CEvent::FindInInterval(const CDate::Interval & interval) const
 {
+    std::vector<CEvent::Instance> result;
     auto beginnings = m_Repeat->TestRangeWithExceptions(m_Start, interval);
 
-    return CEventRepeatBase::MakeIntervals(beginnings, GetDuration());
+    for (auto & beginning : beginnings)
+        result.push_back(Instance(const_cast<CEvent *>(this), beginning));
+
+    return result;
 }
 
 bool CEvent::DeleteInstance(const CDate &date)

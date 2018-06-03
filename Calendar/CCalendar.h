@@ -12,21 +12,24 @@
 
 class CCalendar
 {
+public:
+    ~CCalendar();
+
+    void CreateEvent();
+    void AddEvent(CEvent * ev);
+    void DeleteEvent(CEvent * ev);
+    void DeleteEvent(const CEvent::Instance & instance);
+    void EditEvent(CEvent * ev);
+    void EditEvent(const CEvent::Instance & instance);
+    std::vector<CEvent::Instance> FindInInterval(const CDate::Interval & interval) const;
+    void Clear();
+    std::vector<CEvent *> SearchEvents(const std::string & name) const;
+
 private:
     std::set<CEvent *> m_Events;
     CSuggestor<CEvent *, CEvent::GetSearchable> m_Suggestions;
 
-public:
-    ~CCalendar();
-
-    void AddEvent(CEvent * ev);
-    void CreateEvent();
-    void DeleteEvent(CEvent * event);
-    void DeleteEvent(CEvent * event, const CDate & date);
-    void EditEvent(CEvent * event);
-    std::map<CDate::Interval, CEvent *> FindInInterval(const CDate::Interval & interval) const;
-    void Clear();
-    std::vector<CEvent *> SearchEvents(const std::string & name) const;
+    std::vector<CEvent::Instance> CheckCollisions(const CDate::Interval & interval);
 };
 
 

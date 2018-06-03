@@ -80,6 +80,7 @@ void CCalendar::CreateEvent()
     }
 
     std::cout << "Priority " << CEvent::MIN_PRIORITY << " - " << CEvent::MAX_PRIORITY << " (including): " << std::endl;
+    priority = requestIntInInterval(CEvent::MIN_PRIORITY, CEvent::MAX_PRIORITY, true);
 
     CEvent * event = new CEvent
             (
@@ -97,11 +98,36 @@ void CCalendar::CreateEvent()
 
 void CCalendar::EditEvent(CEvent * ev)
 {
+}
 
-    if (requestConfirm("Do you want to save changes?"))
-        std::cout << "Changes saved!" << std::endl;
+void CCalendar::EditEvent(const CEvent::Instance &instance)
+{
+    CEvent * event = instance.GetEvent();
+
+    if (event->InstancesLeft() > 1)
+    {
+        std::stringstream ss;
+        ss << "This event repeats itself " << event->GetRepeat() << "." << std::endl
+           << "Do you want to edit all instances?" << std::endl
+           << "If you press \"n\", this instance of " << std::endl
+           << "event will be edited separately.";
+
+        if (requestConfirm(ss.str()))
+        {
+            EditEvent(event);
+        }
+        else
+        {
+            CEvent * cpy = new CEvent(*event);
+            event->DeleteInstance(instance.GetTime().first);
+            EditEvent(cpy);
+            AddEvent(cpy);
+        }
+    }
     else
-        std::cout << "Changes not saved." << std::endl;
+    {
+        EditEvent(event);
+    }
 }
 
 void CCalendar::DeleteEvent(CEvent * ev)
@@ -113,21 +139,27 @@ void CCalendar::DeleteEvent(CEvent * ev)
     delete ev;
 }
 
-void CCalendar::DeleteEvent(CEvent *event, const CDate &date)
+void CCalendar::DeleteEvent(const CEvent::Instance & instance)
 {
-    bool allDeleted = event->DeleteInstance(date);
-
-    if (!allDeleted)
+    if (instance.IsInstance())
     {
-        std::stringstream ss;
-        ss << "This event repeats itself: " << event->GetRepeat() << "." << std::endl
-           << "Do you want to delete all instances?" << std::endl;
+        CEvent * event = instance.GetEvent();
+        CDate date = instance.GetTime().first;
+        bool allDeleted = event->DeleteInstance(date);
 
-        allDeleted = requestConfirm(ss.str());
+        if (!allDeleted)
+        {
+            std::stringstream ss;
+            ss << "This event repeats itself " << event->GetRepeat() << "." << std::endl
+               << "Do you want to delete all instances?";
+
+            allDeleted = requestConfirm(ss.str());
+        }
+
+        if (allDeleted)
+            DeleteEvent(event);
+
     }
-
-    if (allDeleted)
-        DeleteEvent(event);
 }
 
 void CCalendar::Clear()
@@ -144,14 +176,15 @@ std::vector<CEvent *> CCalendar::SearchEvents(const std::string & name) const
     return m_Suggestions.Suggest(name);
 }
 
-std::map<CDate::Interval, CEvent *> CCalendar::FindInInterval(const CDate::Interval & interval) const
+std::vector<CEvent::Instance> CCalendar::FindInInterval(const CDate::Interval & interval) const
 {
-    std::map<CDate::Interval, CEvent *> results;
+    std::vector<CEvent::Instance> results;
 
     for (auto ev : m_Events)
     {
-        for (auto instance : ev->FindInInterval(interval))
-            results.insert(make_pair(instance, ev));
+        auto instances = ev->FindInInterval(interval);
+        for (auto instance : instances)
+            results.push_back(instance);
     }
 
     return results;

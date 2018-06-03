@@ -33,6 +33,7 @@ public:
     }
 
     ~CEventRepeatDayInMonth() override = default;
+    int InstancesLeft() const override { return std::numeric_limits<int>::max(); }
     bool Delete(const CDate & date) override;
     CEventRepeatBase * Clone() const override { return new CEventRepeatDayInMonth(*this); }
     std::string ToStr() const override;

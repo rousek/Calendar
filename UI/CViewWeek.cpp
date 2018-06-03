@@ -31,19 +31,18 @@ void CViewWeek::Update()
 
         CDate::Interval interval = std::make_pair(start, end);
 
-        for (auto pair : m_Calendar.FindInInterval(interval))
+        for (auto instance : m_Calendar.FindInInterval(interval))
         {
-            CDate timeStart = pair.first.first;
-            CDate timeEnd = pair.first.second;
-            CEvent * event = pair.second;
+            CDate::Interval time = instance.GetTime();
+            CEvent * event = instance.GetEvent();
 
             total++;
 
-            m_List.insert(std::make_pair(total, event));
+            m_List.insert(std::make_pair(total, instance));
 
             std::cout << total << ") "
-                      << "[" << timeStart.TimeToStr()
-                      << " - " << timeEnd.TimeToStr()
+                      << "[" << time.first.TimeToStr()
+                      << " - " << time.second.TimeToStr()
                       << "]: " << event->GetTitle() << std::endl;
 
         }
@@ -57,7 +56,7 @@ void CViewWeek::Update()
     std::cout << "Total " << total << std::endl;
 }
 
-CEvent* CViewWeek::Find(int ID) const
+CEvent::Instance CViewWeek::Find(int ID) const
 {
     auto it = m_List.find(ID);
     if (it == m_List.end())

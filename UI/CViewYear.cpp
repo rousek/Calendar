@@ -25,7 +25,7 @@ void CViewYear::Update()
     std::cout << "Total " << total << std::endl;
 }
 
-CEvent* CViewYear::Find(int ID) const
+CEvent::Instance CViewYear::Find(int ID) const
 {
     throw std::invalid_argument("This view mode does not support this feature!");
 }

@@ -10,7 +10,7 @@
 #define SEM_CVIEWTIME_H
 
 
-class CViewTime : public CViewBase<CEvent *>
+class CViewTime : public CViewBase<CEvent::Instance>
 {
 public:
     /**
@@ -21,7 +21,7 @@ public:
 protected:
     const CCalendar & m_Calendar;
     CDate & m_Date;
-    std::map<int, CEvent *> m_List;
+    std::map<int, CEvent::Instance> m_List;
 };
 
 #endif //SEM_CVIEWTIME_H

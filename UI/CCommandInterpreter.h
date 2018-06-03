@@ -90,7 +90,7 @@ public:
     void Show(const std::vector<std::string> & params);
     void Export(const std::vector<std::string> & params);
     void Import(const std::vector<std::string> & params);
-    CViewBase<CEvent *> * GetView();
+    CViewBase<CEvent::Instance> * GetView();
 private:
     typedef std::function<void (const std::vector<std::string> &)> command_function;
     typedef std::unordered_map<std::string, command_function> command_map;

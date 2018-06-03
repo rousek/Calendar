@@ -15,6 +15,7 @@ protected:
     std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
     explicit CEventRepeatAfter(const CDuration & duration) : m_Interval(duration) {}
+    int InstancesLeft() const override { return std::numeric_limits<int>::max(); }
     bool Delete(const CDate & date) override;
     CEventRepeatBase * Clone() const override { return new CEventRepeatAfter(*this); }
     ~CEventRepeatAfter() override = default;

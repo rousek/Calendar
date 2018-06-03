@@ -35,6 +35,10 @@ public:
     virtual std::string ToStr() const = 0;
     virtual CEventRepeatBase * Clone() const = 0;
     /**
+     * @return Number of instances left.
+     */
+    virtual int InstancesLeft() const = 0;
+    /**
      * Delete instance of event.
      * @param date Date of instance to be deleted.
      * @return True if there are no more instances of event.

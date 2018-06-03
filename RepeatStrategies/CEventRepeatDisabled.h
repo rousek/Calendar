@@ -17,6 +17,7 @@ protected:
     std::set<CDate> TestRange(const CDate & date, const CDate::Interval & interval) const override;
 public:
     ~CEventRepeatDisabled() override = default;
+    int InstancesLeft() const override { return 1 - m_Skipped.size() + m_Additional.size(); }
     bool Delete(const CDate & date) override;
     CEventRepeatBase * Clone() const override { return new CEventRepeatDisabled(*this); }
     std::string ToStr() const override;

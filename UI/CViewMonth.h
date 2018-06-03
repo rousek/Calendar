@@ -13,7 +13,7 @@ class CViewMonth : public CViewTime
 public:
     using CViewTime::CViewTime;
     ~CViewMonth() override = default;
-    CEvent * Find(int ID) const override;
+    CEvent::Instance Find(int ID) const override;
     void Update() override;
     void Previous() override;
     void Next() override;

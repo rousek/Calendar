@@ -36,7 +36,7 @@ void CViewMonth::Update()
 }
 
 
-CEvent* CViewMonth::Find(int ID) const
+CEvent::Instance CViewMonth::Find(int ID) const
 {
     throw std::invalid_argument("This view mode does not support this feature!");
 }

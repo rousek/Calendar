@@ -24,8 +24,27 @@ private:
     CEventRepeatBase * m_Repeat;
 
 public:
+    class Instance
+    {
+    public:
+        Instance(CEvent * ev, const CDate & start) :
+                m_Event(ev),
+                m_Time(std::make_pair(start, start + ev->GetDuration())),
+                m_IsInstance(true) {}
+        explicit Instance(CEvent * ev) : m_Event(ev), m_IsInstance(false) {}
+        CEvent * GetEvent() const { return m_Event; }
+        CDate::Interval GetTime() const { return m_Time; }
+        bool IsInstance() const { return m_IsInstance; }
+    private:
+        CEvent * m_Event;
+        CDate::Interval m_Time;
+        bool m_IsInstance;
+    };
+
+
     CEvent(const std::string & title, const std::string & place, const std::string & summary,
                const CDate & start, const CDate & end, int priority, CEventRepeatBase * rp);
+    explicit CEvent(const CEvent * ev);
 
     ~CEvent();
 
@@ -35,7 +54,8 @@ public:
     std::string GetSummary() const { return m_Summary; }
     std::string GetRepeat() const { return m_Repeat->ToStr(); }
 
-    std::set<CDate::Interval> FindInInterval(const CDate::Interval & interval) const;
+    std::vector<Instance> FindInInterval(const CDate::Interval & interval) const;
+    int InstancesLeft() const { return m_Repeat->InstancesLeft(); };
     bool DeleteInstance(const CDate & date);
 
     static const int MIN_PRIORITY;

@@ -21,6 +21,8 @@ CEventRepeatBase * RepetitionFromStr(const std::string & str)
         {
             if (parts[0] == "none")
                 return new CEventRepeatDisabled();
+
+            throw 0;
         }
         else if (parts.size() == 2)
         {
@@ -29,6 +31,8 @@ CEventRepeatBase * RepetitionFromStr(const std::string & str)
                 int day = parseInt(parts[1]);
                 return new CEventRepeatDayInMonth(day);
             }
+
+            throw 0;
         }
         else
         {
@@ -38,6 +42,8 @@ CEventRepeatBase * RepetitionFromStr(const std::string & str)
                 CDuration duration = CDuration(str.substr(offset));
                 return new CEventRepeatAfter(duration);
             }
+
+            throw 0;
         }
     }
     catch (...)

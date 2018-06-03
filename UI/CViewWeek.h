@@ -13,7 +13,7 @@ class CViewWeek : public CViewTime
 public:
     using CViewTime::CViewTime;
     ~CViewWeek() override = default;
-    CEvent * Find(int ID) const override;
+    CEvent::Instance Find(int ID) const override;
     void Update() override;
     void Previous() override;
     void Next() override;

@@ -8,10 +8,11 @@
 const int CViewVector::RESULTS_ON_SCREEN = 5;
 
 CViewVector::CViewVector(const std::vector<CEvent *> & events) :
-        m_Events(events),
         m_PageIndex(0),
         m_MaxIndex(static_cast<int>(std::ceil(events.size() / RESULTS_ON_SCREEN)) * RESULTS_ON_SCREEN)
 {
+    for (auto ev : events)
+        m_Events.push_back(CEvent::Instance(ev));
 }
 
 void CViewVector::Update()
@@ -22,7 +23,7 @@ void CViewVector::Update()
 
     for (int i = m_PageIndex; i <= maxShownIndex; i++)
     {
-        CEvent * event = m_Events[i];
+        CEvent * event = m_Events[i].GetEvent();
 
         std::cout << "***************************" << std::endl;
         std::cout << i + 1 << ")" << std::endl;
@@ -52,7 +53,7 @@ void CViewVector::Next()
     m_PageIndex = MIN(newIndex, m_MaxIndex);
 }
 
-CEvent * CViewVector::Find(int ID) const
+CEvent::Instance CViewVector::Find(int ID) const
 {
     int i = ID - 1;
 
