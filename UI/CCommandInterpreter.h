@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include "../Calendar/CCalendar.h"
 #include "CViewTime.h"
+#include "CViewVector.h"
 
 
 /**
@@ -20,6 +21,8 @@
 class CCommandInterpreter
 {
 public:
+    CCalendar m_Calendar;
+
     CCommandInterpreter();
     ~CCommandInterpreter();
 
@@ -61,45 +64,52 @@ public:
     void Delete(const std::vector<std::string> & params);
     /**
      * Searches calendar using title and location.
-     * @param params keywords
+     * @param params Keywords.
      */
     void Search(const std::vector<std::string> & params);
     /**
-     * Goes to next unit or page of m_List.
-     * @param params
+     * Goes to next unit or page of view.
+     * @param params Empty.
      */
     void Next(const std::vector<std::string> & params);
     /**
-     * Goes to previous unit or page of m_List.
-     * @param params
+     * Goes to previous unit or page of view.
+     * @param params Empty.
      */
     void Previous(const std::vector<std::string> & params);
     /**
-     *
+     * Changes view between week, month and year.
      * @param params First value always must be "in" or "out".
      * Second is ID of timeframe (optional).
      */
     void Zoom(const std::vector<std::string> & params);
+    /**
+     * Goes to given date and shows it in current view mode.
+     * @param params {date}
+     */
     void Show(const std::vector<std::string> & params);
     void Export(const std::vector<std::string> & params);
     void Import(const std::vector<std::string> & params);
-    CViewTime const * GetView();
+    CViewBase<CEvent *> * GetView();
 private:
     typedef std::function<void (const std::vector<std::string> &)> command_function;
     typedef std::unordered_map<std::string, command_function> command_map;
 
-    CCalendar m_Calendar;
     CDate m_Position;
     command_map m_Commands;
     bool m_Stopped;
     int m_ViewIndex;
     CViewTime * m_Views[3];
+    std::vector<std::string> m_SearchQuery;
+    CViewVector * m_SearchResults;
 
     /**
      * Calls command with given parameters if command exists.
      * Prints help otherwise.
      */
     void Interpret(const std::string & command, const std::vector<std::string> & params);
+
+    void ClearSearch();
 };
 
 

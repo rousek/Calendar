@@ -14,8 +14,7 @@
 #include "CDuration.h"
 
 /**
- * Wrapper of tm struct defining useful methods like read/write format
- * and arithmetics. This implementation ignores seconds.
+ * Wrapper of tm struct defining useful methods like read/write format and arithmetics.
  */
 class CDate
 {
@@ -33,7 +32,7 @@ public:
 
     /**
      * Initialize date with this tm struct.
-     * @param tm tm stuct to use
+     * @param tm Tm stuct to use.
      */
     explicit CDate(const tm & tm);
 
@@ -99,20 +98,20 @@ public:
     CDuration operator-(const CDate & d2) const;
 
     /**
-     * Return year, month and day in format set by CDate::DATE_FORMAT
+     * Return year, month and day in format set by CDate::DATE_FORMAT.
      * @return string
      */
     std::string DateToStr() const;
 
     /**
-     * Return month and day in format set by CDate::DATE_FORMAT
+     * Return month and day in format set by CDate::DATE_FORMAT.
      * @return string
      */
     std::string ShortDateToStr() const;
 
 
     /**
-     * Return hour and minute in format set by CDate::TIME_FORMAT
+     * Return hour and minute in format set by CDate::TIME_FORMAT.
      * @return string
      */
     std::string TimeToStr() const;
@@ -121,16 +120,16 @@ public:
     /**
      * Reads year, month, day in format set by DATE_FORMAT.
      * Throws invalid_argument exception if format is incorrect.
-     * @param s istream to be read
-     * @return CDate with set year, month and day
+     * @param s istream to be read.
+     * @return CDate with set year, month and day.
      */
     static CDate ReadDate(std::istream & s);
 
     /**
      * Reads hour, minute in format set by TIME_FORMAT.
      * Throws invalid_argument exception if format is incorrect.
-     * @param s istream to be read
-     * @return CDate with set hour and minute
+     * @param s istream to be read.
+     * @return CDate with set hour and minute.
      */
     static CDate ReadTime(std::istream & s);
 
@@ -144,14 +143,27 @@ public:
     static CDate RequestDateFromUser(std::function<CDate (std::istream &)> fn, bool required);
 
     /**
-     * @param date CDate providing year, month and day
-     * @param time CDate providing hour and minute
-     * @return Combined date and time
+     * @param date CDate providing year, month and day.
+     * @param time CDate providing hour and minute.
+     * @return Combined date and time.
      */
     static CDate CombineDateTime(const CDate & date, const CDate & time);
 
+    /**
+     * @param month
+     * @param year
+     * @return 01. XX. YYYY 00:00.
+     */
     static CDate StartOfMonth(int month, int year);
+    /**
+     * @param month
+     * @param year
+     * @return (31|30|29|28). XX. YYYY 23:59.
+     */
     static CDate EndOfMonth(int month, int year);
+    /**
+     * @return Current time read by function time.
+     */
     static CDate Now();
 
     /**
@@ -161,10 +173,25 @@ public:
      */
     static int MonthLength(int month, int year);
 
+    /**
+     * @param month Integer 1-12.
+     * @return Three letters long char[].
+     */
     static char const * MonthStringShort(int month);
+    /**
+     * @param month Integer 1-12.
+     * @return Full sized name of month.
+     */
     static char const * MonthStringLong(int month);
-
+    /**
+     * @param weekday Integer 0-6. 0 is for Sunday.
+     * @return Three letters long char[].
+     */
     static char const * WeekdayStringShort(int weekday);
+    /**
+     * @param weekday Integer 0-6. 0 is for Sunday.
+     * @return Full sized name of weekday.
+     */
     static char const * WeekdayStringLong(int weekday);
 
 

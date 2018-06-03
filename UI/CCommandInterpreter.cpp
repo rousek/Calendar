@@ -11,12 +11,8 @@
 
 CCommandInterpreter::CCommandInterpreter() :
         m_Position(CDate::Now()),
-        m_Views
-                {
-                new CViewWeek(m_Calendar, m_Position)
-                //new CViewMonth(m_Calendar, m_Position),
-                //new CViewYear(m_Calendar, m_Position)
-                }
+        m_Views{new CViewWeek(m_Calendar, m_Position), new CViewMonth(m_Calendar, m_Position), new CViewYear(m_Calendar, m_Position)},
+        m_SearchResults(nullptr)
 
 {
     // Week view is default
@@ -73,6 +69,9 @@ void CCommandInterpreter::Interpret(const std::string & command, const std::vect
 
 void CCommandInterpreter::Run()
 {
+    Welcome();
+    GetView()->Update();
+
     m_Stopped = false;
 
     while (!m_Stopped)
@@ -84,6 +83,23 @@ void CCommandInterpreter::Run()
         getline(std::cin, params);
 
         Interpret(command, split(params, ' '));
+    }
+}
+
+CViewBase<CEvent *> * CCommandInterpreter::GetView()
+{
+    if (m_SearchResults != nullptr)
+        return m_SearchResults;
+
+    return m_Views[m_ViewIndex];
+}
+
+void CCommandInterpreter::ClearSearch()
+{
+    if (m_SearchResults != nullptr)
+    {
+        delete m_SearchResults;
+        m_SearchResults = nullptr;
     }
 }
 
@@ -149,7 +165,15 @@ void CCommandInterpreter::Help()
 
 void CCommandInterpreter::Exit()
 {
-    m_Stopped = true;
+    if (m_SearchResults != nullptr)
+    {
+        ClearSearch();
+        GetView()->Update();
+    }
+    else
+    {
+        m_Stopped = true;
+    }
 }
 
 void CCommandInterpreter::Add(const std::vector<std::string> &params)
@@ -167,8 +191,16 @@ void CCommandInterpreter::Edit(const std::vector<std::string> &params)
     if (params.size() != 1)
         return Help();
 
-    evtID = parseInt(params[0]);
-    m_Calendar.EditEvent(evtID);
+    try
+    {
+        evtID = parseInt(params[0]);
+        CEvent * ev = GetView()->Find(evtID);
+        m_Calendar.EditEvent(ev);
+    }
+    catch (const std::invalid_argument & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void CCommandInterpreter::Clear(const std::vector<std::string> &params)
@@ -186,9 +218,22 @@ void CCommandInterpreter::Delete(const std::vector<std::string> &params)
     if (params.size() != 1)
         return Help();
 
-    evtID = parseInt(params[0]);
+    try
+    {
+        evtID = parseInt(params[0]);
+        CEvent * ev = GetView()->Find(evtID);
+        m_Calendar.DeleteEvent(ev);
 
-    m_Calendar.RemoveEvent(evtID);
+        // Update search results or view.
+        if (m_SearchResults != nullptr)
+            Search(m_SearchQuery);
+        else
+            GetView()->Update();
+    }
+    catch (const std::invalid_argument & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void CCommandInterpreter::Zoom(const std::vector<std::string> &params)
@@ -208,28 +253,105 @@ void CCommandInterpreter::Zoom(const std::vector<std::string> &params)
     }
     else if (params.size() != 1)
         return Help();
+    else if (m_SearchResults != nullptr)
+    {
+        std::cout << "This view mode does not support this feature!" << std::endl;
+        return;
+    }
 
-    if (params[1] == "in")
+    if (params[0] == "in")
     {
 
         if (m_ViewIndex == 0)
+        {
+            std::cout << "You cannot zoom in any further!" << std::endl;
             return;
+        }
+        m_ViewIndex--;
     }
+    else if (params[0] == "out")
+    {
+        if (m_ViewIndex == sizeof(m_Views) / sizeof(m_Views[0]) - 1)
+        {
+            std::cout << "You cannot zoom out any further!" << std::endl;
+            return;
+        }
+        m_ViewIndex++;
+    }
+    else
+        return Help();
+
+    GetView()->Update();
 }
 
 void CCommandInterpreter::Search(const std::vector<std::string> &params)
 {
+    if (params.empty())
+    {
+        std::cout << "Please type in at least one keyword." << std::endl;
+        return;
+    }
 
+    ClearSearch();
+
+    std::string query = join(params, " ");
+    std::vector<CEvent *> results = m_Calendar.SearchEvents(query);
+    m_SearchQuery = params;
+    m_SearchResults = new CViewVector(results);
+    m_SearchResults->Update();
 }
 
 void CCommandInterpreter::Next(const std::vector<std::string> &params)
 {
+    if (!params.empty())
+        return Help();
 
+    try
+    {
+        GetView()->Next();
+        GetView()->Update();
+    }
+    catch (const std::invalid_argument & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void CCommandInterpreter::Previous(const std::vector<std::string> &params)
 {
+    if (!params.empty())
+        return Help();
 
+    try
+    {
+        GetView()->Previous();
+        GetView()->Update();
+    }
+    catch (const std::invalid_argument & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
+}
+
+void CCommandInterpreter::Show(const std::vector<std::string> &params)
+{
+    if (params.empty())
+        return Help();
+
+    std::string str = join(params, " ");
+    std::stringstream ss(str);
+
+    try
+    {
+        CDate d = CDate::ReadDate(ss);
+        m_Position = d;
+        ClearSearch();
+        GetView()->Update();
+    }
+    catch (const std::invalid_argument & e)
+    {
+        std::cout << e.what() << std::endl;
+    }
 }
 
 void CCommandInterpreter::Import(const std::vector<std::string> &params)
@@ -238,11 +360,6 @@ void CCommandInterpreter::Import(const std::vector<std::string> &params)
 }
 
 void CCommandInterpreter::Export(const std::vector<std::string> &params)
-{
-
-}
-
-void CCommandInterpreter::Show(const std::vector<std::string> &params)
 {
 
 }

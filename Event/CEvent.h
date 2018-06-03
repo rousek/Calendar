@@ -14,7 +14,6 @@
 class CEvent
 {
 private:
-    int m_ID;
     std::string m_Title;
     std::string m_Place;
     std::string m_Summary;
@@ -25,38 +24,30 @@ private:
     CEventRepeatBase * m_Repeat;
 
 public:
-    CEvent(int id, const std::string & title, const std::string & place, const std::string & summary,
+    CEvent(const std::string & title, const std::string & place, const std::string & summary,
                const CDate & start, const CDate & end, int priority, CEventRepeatBase * rp);
 
     ~CEvent();
 
     CDuration GetDuration() const;
-
-    void SetID(int id) { m_ID = id; }
-    int GetID() const { return m_ID; }
     std::string GetTitle() const { return m_Title; }
     std::string GetPlace() const { return m_Place; }
     std::string GetSummary() const { return m_Summary; }
-
-    bool InteractiveEditor();
+    std::string GetRepeat() const { return m_Repeat->ToStr(); }
 
     std::set<CDate::Interval> FindInInterval(const CDate::Interval & interval) const;
+    bool DeleteInstance(const CDate & date);
 
-    static CEvent * InteractiveCreator(int id);
-
-    static CEventRepeatBase * ReadRepetition(std::istream & s);
-
-    friend std::ostream & operator<<(std::ostream & s, const CEvent & ev);
-
-    friend std::ostream & operator<<(std::ostream & s, const CEvent * ev);
-
-    static int MIN_PRIORITY;
-    static int MAX_PRIORITY;
+    static const int MIN_PRIORITY;
+    static const int MAX_PRIORITY;
 
     struct GetSearchable
     {
         std::vector<std::string> operator()(CEvent * const & ev) const;
     };
+
+    friend std::ostream & operator<<(std::ostream & s, const CEvent & ev);
+    friend std::ostream & operator<<(std::ostream & s, const CEvent * ev);
 };
 
 

@@ -13,6 +13,7 @@
 #include "UI/CViewMonth.h"
 #include "UI/CViewWeek.h"
 #include "UI/CViewVector.h"
+#include "RepeatStrategies/CEventRepeatUtils.h"
 
 
 using namespace std;
@@ -57,65 +58,77 @@ void CalendarTest()
     CCalendar cal;
     stringstream ss("after 1 day");
 
-    CEvent * obed = new CEvent
-            (
-                    0,
-                    "Obed",
-                    "domov skola restaurace kancelar",
-                    "Normalni obed",
-                    CDate("01. 01. 2018 11:30"),
-                    CDate("01. 01. 2018 12:00"),
-                    1,
-                    CEvent::ReadRepetition(ss)
-            );
 
     /*
     for (auto a : obed->FindInInterval(make_pair(CDate("01. 01. 2018 12:31"), CDate("02. 01. 2018 11:30"))))
         cout << a << endl;
         */
 
-    ss = stringstream("month_day 31"); // last day in month
+
+/*
+    for (auto a : schuzka->FindInInterval(make_pair(CDate("01. 01. 2018 12:19"), CDate("01. 12. 2018 12:30"))))
+        cout << a << endl;
+*/
+}
+
+
+int main()
+{
+    /*
+    CalendarTest();
+    DateTest();
+     */
+
+    CCommandInterpreter in;
+
+    CEvent * obed = new CEvent
+            (
+                    "Obed",
+                    "domov skola restaurace kancelar",
+                    "Normalni obed",
+                    CDate("01. 01. 2018 11:30"),
+                    CDate("01. 01. 2018 12:00"),
+                    1,
+                    RepetitionFromStr("after 1 day")
+            );
 
     CEvent * schuzka = new CEvent
             (
-                    1,
                     "Schuzka s klientem",
                     "kancelar",
                     "pravidelna schuzka",
                     CDate("01. 01. 2018 12:20"),
                     CDate("01. 01. 2018 15:20"),
                     9,
-                    CEvent::ReadRepetition(ss)
+                    RepetitionFromStr("month_day 31")
             );
-/*
-    for (auto a : schuzka->FindInInterval(make_pair(CDate("01. 01. 2018 12:19"), CDate("01. 12. 2018 12:30"))))
-        cout << a << endl;
-*/
-    cal.AddEvent(obed);
-    cal.AddEvent(schuzka);
 
-    CDate date = CDate("01. 01. 2018 12:20");
+    in.m_Calendar.AddEvent(obed);
+    in.m_Calendar.AddEvent(schuzka);
 
-    //CViewWeek(cal, date).Update();
+    std::string evtName = "Random event TEsT ";
+    std::string place = "in a galaxy far away";
+    CDate evtStart = CDate("15. 05. 2018 10:00");
 
-    vector<CEvent *> schuzky;
-    for (int i = 0; i < 8; i++)
-        schuzky.push_back(obed);
+    for (int i = 0; i < 60; i++)
+    {
+        CEvent * test = new CEvent
+                (
+                        evtName + toStr(i),
+                        place,
+                        "",
+                        evtStart,
+                        evtStart + CDuration::Hours(2),
+                        1,
+                        RepetitionFromStr("none")
+        );
 
-    CViewVector vec(schuzky);
-    vec.Update();
-    vec.Next();
-    vec.Next();
-    vec.Update();
+        evtStart += CDuration::Days(1);
 
-    cout << "cislo 6: " << vec.Find(6)->GetTitle() << endl;
-}
+        in.m_Calendar.AddEvent(test);
+    }
 
-
-int main()
-{
-    CalendarTest();
-    DateTest();
+    in.Run();
 
     return 0;
 }

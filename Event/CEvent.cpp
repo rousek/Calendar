@@ -10,11 +10,12 @@
 #include "../RepeatStrategies/CEventRepeatDisabled.h"
 #include "../RepeatStrategies/CEventRepeatDayInMonth.h"
 #include "../RepeatStrategies/CEventRepeatAfter.h"
+#include "../RepeatStrategies/CEventRepeatUtils.h"
 
-int CEvent::MIN_PRIORITY = 1;
-int CEvent::MAX_PRIORITY = 10;
+const int CEvent::MIN_PRIORITY = 1;
+const int CEvent::MAX_PRIORITY = 10;
 
-CEvent::CEvent(int id,
+CEvent::CEvent(
                const std::string & title,
                const std::string & place,
                const std::string & summary,
@@ -22,7 +23,6 @@ CEvent::CEvent(int id,
                const CDate & end,
                int priority,
                CEventRepeatBase * rp) :
-                m_ID(id),
                 m_Title(title),
                 m_Place(place),
                 m_Summary(summary),
@@ -53,103 +53,9 @@ std::set<CDate::Interval> CEvent::FindInInterval(const CDate::Interval & interva
     return CEventRepeatBase::MakeIntervals(beginnings, GetDuration());
 }
 
-bool CEvent::InteractiveEditor()
+bool CEvent::DeleteInstance(const CDate &date)
 {
-
-    if (requestConfirm("Do you want to save changes?"))
-    {
-
-    }
-}
-
-CEvent * CEvent::InteractiveCreator(int ID)
-{
-    CDate dateStart, dateEnd, timeStart, timeEnd;
-    std::string title, place, summary;
-    int priority;
-    CEventRepeatBase * repeat;
-
-    std::cout << "Date:" << std::endl;
-
-    dateStart = CDate::RequestDateFromUser(CDate::ReadDate, true);
-
-    std::cout << "End date (optional):" << std::endl;
-    try
-    {
-        dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
-    }
-    catch (const EmptyLineException & e)
-    {
-        dateEnd = dateStart;
-    }
-
-    std::cout << "Start time:" << std::endl;
-    timeStart = CDate::RequestDateFromUser(CDate::ReadTime, true);
-
-    std::cout << "End time:" << std::endl;
-    while(true)
-    {
-        timeEnd = CDate::RequestDateFromUser(CDate::ReadTime, true);
-
-        if (timeEnd > timeStart)
-            break;
-        else
-            std::cout << "Event must end after it starts!" << std::endl;
-    }
-
-    std::cout << "Title:" << std::endl;
-    getline(std::cin, title);
-
-    std::cout << "Summary: " << std::endl;
-    getline(std::cin, summary);
-
-    std::cout << "Place:" << std::endl;
-    getline(std::cin, place);
-
-    std::cout << "Repetition: " << std::endl;
-    while(true)
-    {
-        try
-        {
-            repeat = ReadRepetition(std::cin);
-            break;
-        }
-        catch (const std::invalid_argument & e)
-        {
-            std::cout << e.what() << std::endl;
-        }
-    }
-
-    std::cout << "Priority " << MIN_PRIORITY << " - " << MAX_PRIORITY << " (including): " << std::endl;
-    while(true)
-    {
-        try
-        {
-            std::string tmp;
-            getline(std::cin, tmp);
-            priority = parseInt(tmp);
-            if (priority < MIN_PRIORITY || priority > MAX_PRIORITY)
-                throw 0;
-            break;
-        }
-        catch (...)
-        {
-            std::cout << "Invalid input! Please type in number in the interval of "
-                      << MIN_PRIORITY << " - " << MAX_PRIORITY << "." << std::endl;
-        }
-    }
-
-    return new CEvent
-            (
-                    ID,
-                    title,
-                    place,
-                    summary,
-                    CDate::CombineDateTime(dateStart, timeStart),
-                    CDate::CombineDateTime(dateEnd, timeEnd),
-                    priority,
-                    repeat
-            );
+    return m_Repeat->Delete(date);
 }
 
 std::ostream & operator<<(std::ostream & s, const CEvent & ev)
@@ -173,54 +79,6 @@ std::ostream & operator<<(std::ostream & s, const CEvent * ev)
         return s << "null";
     else
         return s << *ev;
-}
-
-CEventRepeatBase * CEvent::ReadRepetition(std::istream & s)
-{
-    std::string line;
-    getline(s, line);
-
-    auto parts = split(line, ' ');
-
-    try
-    {
-        if (parts.empty())
-            throw 0;
-
-        if (parts.size() == 1)
-        {
-            if (parts[0] == "none")
-                return new CEventRepeatDisabled();
-        }
-        else if (parts.size() == 2)
-        {
-            if (parts[0] == "month_day")
-            {
-                int day = parseInt(parts[1]);
-                return new CEventRepeatDayInMonth(day);
-            }
-        }
-        else
-        {
-            if (parts[0] == "after")
-            {
-                const int offset = 6; // Offset in line after string "after "
-                CDuration duration = CDuration(line.substr(offset));
-                return new CEventRepeatAfter(duration);
-            }
-        }
-    }
-    catch (...)
-    {
-        const char help[] =
-                "Invalid input!\n"
-                "Valid options are:\n"
-                "\"none\"\n"
-                "\"month_day day\" where day is day of month. Negative values are also accepted.\n"
-                "\"after duration\" where duration is string representation of duration i.e. \"1 day, 1 month, 2 hours\"\n";
-
-        throw std::invalid_argument(help);
-    }
 }
 
 std::vector<std::string> CEvent::GetSearchable::operator()(CEvent * const & ev) const

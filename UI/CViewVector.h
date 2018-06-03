@@ -9,10 +9,13 @@
 #include "../Event/CEvent.h"
 #include "CViewBase.h"
 
+/**
+ * CView printing events and allowing pagination.
+ */
 class CViewVector : public CViewBase<CEvent *>
 {
 public:
-    CViewVector(const std::vector<CEvent *> events) : m_Events(events), m_PageIndex(0) {}
+    CViewVector(const std::vector<CEvent *> & events);
     ~CViewVector() override = default;
     CEvent * Find(int ID) const override;
     void Update() override;
@@ -22,6 +25,7 @@ public:
     static const int RESULTS_ON_SCREEN;
 private:
     int m_PageIndex;
+    const int m_MaxIndex;
     std::vector<CEvent *> m_Events;
 };
 

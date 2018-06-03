@@ -5,13 +5,22 @@
 #include "CViewVector.h"
 #include "../utils/utils.h"
 
-const int CViewVector::RESULTS_ON_SCREEN = 3;
+const int CViewVector::RESULTS_ON_SCREEN = 5;
+
+CViewVector::CViewVector(const std::vector<CEvent *> & events) :
+        m_Events(events),
+        m_PageIndex(0),
+        m_MaxIndex(static_cast<int>(std::ceil(events.size() / RESULTS_ON_SCREEN)) * RESULTS_ON_SCREEN)
+{
+}
 
 void CViewVector::Update()
 {
-    const int maxIndex = MIN(m_PageIndex + RESULTS_ON_SCREEN - 1, m_Events.size() - 1);
+    int nextMilestone = m_PageIndex + RESULTS_ON_SCREEN;
+    int maxIndexInArray = static_cast<int>(m_Events.size() - 1);
+    const int maxShownIndex = MIN(nextMilestone, maxIndexInArray);
 
-    for (int i = m_PageIndex; i <= maxIndex; i++)
+    for (int i = m_PageIndex; i <= maxShownIndex; i++)
     {
         CEvent * event = m_Events[i];
 
@@ -21,28 +30,26 @@ void CViewVector::Update()
     }
 
     std::cout << "***************************" << std::endl;
-    std::cout << "Showing " << m_PageIndex + 1 << " - " << maxIndex + 1 << std::endl;
+    std::cout << "Showing " << m_PageIndex + 1 << " - " << maxShownIndex + 1 << std::endl;
     std::cout << "Total " << m_Events.size() << std::endl;
 }
 
 void CViewVector::Previous()
 {
-    const int minIndex = 0;
+    if (m_PageIndex == 0)
+        throw std::invalid_argument("Cannot go back any further!");
 
-    if (m_PageIndex == minIndex)
-        std::invalid_argument("Cannot go back any further!");
-
-    m_PageIndex = MAX(m_PageIndex - RESULTS_ON_SCREEN, 0);
+    int newIndex = m_PageIndex - RESULTS_ON_SCREEN;
+    m_PageIndex = MAX(newIndex, 0);
 }
 
 void CViewVector::Next()
 {
-    const int maxIndex = static_cast<int>((std::ceil(m_Events.size() / RESULTS_ON_SCREEN) - 1) * RESULTS_ON_SCREEN);
+    if (m_PageIndex == m_MaxIndex)
+        throw std::invalid_argument("Cannot go forward any further!");
 
-    if (m_PageIndex == maxIndex)
-        std::invalid_argument("Cannot go forward any further!");
-
-    m_PageIndex = MIN(m_PageIndex + 10, maxIndex);
+    int newIndex = m_PageIndex + RESULTS_ON_SCREEN;
+    m_PageIndex = MIN(newIndex, m_MaxIndex);
 }
 
 CEvent * CViewVector::Find(int ID) const

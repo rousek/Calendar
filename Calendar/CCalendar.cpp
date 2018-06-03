@@ -5,72 +5,135 @@
 #include <vector>
 #include "CCalendar.h"
 #include "../utils/utils.h"
-
-CCalendar::CCalendar()
-{
-    m_EventCounter = 0;
-}
+#include "../RepeatStrategies/CEventRepeatUtils.h"
 
 CCalendar::~CCalendar()
 {
-    for (auto pair: m_Events)
-        delete pair.second;
+    for (auto ev: m_Events)
+        delete ev;
 }
 
 void CCalendar::AddEvent(CEvent * ev)
 {
-    int ID = ev->GetID();
-
-    if (ID >= m_EventCounter)
-        m_EventCounter = ID + 1;
-    else
-        ev->SetID(m_EventCounter++);
-
-    m_Events.insert(std::make_pair(ID, ev));
+    m_Events.insert(ev);
     m_Suggestions.Insert(ev);
 }
 
 void CCalendar::CreateEvent()
 {
-    CEvent * ev = CEvent::InteractiveCreator(m_EventCounter);
-    AddEvent(ev);
+    CDate dateStart, dateEnd, timeStart, timeEnd;
+    std::string title, place, summary;
+    int priority;
+    CEventRepeatBase * repeat;
+
+    std::cout << "Date:" << std::endl;
+
+    dateStart = CDate::RequestDateFromUser(CDate::ReadDate, true);
+
+    std::cout << "End date (optional):" << std::endl;
+    try
+    {
+        dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
+    }
+    catch (const EmptyLineException & e)
+    {
+        dateEnd = dateStart;
+    }
+
+    std::cout << "Start time:" << std::endl;
+    timeStart = CDate::RequestDateFromUser(CDate::ReadTime, true);
+
+    std::cout << "End time:" << std::endl;
+    while(true)
+    {
+        timeEnd = CDate::RequestDateFromUser(CDate::ReadTime, true);
+
+        if (timeEnd > timeStart)
+            break;
+        else
+            std::cout << "Event must end after it starts!" << std::endl;
+    }
+
+    std::cout << "Title:" << std::endl;
+    getline(std::cin, title);
+
+    std::cout << "Summary: " << std::endl;
+    getline(std::cin, summary);
+
+    std::cout << "Place:" << std::endl;
+    getline(std::cin, place);
+
+    std::cout << "Repetition: " << std::endl;
+    while(true)
+    {
+        try
+        {
+            std::string line;
+            getline(std::cin, line);
+            repeat = RepetitionFromStr(line);
+            break;
+        }
+        catch (const std::invalid_argument & e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    }
+
+    std::cout << "Priority " << CEvent::MIN_PRIORITY << " - " << CEvent::MAX_PRIORITY << " (including): " << std::endl;
+
+    CEvent * event = new CEvent
+            (
+                    title,
+                    place,
+                    summary,
+                    CDate::CombineDateTime(dateStart, timeStart),
+                    CDate::CombineDateTime(dateEnd, timeEnd),
+                    priority,
+                    repeat
+            );
+
+    AddEvent(event);
 }
 
-std::map<int, CEvent *>::const_iterator CCalendar::FindEvent(int ID) const
+void CCalendar::EditEvent(CEvent * ev)
 {
-    auto it = m_Events.find(ID);
 
-    if (it == m_Events.end())
-        throw std::invalid_argument("Event with ID " + toStr(ID) + " does not exist!");
-
-    return it;
-}
-
-void CCalendar::EditEvent(const std::map<int, CEvent *>::const_iterator & it)
-{
-    CEvent * ev = (*it).second;
-
-    if (ev->InteractiveEditor())
-        std::cout << "Event has been saved successfully!" << std::endl;
+    if (requestConfirm("Do you want to save changes?"))
+        std::cout << "Changes saved!" << std::endl;
     else
-        std::cout << "Event has not been saved." << std::endl;
+        std::cout << "Changes not saved." << std::endl;
 }
 
-void CCalendar::RemoveEvent(const std::map<int, CEvent *>::const_iterator & it)
+void CCalendar::DeleteEvent(CEvent * ev)
 {
-    CEvent * ev = (*it).second;
+    auto it = m_Events.find(ev);
 
     m_Events.erase(it);
     m_Suggestions.Remove(ev);
     delete ev;
 }
 
+void CCalendar::DeleteEvent(CEvent *event, const CDate &date)
+{
+    bool allDeleted = event->DeleteInstance(date);
+
+    if (!allDeleted)
+    {
+        std::stringstream ss;
+        ss << "This event repeats itself: " << event->GetRepeat() << "." << std::endl
+           << "Do you want to delete all instances?" << std::endl;
+
+        allDeleted = requestConfirm(ss.str());
+    }
+
+    if (allDeleted)
+        DeleteEvent(event);
+}
+
 void CCalendar::Clear()
 {
-    for (auto pair : m_Events)
-    {
-        delete pair.second;
-    }
+    for (auto ev : m_Events)
+        delete ev;
 
     m_Events.clear();
     m_Suggestions.Clear();
@@ -85,10 +148,8 @@ std::map<CDate::Interval, CEvent *> CCalendar::FindInInterval(const CDate::Inter
 {
     std::map<CDate::Interval, CEvent *> results;
 
-    for (auto pair : m_Events)
+    for (auto ev : m_Events)
     {
-        CEvent * ev = pair.second;
-
         for (auto instance : ev->FindInInterval(interval))
             results.insert(make_pair(instance, ev));
     }

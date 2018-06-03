@@ -74,7 +74,16 @@ void CEventRepeatDayInMonth::Negative(const CDate &date, const CDate &to, std::s
 
 void CEventRepeatDayInMonth::Positive(const CDate &date, const CDate & to, std::set<CDate> &results, CDate current) const
 {
-    current.SetDay(m_Day);
+    try
+    {
+        current.SetDay(m_Day);
+    }
+    catch (const std::invalid_argument & e)
+    {
+        current += CDuration::Months(1);
+        current.SetDay(m_Day);
+    }
+
 
     while (current <= to)
     {

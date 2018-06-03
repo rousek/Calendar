@@ -75,16 +75,16 @@ public:
      * The match is not always accurate as only one
      * term of only one identifier must match only one
      * term of query.
-     * Example:
-     *
-     * Database:
-     * 1 (ID = {"Hello WorlD", "wORlD"}),
-     * 2 (ID = {"Hello world from Czech Republic"}),
-     * 3 (ID = {"worlds"})
-     *
+     * Example:\n
+     * \n
+     * Database:\n
+     * 1 (ID = {"Hello WorlD", "wORlD"}),\n
+     * 2 (ID = {"Hello world from Czech Republic"}),\n
+     * 3 (ID = {"worlds"})\n
+     * \n
      * Query "world" results in {1, 2} while order is not given.
      * Item 3 does not contain term "world" so it does not appear
-     * in results.
+     * in results.\n
      * Query "hello czech" returns {2, 1}. Item 2 must be first
      * as the match is better. However item 1 matches at least one
      * term and cannot be ignored.
