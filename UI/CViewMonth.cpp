@@ -17,6 +17,7 @@ void CViewMonth::Update()
     CDate endOfMonth = CDate::EndOfMonth(month, year);
     int total = 0;
 
+    std::cout << std::endl;
     std::cout << "*************** -" << CDate::MonthStringLong(month) << " " << year << "- ***************" << std::endl;
 
     while (start < endOfMonth)
@@ -32,6 +33,7 @@ void CViewMonth::Update()
         total += count;
     }
 
+    std::cout << std::endl;
     std::cout << "Total " << total << std::endl;
 }
 

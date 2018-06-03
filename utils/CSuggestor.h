@@ -152,6 +152,7 @@ private:
 
         while (ss >> item)
         {
+
             transform(item.begin(), item.end(), item.begin(), ::tolower);
             result.insert(item);
         }

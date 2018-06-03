@@ -18,6 +18,8 @@ void CViewWeek::Update()
     while (start.GetWeekDay() != 1)
         start -= CDuration::Days(1);
 
+    std::cout << std::endl;
+
     int weekday = 1;
     // Go from Monday to another Monday
     do
@@ -46,6 +48,7 @@ void CViewWeek::Update()
                       << "]: " << event->GetTitle() << std::endl;
 
         }
+        std::cout << std::endl;
 
         weekday++;
         weekday %= 7;

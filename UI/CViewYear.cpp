@@ -10,6 +10,7 @@ void CViewYear::Update()
     int year = m_Date.GetYear();
     int total = 0;
 
+    std::cout << std::endl;
     std::cout << "*************** -" << year << "- ***************" << std::endl;
 
     for (int month = 1; month <= 12; month++)
@@ -22,6 +23,8 @@ void CViewYear::Update()
 
         std::cout << month << ") " << CDate::MonthStringShort(month) << " - " << count << std::endl;
     }
+
+    std::cout << std::endl;
     std::cout << "Total " << total << std::endl;
 }
 

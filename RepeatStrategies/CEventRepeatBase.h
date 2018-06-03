@@ -34,6 +34,11 @@ public:
     virtual ~CEventRepeatBase() = default;
     virtual std::string ToStr() const = 0;
     virtual CEventRepeatBase * Clone() const = 0;
+
+    std::set<CDate> GetAdditional() const { return m_Additional; }
+    std::set<CDate> GetSkipped() const { return m_Skipped; }
+    void AddAdditional(const CDate & date) { m_Additional.insert(date); }
+    void AddSkipped(const CDate & date) { m_Skipped.insert(date); }
     /**
      * @return Number of instances left.
      */
@@ -49,7 +54,7 @@ public:
      * @param from Start of event instance.
      * @param to New start of event instance.
      */
-    virtual void Transfer(const CDate & from, const CDate & to);
+    void Transfer(const CDate & from, const CDate & to);
     /**
      * Calls TestRange and filters skipped dates while adding additional dates.
      */
@@ -61,6 +66,15 @@ public:
      * @return Set of intervals.
      */
     static std::set<CDate::Interval> MakeIntervals(const std::set<CDate> & beginnings, const CDuration & duration);
+
+    friend std::ostream &operator<<(std::ostream & stream, const CEventRepeatBase & rp)
+    {
+        return stream << rp.ToStr();
+    }
+    friend std::ostream &operator<<(std::ostream & stream, const CEventRepeatBase * rp)
+    {
+        return stream << rp->ToStr();
+    }
 };
 
 

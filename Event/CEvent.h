@@ -10,6 +10,8 @@
 #include "../Date/CDate.h"
 #include "../RepeatStrategies/CEventRepeatBase.h"
 
+class CEventEditor;
+
 class CEvent
 {
 private:
@@ -43,15 +45,16 @@ public:
 
     CEvent(const std::string & title, const std::string & place, const std::string & summary,
                const CDate & start, const CDate & end, int priority, CEventRepeatBase * rp);
-    explicit CEvent(const CEvent * ev);
-
     ~CEvent();
 
-    CDuration GetDuration() const;
+    CDuration GetDuration() const { return m_End - m_Start; };
     std::string GetTitle() const { return m_Title; }
     std::string GetPlace() const { return m_Place; }
     std::string GetSummary() const { return m_Summary; }
-    std::string GetRepeat() const { return m_Repeat->ToStr(); }
+    CEventRepeatBase * GetRepeat() const { return m_Repeat; }
+    CDate GetStart() const { return m_Start; }
+    CDate GetEnd() const { return m_End; }
+    int GetPriority() const { return m_Priority; }
 
     std::vector<Instance> FindInInterval(const CDate::Interval & interval) const;
     int InstancesLeft() const { return m_Repeat->InstancesLeft(); };
@@ -60,6 +63,8 @@ public:
     static const int MIN_PRIORITY;
     static const int MAX_PRIORITY;
 
+    static CEvent * CopyInstance(const CEvent::Instance & instance);
+
     struct GetSearchable
     {
         std::vector<std::string> operator()(CEvent * const & ev) const;
@@ -67,6 +72,7 @@ public:
 
     friend std::ostream & operator<<(std::ostream & s, const CEvent & ev);
     friend std::ostream & operator<<(std::ostream & s, const CEvent * ev);
+    friend CEventEditor;
 };
 
 

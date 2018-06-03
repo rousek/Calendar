@@ -8,11 +8,14 @@
 #include "../Calendar/CCalendar.h"
 #include <fstream>
 
+/**
+ * Basic interface for import/export.
+ */
 class CCalendarExportBase {
 public:
-    virtual void Import(std::ifstream & s, CCalendar & cal);
-    virtual void Export(const CCalendar & cal, std::ofstream & s);
+    virtual ~CCalendarExportBase() = default;
+    virtual void Import(std::ifstream & s, CCalendar & cal) const = 0;
+    virtual void Export(const CCalendar & cal, std::ofstream & s) const = 0;
 };
-
 
 #endif //SEM_CCALENDAREXPORTBASE_H

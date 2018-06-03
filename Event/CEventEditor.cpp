@@ -95,7 +95,144 @@ void CEventEditor::Create(CCalendar &calendar)
 
 void CEventEditor::Edit(CCalendar &calendar, CEvent *ev)
 {
+    CDate dateStart, dateEnd, timeStart, timeEnd;
+    std::string title, place, summary;
+    int priority;
+    CEventRepeatBase * repeat;
 
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // Start date
+    std::cout << "Date (" << ev->GetStart().DateToStr() << "):" << std::endl;
+    try
+    {
+        dateStart = CDate::RequestDateFromUser(CDate::ReadDate, false);
+    }
+    catch (const EmptyLineException & e)
+    {
+        dateStart = ev->GetStart();
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // End date
+    std::cout << "End date (" << ev->GetEnd().DateToStr() << "):"<< std::endl;
+    while(true)
+    {
+        try
+        {
+            dateEnd = CDate::RequestDateFromUser(CDate::ReadDate, false);
+        }
+        catch (const EmptyLineException & e)
+        {
+            dateEnd = ev->GetEnd();
+        }
+
+        if (dateStart <= dateEnd)
+            break;
+        else
+            std::cout << "Event must end after it starts!" << std::endl;
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // Start time
+    std::cout << "Start time (" << ev->GetStart().TimeToStr() << "):" << std::endl;
+    try
+    {
+        timeStart = CDate::RequestDateFromUser(CDate::ReadTime, false);
+    }
+    catch (const EmptyLineException & e)
+    {
+        timeStart = ev->GetStart();
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // End time
+    std::cout << "End time (" << ev->GetEnd().TimeToStr() << "):"<< std::endl;
+    while(true)
+    {
+        try
+        {
+            timeEnd = CDate::RequestDateFromUser(CDate::ReadTime, false);
+        }
+        catch (const EmptyLineException & e)
+        {
+            timeEnd = ev->GetEnd();
+        }
+
+        if (dateStart < dateEnd || timeEnd > timeStart)
+            break;
+        else
+            std::cout << "Event must end after it starts!" << std::endl;
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Title (" << ev->GetTitle() << "):" << std::endl;
+    getline(std::cin, title);
+    if (title.empty())
+        title = ev->GetTitle();
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Summary (" << ev->GetSummary() << "):" << std::endl;
+    getline(std::cin, summary);
+    if (summary.empty())
+        summary = ev->GetSummary();
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Place (" << ev->GetPlace() << "):" << std::endl;
+    getline(std::cin, place);
+    if (place.empty())
+        place = ev->GetPlace();
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Repetition (" << ev->GetRepeat() << "):" << std::endl;
+    while(true)
+    {
+        try
+        {
+            std::string line;
+            getline(std::cin, line);
+
+            if (line.empty())
+                repeat = ev->GetRepeat();
+            else
+            {
+                repeat = ParseRepeat(line);
+                delete ev->GetRepeat();
+            }
+            break;
+        }
+        catch (const std::invalid_argument & e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+    }
+
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    std::cout << "Priority (" << ev->GetPriority() << "):" << std::endl;
+    try
+    {
+        priority = requestIntInInterval(CEvent::MIN_PRIORITY, CEvent::MAX_PRIORITY, false);
+    }
+    catch (const EmptyLineException & e)
+    {
+        priority = ev->GetPriority();
+    }
+
+    ev->m_Title = title;
+    ev->m_Place = place;
+    ev->m_Summary = summary;
+    ev->m_Start = CDate::CombineDateTime(dateStart, timeStart);
+    ev->m_End = CDate::CombineDateTime(dateEnd, timeEnd);
+    ev->m_Priority = priority;
+    ev->m_Repeat = repeat;
 }
 
 void CEventEditor::Edit(CCalendar &calendar, const CEvent::Instance &instance)
@@ -105,9 +242,9 @@ void CEventEditor::Edit(CCalendar &calendar, const CEvent::Instance &instance)
     if (event->InstancesLeft() > 1)
     {
         std::stringstream ss;
-        ss << "This event repeats itself " << event->GetRepeat() << "." << std::endl
-           << "Do you want to edit all instances?" << std::endl
-           << "If you press \"n\", this instance of " << std::endl
+        ss << "This event repeats itself " << event->GetRepeat() << ". "
+           << "Do you want to edit all instances? "
+           << "If you press \"n\", this instance of "
            << "event will be edited separately.";
 
         if (requestConfirm(ss.str()))
@@ -116,9 +253,10 @@ void CEventEditor::Edit(CCalendar &calendar, const CEvent::Instance &instance)
         }
         else
         {
-            CEvent * cpy = new CEvent(*event);
+            CEvent * cpy = CEvent::CopyInstance(instance);
+
             event->DeleteInstance(instance.GetTime().first);
-            Edit(calendar, event);
+            Edit(calendar, cpy);
             calendar.AddEvent(cpy);
         }
     }

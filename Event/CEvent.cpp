@@ -7,6 +7,7 @@
 #include "../Date/CDate.h"
 #include "CEvent.h"
 #include "../utils/utils.h"
+#include "../RepeatStrategies/CEventRepeatDisabled.h"
 
 const int CEvent::MIN_PRIORITY = 1;
 const int CEvent::MAX_PRIORITY = 10;
@@ -31,26 +32,28 @@ CEvent::CEvent(
         throw std::invalid_argument("Event must end after it starts!");
 }
 
-CEvent::CEvent(const CEvent *ev) :
-m_Title(ev->m_Title),
-m_Place(ev->m_Place),
-m_Summary(ev->m_Summary),
-m_Start(ev->m_Start),
-m_End(ev->m_End),
-m_Priority(ev->m_Priority),
-m_Repeat(ev->m_Repeat->Clone())
+CEvent * CEvent::CopyInstance(const CEvent::Instance &instance)
 {
+    CEvent * ev = instance.GetEvent();
+    CDate::Interval time = instance.GetTime();
+
+    CEvent * res = new CEvent
+            (
+                    ev->m_Title,
+                    ev->m_Place,
+                    ev->m_Summary,
+                    time.first,
+                    time.second,
+                    ev->m_Priority,
+                    new CEventRepeatDisabled()
+            );
+
+    return res;
 }
 
 CEvent::~CEvent()
 {
     delete m_Repeat;
-}
-
-CDuration CEvent::GetDuration() const
-{
-    double diff = difftime(m_End.Count(), m_Start.Count());
-    return CDuration::Seconds(static_cast<int>(diff));
 }
 
 std::vector<CEvent::Instance> CEvent::FindInInterval(const CDate::Interval & interval) const
@@ -78,7 +81,7 @@ std::ostream & operator<<(std::ostream & s, const CEvent & ev)
     s << "Ends on: " << ev.m_End << std::endl;
     s << "Duration: " << ev.GetDuration() << std::endl;
     s << "Priority: " << ev.m_Priority << std::endl;
-    s << "Repetition: " << ev.m_Repeat->ToStr() << std::endl;
+    s << "Repetition: " << ev.m_Repeat << std::endl;
 
     return s;
 }

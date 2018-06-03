@@ -21,6 +21,8 @@ void CViewVector::Update()
     int maxIndexInArray = static_cast<int>(m_Events.size() - 1);
     const int maxShownIndex = MIN(nextMilestone, maxIndexInArray);
 
+    std::cout << std::endl;
+
     for (int i = m_PageIndex; i <= maxShownIndex; i++)
     {
         CEvent * event = m_Events[i].GetEvent();
@@ -30,7 +32,7 @@ void CViewVector::Update()
         std::cout << event;
     }
 
-    std::cout << "***************************" << std::endl;
+    std::cout << std::endl;
     std::cout << "Showing " << m_PageIndex + 1 << " - " << maxShownIndex + 1 << std::endl;
     std::cout << "Total " << m_Events.size() << std::endl;
 }

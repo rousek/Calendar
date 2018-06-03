@@ -15,13 +15,13 @@ class CCalendar
 public:
     ~CCalendar();
 
+    std::set<CEvent *> GetEvents() const { return m_Events; }
     void AddEvent(CEvent * ev);
     void DeleteEvent(CEvent * ev);
     void DeleteEvent(const CEvent::Instance & instance);
     std::vector<CEvent::Instance> FindInInterval(const CDate::Interval & interval) const;
     void Clear();
     std::vector<CEvent *> SearchEvents(const std::string & name) const;
-
 private:
     std::set<CEvent *> m_Events;
     CSuggestor<CEvent *, CEvent::GetSearchable> m_Suggestions;

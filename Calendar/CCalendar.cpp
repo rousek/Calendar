@@ -39,7 +39,7 @@ void CCalendar::DeleteEvent(const CEvent::Instance & instance)
         if (!allDeleted)
         {
             std::stringstream ss;
-            ss << "This event repeats itself " << event->GetRepeat() << "." << std::endl
+            ss << "This event repeats itself " << event->GetRepeat() << ". "
                << "Do you want to delete all instances?";
 
             allDeleted = requestConfirm(ss.str());

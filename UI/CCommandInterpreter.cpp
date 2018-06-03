@@ -9,6 +9,7 @@
 #include "CViewMonth.h"
 #include "CViewYear.h"
 #include "../Event/CEventEditor.h"
+#include "../Exporters/CCalendarExportDefault.h"
 
 CCommandInterpreter::CCommandInterpreter() :
         m_Position(CDate::Now()),
@@ -84,6 +85,14 @@ CViewBase<CEvent::Instance> * CCommandInterpreter::GetView()
     return m_Views[m_ViewIndex];
 }
 
+void CCommandInterpreter::UpdateView()
+{
+    if (m_SearchResults != nullptr)
+        Search(m_SearchQuery);
+    else
+        GetView()->Update();
+}
+
 void CCommandInterpreter::ClearSearch()
 {
     if (m_SearchResults != nullptr)
@@ -104,48 +113,52 @@ void CCommandInterpreter::Help()
 {
     std::cout << "Available commands are:" << std::endl << std::endl;
 
-    std::cout << "help" << std::endl;
-    std::cout << "Prints this help." << std::endl << std::endl;
+    std::cout << "help" << std::endl
+              << "Prints this help." << std::endl << std::endl;
 
-    std::cout << "add" << std::endl;
-    std::cout << "This command runs interactive editor" << std::endl;
-    std::cout << "which will help you create event and" << std::endl;
-    std::cout << "add it to the calendar. Has no parameters." << std::endl << std::endl;
+    std::cout << "exit" << std::endl
+              << "Exits app when in calendar, exits search when searching. "
+              << "\"exit\" when editing or creating event will have no effect." << std::endl << std::endl;
 
-    std::cout << "edit event_id" << std::endl;
-    std::cout << "Supported only in a few selected modes." << std::endl;
-    std::cout << "Pass this id as parameter." << std::endl << std::endl;
+    std::cout << "add" << std::endl
+              << "This command runs interactive editor "
+              << "which will help you create event and "
+              << "add it to the calendar. Has no parameters." << std::endl << std::endl;
 
-    std::cout << "delete event_id" << std::endl;
-    std::cout << "Delete event with given id." << std::endl << std::endl;
+    std::cout << "edit event_id" << std::endl
+              << "Supported only in a few selected modes. "
+              << "Pass this id as parameter." << std::endl << std::endl;
 
-    std::cout << "clear" << std::endl;
-    std::cout << "Clears calendar." << std::endl << std::endl;
+    std::cout << "delete event_id" << std::endl
+              << "Delete event with given id." << std::endl << std::endl;
 
-    std::cout << "next" << std::endl;
-    std::cout << "Goes to next page of used view." << std::endl;
-    std::cout << "For example if calendar is showing weeks,"<< std::endl;
-    std::cout << "Then this will go to next week." << std::endl << std::endl;
+    std::cout << "clear" << std::endl
+              << "Clears calendar." << std::endl << std::endl;
 
-    std::cout << "previous" << std::endl;
-    std::cout << "Same as \"next\" but backwards." << std::endl << std::endl;
+    std::cout << "next" << std::endl
+              << "Goes to next page of used view. "
+              << "For example if calendar is showing weeks, "
+              << "Then this will go to next week." << std::endl << std::endl;
 
-    std::cout << "zoom (in|out)" << std::endl;
-    std::cout << "Zooms into smaller or bigger timeframe." << std::endl;
-    std::cout << "For example \"zoom in\" when calendar" << std::endl;
-    std::cout << "is showing a whole year would show a month instead." << std::endl << std::endl;
+    std::cout << "previous" << std::endl
+              << "Same as \"next\" but backwards." << std::endl << std::endl;
 
-    std::cout << "show date_to_show" << std::endl;
-    std::cout << "If time_frame is left blank, then shows" << std::endl;
-    std::cout << "day which is given as parameter date_to_show." << std::endl;
-    std::cout << "Date format is dd. mm. yyyy" << std::endl << std::endl;
+    std::cout << "zoom (in|out)" << std::endl
+              << "Zooms into smaller or bigger timeframe. "
+              << "For example \"zoom in\" when calendar "
+              << "is showing a whole year would show a month instead." << std::endl << std::endl;
 
-    std::cout << "export file_name" << std::endl;
-    std::cout << "Exports whole calendar into file." << std::endl << std::endl;
+    std::cout << "show [date_to_show]" << std::endl
+              << "Shows events for date_to_show. "
+              << "Updates view if no parameter is passed. "
+              << "Date format is dd. mm. yyyy" << std::endl << std::endl;
 
-    std::cout << "import file_name" << std::endl;
-    std::cout << "Imports events from file. Does not" << std::endl;
-    std::cout << "remove existing events (if there are any)." << std::endl << std::endl;
+    std::cout << "export file_name" << std::endl
+              << "Exports whole calendar into file." << std::endl << std::endl;
+
+    std::cout << "import file_name" << std::endl
+              << "Imports events from file. Does not "
+              << "remove existing events (if there are any)." << std::endl << std::endl;
 }
 
 void CCommandInterpreter::Exit()
@@ -167,6 +180,7 @@ void CCommandInterpreter::Add(const std::vector<std::string> &params)
         return Help();
 
     CEventEditor::Create(m_Calendar);
+    UpdateView();
 }
 
 void CCommandInterpreter::Edit(const std::vector<std::string> &params)
@@ -181,6 +195,7 @@ void CCommandInterpreter::Edit(const std::vector<std::string> &params)
         evtID = parseInt(params[0]);
         CEvent::Instance ev = GetView()->Find(evtID);
         CEventEditor::Edit(m_Calendar, ev);
+        UpdateView();
     }
     catch (const std::invalid_argument & e)
     {
@@ -194,6 +209,8 @@ void CCommandInterpreter::Clear(const std::vector<std::string> &params)
         return Help();
 
     m_Calendar.Clear();
+
+    std::cout << "Calendar is now clear." << std::endl;
 }
 
 void CCommandInterpreter::Delete(const std::vector<std::string> &params)
@@ -208,12 +225,7 @@ void CCommandInterpreter::Delete(const std::vector<std::string> &params)
         evtID = parseInt(params[0]);
         CEvent::Instance ev = GetView()->Find(evtID);
         m_Calendar.DeleteEvent(ev);
-
-        // Update search results or view.
-        if (m_SearchResults != nullptr)
-            Search(m_SearchQuery);
-        else
-            GetView()->Update();
+        UpdateView();
     }
     catch (const std::invalid_argument & e)
     {
@@ -223,21 +235,9 @@ void CCommandInterpreter::Delete(const std::vector<std::string> &params)
 
 void CCommandInterpreter::Zoom(const std::vector<std::string> &params)
 {
-    int id = 0;
-
-    if (params.size() == 2)
-    {
-        try
-        {
-            id = parseInt(params[1]);
-        }
-        catch (...)
-        {
-            return Help();
-        }
-    }
-    else if (params.size() != 1)
+    if (params.size() != 1)
         return Help();
+
     else if (m_SearchResults != nullptr)
     {
         std::cout << "This view mode does not support this feature!" << std::endl;
@@ -289,7 +289,6 @@ void CCommandInterpreter::Search(const std::vector<std::string> &params)
     else
     {
         std::cout << "No matching events were found!" << std::endl;
-        GetView()->Update();
     }
 }
 
@@ -352,10 +351,51 @@ void CCommandInterpreter::Show(const std::vector<std::string> &params)
 
 void CCommandInterpreter::Import(const std::vector<std::string> &params)
 {
+    if (params.size() != 1)
+        return Help();
 
+    std::ifstream file;
+    file.open(params[0]);
+
+    if (!file.is_open())
+    {
+        std::cout << "File " << params[0] << " could not be opened." << std::endl;
+    }
+    else
+    {
+        CCalendarExportDefault importer;
+        try
+        {
+            importer.Import(file, m_Calendar);
+            std::cout << "File has been imported successfully!" << std::endl;
+            UpdateView();
+        }
+        catch (const std::invalid_argument & e)
+        {
+            std::cout << e.what() << std::endl;
+        }
+
+        file.close();
+    }
 }
 
 void CCommandInterpreter::Export(const std::vector<std::string> &params)
 {
+    if (params.size() != 1)
+        return Help();
 
+    std::ofstream file;
+    file.open(params[0]);
+
+    if (!file.is_open())
+    {
+        std::cout << "File " << params[0] << " could not be opened." << std::endl;
+    }
+    else
+    {
+        CCalendarExportDefault exporter;
+        exporter.Export(m_Calendar, file);
+        std::cout << "File has been exported successfully!" << std::endl;
+        file.close();
+    }
 }
