@@ -23,7 +23,7 @@ std::set<CDate> CEventRepeatWork::TestRange(const CDate &date, const CDate::Inte
     CDate current(from);
 
     current -= CDuration::Days(1);
-    current.SetHour(date.GetHour()).SetMinute(date.GetMinute());
+    current.SetHour(date.GetHour()).SetMinute(date.GetMinute()).SetSecond(0);
 
     while(current <= interval.second)
     {
