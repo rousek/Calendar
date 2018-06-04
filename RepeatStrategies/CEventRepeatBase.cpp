@@ -18,9 +18,9 @@ void CEventRepeatBase::Transfer(const CDate &from, const CDate &to)
 std::set<CDate> CEventRepeatBase::TestRangeWithExceptions(const CDate::Interval & timeOfEvent,
                                                           const CDate::Interval & interval)
 {
-    auto eventDuration = (timeOfEvent.second - timeOfEvent.first).GetSize();
+    auto eventDuration = timeOfEvent.second - timeOfEvent.first;
     CDate::Interval cpy(interval);
-    cpy.first = CDate(interval.first.Count() - eventDuration + 1);
+    cpy.first = CDate(interval.first - eventDuration + CDuration::Minutes(1));
     auto results = TestRange(timeOfEvent.first, cpy);
 
     auto itSkippedEnd = m_Skipped.upper_bound(cpy.second);

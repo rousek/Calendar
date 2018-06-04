@@ -57,7 +57,7 @@ void CViewVector::Next()
 
 CEvent::Instance CViewVector::Find(int ID) const
 {
-    int i = ID - 1;
+    size_t i = static_cast<size_t>(ID - 1);
 
     if (i < m_Events.size())
         return m_Events[i];

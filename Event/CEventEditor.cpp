@@ -129,10 +129,12 @@ void CEventEditor::Edit(CCalendar &calendar, CEvent *ev)
             dateEnd = ev->GetEnd();
         }
 
-        if (dateStart <= dateEnd)
-            break;
-        else
+        if (   dateStart.GetYear() > dateEnd.GetYear()
+            || dateStart.GetMonth() > dateEnd.GetMonth()
+            || dateStart.GetDay() > dateEnd.GetDay())
             std::cout << "Event must end after it starts!" << std::endl;
+        else
+            break;
     }
 
     // Start time
@@ -234,7 +236,7 @@ void CEventEditor::Edit(CCalendar &calendar, const CEvent::Instance &instance)
 {
     CEvent * event = instance.GetEvent();
 
-    if (event->InstancesLeft() > 1)
+    if (!instance.IsInstance() && event->InstancesLeft() > 1)
     {
         std::stringstream ss;
         ss << "This event repeats itself " << event->GetRepeat() << ". "

@@ -82,7 +82,7 @@ static inline std::string join(const std::vector<std::string> & vec, const std::
 {
     std::stringstream ss;
 
-    for (int i = 0; i < vec.size(); i++)
+    for (size_t i = 0; i < vec.size(); i++)
     {
         ss << vec[i];
         if (i != vec.size() - 1)

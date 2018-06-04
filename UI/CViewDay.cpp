@@ -26,16 +26,13 @@ void CViewDay::Update()
 
     std::vector<CEvent::Instance> instances;
 
-    for (auto instance : m_Calendar.FindInInterval(interval))
+    for (auto & instance : m_Calendar.FindInInterval(interval))
         instances.push_back(instance);
 
     std::sort(instances.begin(), instances.end());
 
     for (auto & instance : instances)
     {
-        CDate::Interval time = instance.GetTime();
-        CEvent * event = instance.GetEvent();
-
         total++;
 
         m_List.insert(std::make_pair(total, instance));

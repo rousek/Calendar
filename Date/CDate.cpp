@@ -36,9 +36,7 @@ CDate::CDate(time_t number)
     else if (number > std::numeric_limits<time_t>::max())
         throw std::invalid_argument("Date is too big!");
 
-    //number -= _timezone;
     m_Date.tm_isdst = -1;
-    //m_Date = *gmtime(&number);
     m_Date = *localtime(&number);
 }
 

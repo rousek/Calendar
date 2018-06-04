@@ -39,22 +39,6 @@ public:
     std::string ToStr() const override;
 private:
     int m_Day;
-    /**
-     * Solution to problem when m_Day > 0.
-     * @param date Original date of event.
-     * @param to End of interval.
-     * @param results Set of dates which will be returned from TestRange.
-     * @param current Beginning of interval with the same time as date parameter.
-     */
-    void Positive(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
-    /**
-     * Second half of TestRange. Solution to problem when m_Day < 0.
-     * @param date Original date of event.
-     * @param to End of interval.
-     * @param results Set of dates which will be returned from TestRange.
-     * @param current Beginning of interval with the same time as date parameter.
-     */
-    void Negative(const CDate &date, const CDate &to, std::set<CDate> &results, CDate current) const;
 };
 
 
