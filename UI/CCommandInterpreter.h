@@ -25,9 +25,13 @@ public:
     ~CCommandInterpreter();
 
     /**
-     * Runs the main loop.
+     * Runs the main loop. If fileName is not empty string, then imports the file.
      */
-    void Run();
+    void Run(const std::string & fileName);
+    /**
+     * Run with empty string.
+     */
+    void Run() { Run(""); }
     /**
      * Prints little welcome for user.
      */

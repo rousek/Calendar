@@ -63,11 +63,12 @@ void CCommandInterpreter::Interpret(const std::string & command, const std::vect
     }
 }
 
-void CCommandInterpreter::Run()
+void CCommandInterpreter::Run(const std::string & fileName)
 {
     Welcome();
-    std::cout << std::endl;
-    GetView()->Update();
+
+    if (!fileName.empty())
+        Import({fileName});
 
     m_Stopped = false;
 
@@ -112,7 +113,7 @@ void CCommandInterpreter::Welcome()
 {
     std::cout << "Welcome to Calendar!" << std::endl;
     std::cout << "Today is " << CDate::Now() << std::endl;
-    std::cout << "For help just type in \"help\" and press Enter." << std::endl;
+    std::cout << "For help just type in \"help\" and press Enter." << std::endl << std::endl;
 }
 
 void CCommandInterpreter::Help()
