@@ -22,11 +22,12 @@ public:
     std::vector<CEvent::Instance> FindInInterval(const CDate::Interval & interval) const;
     void Clear();
     std::vector<CEvent *> SearchEvents(const std::string & name) const;
+
+    static const int WAKE_UP_HOUR;
+    static const int SLEEPING_HOUR;
 private:
     std::set<CEvent *> m_Events;
     CSuggestor<CEvent *, CEvent::GetSearchable> m_Suggestions;
-
-    std::vector<CEvent::Instance> CheckCollisions(const CDate::Interval & interval);
 };
 
 

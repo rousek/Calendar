@@ -128,6 +128,20 @@ CDate& CDate::SetMinute(int m)
     }
 }
 
+CDate& CDate::SetSecond(int s)
+{
+    if (s >= 0 && s < 60)
+    {
+        m_Date.tm_sec = s;
+        mktime(&m_Date);
+        return *this;
+    }
+    else
+    {
+        throw std::invalid_argument("Invalid minute!");
+    }
+}
+
 bool CDate::operator == (const CDate & d2) const
 {
     return Count() == d2.Count();
@@ -231,7 +245,7 @@ CDate CDate::ReadTime(std::istream & s)
 
     tm.tm_sec = 0;
     tm.tm_mon = 0;
-    tm.tm_mday = 1;
+    tm.tm_mday = 2; // 2, because timestamp starts at 01:00, therefore anything before is unsupported.
     tm.tm_year = 70; // 1970
 
     if (ss.fail())
@@ -299,6 +313,11 @@ CDate CDate::EndOfMonth(int month, int year)
     tm.tm_sec = 59;
 
     return CDate(tm);
+}
+
+bool CDate::IsWorkDay(int weekday)
+{
+    return weekday != 0 && weekday != 6;
 }
 
 CDate CDate::Now()

@@ -8,12 +8,18 @@
 #include "CViewWeek.h"
 #include "CViewMonth.h"
 #include "CViewYear.h"
+#include "CViewDay.h"
 #include "../Event/CEventEditor.h"
 #include "../Exporters/CCalendarExportDefault.h"
 
 CCommandInterpreter::CCommandInterpreter() :
         m_Position(CDate::Now()),
-        m_Views{new CViewWeek(m_Calendar, m_Position), new CViewMonth(m_Calendar, m_Position), new CViewYear(m_Calendar, m_Position)},
+        m_Views{
+                new CViewDay(m_Calendar, m_Position),
+                new CViewWeek(m_Calendar, m_Position),
+                new CViewMonth(m_Calendar, m_Position),
+                new CViewYear(m_Calendar, m_Position)
+        },
         m_SearchResults(nullptr)
 
 {

@@ -6,6 +6,9 @@
 #include "CCalendar.h"
 #include "../utils/utils.h"
 
+const int CCalendar::WAKE_UP_HOUR = 6;
+const int CCalendar::SLEEPING_HOUR = 20;
+
 CCalendar::~CCalendar()
 {
     for (auto ev: m_Events)
@@ -25,14 +28,13 @@ void CCalendar::DeleteEvent(CEvent * ev)
 
     m_Events.erase(it);
     m_Suggestions.Remove(ev);
-    delete ev;
 }
 
 void CCalendar::DeleteEvent(const CEvent::Instance & instance)
 {
+    CEvent * event = instance.GetEvent();
     if (instance.IsInstance())
     {
-        CEvent * event = instance.GetEvent();
         CDate date = instance.GetTime().first;
         bool allDeleted = event->DeleteInstance(date);
 
@@ -46,8 +48,15 @@ void CCalendar::DeleteEvent(const CEvent::Instance & instance)
         }
 
         if (allDeleted)
+        {
             DeleteEvent(event);
-
+            delete event;
+        }
+    }
+    else
+    {
+        DeleteEvent(event);
+        delete event;
     }
 }
 
@@ -77,5 +86,4 @@ std::vector<CEvent::Instance> CCalendar::FindInInterval(const CDate::Interval & 
     }
 
     return results;
-};
-
+}

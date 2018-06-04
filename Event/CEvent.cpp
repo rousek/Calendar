@@ -12,6 +12,7 @@
 const int CEvent::MIN_PRIORITY = 1;
 const int CEvent::MAX_PRIORITY = 10;
 
+
 CEvent::CEvent(
                const std::string & title,
                const std::string & place,
@@ -59,7 +60,7 @@ CEvent::~CEvent()
 std::vector<CEvent::Instance> CEvent::FindInInterval(const CDate::Interval & interval) const
 {
     std::vector<CEvent::Instance> result;
-    auto beginnings = m_Repeat->TestRangeWithExceptions(m_Start, interval);
+    auto beginnings = m_Repeat->TestRangeWithExceptions(std::make_pair(m_Start, m_End), interval);
 
     for (auto & beginning : beginnings)
         result.push_back(Instance(const_cast<CEvent *>(this), beginning));
@@ -98,4 +99,20 @@ std::ostream & operator<<(std::ostream & s, const CEvent * ev)
 std::vector<std::string> CEvent::GetSearchable::operator()(CEvent * const & ev) const
 {
     return {ev->GetPlace(), ev->GetTitle()};
+}
+
+std::ostream & operator<<(std::ostream & s, const CEvent::Instance & instance)
+{
+    CEvent * ev = instance.m_Event;
+
+    s << "Title: " << ev->GetTitle() << std::endl;
+    s << "Place: " << ev->GetPlace() << std::endl;
+    s << "Summary: " << ev->GetSummary() << std::endl;
+    s << "Starts on: " << instance.m_Time.first << std::endl;
+    s << "Ends on: " << instance.m_Time.second << std::endl;
+    s << "Duration: " << ev->GetDuration() << std::endl;
+    s << "Priority: " << ev->GetPriority() << std::endl;
+    s << "Repetition: " << ev->GetRepeat() << std::endl;
+
+    return s;
 }

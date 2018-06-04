@@ -11,7 +11,7 @@
 class CCalendarExportDefault : public CCalendarExportBase
 {
 public:
-    ~CCalendarExportDefault() = default;
+    ~CCalendarExportDefault() override = default;
     void Import(std::ifstream & s, CCalendar & cal) const override;
     void Export(const CCalendar & cal, std::ofstream & s) const override;
 private:

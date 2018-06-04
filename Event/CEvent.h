@@ -36,6 +36,11 @@ public:
         CEvent * GetEvent() const { return m_Event; }
         CDate::Interval GetTime() const { return m_Time; }
         bool IsInstance() const { return m_IsInstance; }
+
+        bool operator<(const Instance & i2) { return m_Time < i2.m_Time; }
+        bool operator<=(const Instance & i2) { return m_Time <= i2.m_Time; }
+
+        friend std::ostream & operator<<(std::ostream & stream, const CEvent::Instance & instance);
     private:
         CEvent * m_Event;
         CDate::Interval m_Time;

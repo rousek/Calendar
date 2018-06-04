@@ -29,11 +29,20 @@ void CViewWeek::Update()
 
         std::stringstream title;
 
-        std::cout << "*************** -" << CDate::WeekdayStringShort(weekday) << " " << start.ShortDateToStr() << "- ***************" << std::endl;
+        std::cout << "*************** -"
+                  << CDate::WeekdayStringShort(weekday)
+                  << ", " << start.ShortDateToStr()
+                  << "- ***************" << std::endl;
 
         CDate::Interval interval = std::make_pair(start, end);
+        std::vector<CEvent::Instance> instances;
 
         for (auto instance : m_Calendar.FindInInterval(interval))
+            instances.push_back(instance);
+
+        std::sort(instances.begin(), instances.end());
+
+        for (auto & instance : instances)
         {
             CDate::Interval time = instance.GetTime();
             CEvent * event = instance.GetEvent();
@@ -46,7 +55,6 @@ void CViewWeek::Update()
                       << "[" << time.first.TimeToStr()
                       << " - " << time.second.TimeToStr()
                       << "]: " << event->GetTitle() << std::endl;
-
         }
         std::cout << std::endl;
 

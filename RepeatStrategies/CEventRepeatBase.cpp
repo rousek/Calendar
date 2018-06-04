@@ -15,14 +15,18 @@ void CEventRepeatBase::Transfer(const CDate &from, const CDate &to)
     m_Additional.insert(to);
 }
 
-std::set<CDate> CEventRepeatBase::TestRangeWithExceptions(const CDate & date, const CDate::Interval & interval)
+std::set<CDate> CEventRepeatBase::TestRangeWithExceptions(const CDate::Interval & timeOfEvent,
+                                                          const CDate::Interval & interval)
 {
-    auto results = TestRange(date, interval);
+    auto eventDuration = (timeOfEvent.second - timeOfEvent.first).GetSize();
+    CDate::Interval cpy(interval);
+    cpy.first = CDate(interval.first.Count() - eventDuration + 1);
+    auto results = TestRange(timeOfEvent.first, cpy);
 
-    auto itSkippedEnd = m_Skipped.upper_bound(interval.second);
-    auto itAddedEnd = m_Additional.upper_bound(interval.second);
+    auto itSkippedEnd = m_Skipped.upper_bound(cpy.second);
+    auto itAddedEnd = m_Additional.upper_bound(cpy.second);
 
-    for (auto itSkipped = m_Skipped.lower_bound(interval.first); itSkipped != itSkippedEnd; itSkipped++)
+    for (auto itSkipped = m_Skipped.lower_bound(cpy.first); itSkipped != itSkippedEnd; itSkipped++)
     {
         auto it = results.find(*itSkipped);
 
@@ -30,7 +34,7 @@ std::set<CDate> CEventRepeatBase::TestRangeWithExceptions(const CDate & date, co
             results.erase(it);
     }
 
-    for (auto itAdded = m_Additional.lower_bound(interval.first); itAdded != itAddedEnd; itAdded++)
+    for (auto itAdded = m_Additional.lower_bound(cpy.first); itAdded != itAddedEnd; itAdded++)
     {
         results.insert(*itAdded);
     }

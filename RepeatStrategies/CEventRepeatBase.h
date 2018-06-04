@@ -58,7 +58,7 @@ public:
     /**
      * Calls TestRange and filters skipped dates while adding additional dates.
      */
-    virtual std::set<CDate> TestRangeWithExceptions(const CDate & date, const CDate::Interval & interval);
+    virtual std::set<CDate> TestRangeWithExceptions(const CDate::Interval & timeOfEvent, const CDate::Interval & interval);
     /**
      * Simply converts list of beginnings into list of intervals.
      * @param beginnings

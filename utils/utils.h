@@ -12,9 +12,6 @@
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
 #define MAX(a,b) ((a) > (b) ? (a) : (b))
 
-// Stolen from https://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
-
-// trim from start (in place)
 static inline void trimLeft(std::string &s)
 {
     s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch)
@@ -23,7 +20,6 @@ static inline void trimLeft(std::string &s)
     }));
 }
 
-// trim from end (in place)
 static inline void trimRight(std::string &s)
 {
     s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch)

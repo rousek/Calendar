@@ -10,6 +10,9 @@
 #define SEM_CVIEWTIME_H
 
 
+/**
+ * Common parent of CViewDay, Week, Month and year.
+ */
 class CViewTime : public CViewBase<CEvent::Instance>
 {
 public:

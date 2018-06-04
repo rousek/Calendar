@@ -80,6 +80,7 @@ public:
     CDate & SetDay(int d);
     CDate & SetHour(int h);
     CDate & SetMinute(int m);
+    CDate & SetSecond(int s);
 
 
     bool operator == (const CDate & d2) const;
@@ -162,6 +163,11 @@ public:
      */
     static CDate EndOfMonth(int month, int year);
     /**
+     * @param weekday
+     * @return True if day is Saturday or Sunday.
+     */
+    static bool IsWorkDay(int weekday);
+    /**
      * @return Current time read by function time.
      */
     static CDate Now();
@@ -198,7 +204,6 @@ public:
     typedef std::pair<CDate, CDate> Interval;
 
     friend std::ostream & operator << (std::ostream & stream, const CDate & date);
-
     friend std::ostream & operator << (std::ostream & stream, const CDate::Interval & interval);
 
 private:

@@ -21,8 +21,6 @@
 class CCommandInterpreter
 {
 public:
-    CCalendar m_Calendar;
-
     CCommandInterpreter();
     ~CCommandInterpreter();
 
@@ -88,19 +86,34 @@ public:
      * @param params {date}
      */
     void Show(const std::vector<std::string> & params);
+    /**
+     * Losslessly exports calendar.
+     * @param params {filename}
+     */
     void Export(const std::vector<std::string> & params);
+    /**
+     * Imports file that was exported by Export.
+     * @param params {filename}
+     */
     void Import(const std::vector<std::string> & params);
+    /**
+     * @return Currently used view.
+     */
     CViewBase<CEvent::Instance> * GetView();
+    /**
+     * Updates calendar view or search results.
+     */
     void UpdateView();
 private:
     typedef std::function<void (const std::vector<std::string> &)> command_function;
     typedef std::unordered_map<std::string, command_function> command_map;
 
+    CCalendar m_Calendar;
     CDate m_Position;
     command_map m_Commands;
     bool m_Stopped;
     int m_ViewIndex;
-    CViewTime * m_Views[3];
+    CViewTime * m_Views[4];
     std::vector<std::string> m_SearchQuery;
     CViewVector * m_SearchResults;
 
@@ -109,7 +122,9 @@ private:
      * Prints help otherwise.
      */
     void Interpret(const std::string & command, const std::vector<std::string> & params);
-
+    /**
+     * Resets search.
+     */
     void ClearSearch();
 };
 
