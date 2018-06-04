@@ -332,6 +332,16 @@ void CEventEditor::ResolveCollisions(CCalendar &calendar, CEvent *ev)
     if (collisions.empty()) // no resolution needed
         return;
 
+    CDuration maxDuration = CDuration::Hours(CCalendar::SLEEPING_HOUR - CCalendar::WAKE_UP_HOUR);
+
+    if ((eventEnd - eventStart).GetSize() > maxDuration.GetSize())
+    {
+        std::cout << "Collision has been detected. However event is too long to use "
+                  << "this algorithm on it. Event will be added to calendar and you "
+                  << "have to find free date yourself and edit it afterwards." << std::endl;
+        return;
+    }
+
     CDate morning = eventStart;
     morning.SetHour(CCalendar::WAKE_UP_HOUR).SetMinute(0);
 

@@ -99,27 +99,27 @@ public:
     CDuration operator-(const CDate & d2) const;
 
     /**
-     * Return year, month and day in format set by CDate::DATE_FORMAT.
+     * Return year, month and day.
      * @return string
      */
     std::string DateToStr() const;
 
     /**
-     * Return month and day in format set by CDate::DATE_FORMAT.
+     * Return month and day.
      * @return string
      */
     std::string ShortDateToStr() const;
 
 
     /**
-     * Return hour and minute in format set by CDate::TIME_FORMAT.
+     * Return hour and minute.
      * @return string
      */
     std::string TimeToStr() const;
 
 
     /**
-     * Reads year, month, day in format set by DATE_FORMAT.
+     * Reads year, month, day.
      * Throws invalid_argument exception if format is incorrect.
      * @param s istream to be read.
      * @return CDate with set year, month and day.
@@ -127,12 +127,20 @@ public:
     static CDate ReadDate(std::istream & s);
 
     /**
-     * Reads hour, minute in format set by TIME_FORMAT.
+     * Reads hour, minute.
      * Throws invalid_argument exception if format is incorrect.
      * @param s istream to be read.
      * @return CDate with set hour and minute.
      */
     static CDate ReadTime(std::istream & s);
+
+    /**
+     * Reads day, month, year and hour, minute.
+     * Throws invalid_argument exception if format is incorrect.
+     * @param s istream to be read.
+     * @return CDate with set hour and minute.
+     */
+    static CDate ReadWholeDate(std::istream & s);
 
     /**
      *
@@ -200,7 +208,6 @@ public:
      */
     static char const * WeekdayStringLong(int weekday);
 
-
     typedef std::pair<CDate, CDate> Interval;
 
     friend std::ostream & operator << (std::ostream & stream, const CDate & date);
@@ -209,10 +216,12 @@ public:
 private:
     tm m_Date;
 
-    static const char TIME_FORMAT[];
-    static const char DATE_FORMAT[];
-    static const char SHORT_DATE_FORMAT[];
-    static const char WHOLE_FORMAT[];
+    CDate & _SetYear(int y);
+    CDate & _SetMonth(int m);
+    CDate & _SetDay(int d);
+    CDate & _SetHour(int h);
+    CDate & _SetMinute(int m);
+    CDate & _SetSecond(int s);
 };
 
 #endif //SEM_CDATE_H

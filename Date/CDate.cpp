@@ -7,27 +7,17 @@
 #include <iomanip>
 #include <sstream>
 
-const char CDate::TIME_FORMAT[] = "%H:%M";
-const char CDate::DATE_FORMAT[] = "%d. %m. %Y";
-const char CDate::SHORT_DATE_FORMAT[] = "%d. %m.";
-const char CDate::WHOLE_FORMAT[] = "%d. %m. %Y %H:%M";
-
 CDate::CDate()
 {
     m_Date = {0};
     m_Date.tm_isdst = -1;
+    mktime(&m_Date);
 }
 
 CDate::CDate(const std::string &str)
 {
-    m_Date = {0};
-
     std::stringstream ss(str);
-    ss >> std::get_time(&m_Date, WHOLE_FORMAT);
-    m_Date.tm_isdst = -1;
-
-    if (mktime(&m_Date) == -1)
-        throw std::invalid_argument("Invalid date string!");
+    m_Date = ReadWholeDate(ss).m_Date;
 }
 
 CDate::CDate(const tm & tm)
@@ -42,8 +32,8 @@ CDate::CDate(const tm & tm)
 CDate::CDate(time_t number)
 {
     if (number < 0)
-        throw std::invalid_argument("Date must be at least 01. 01. 1970!");
-    if (number > std::numeric_limits<time_t>::max())
+        number = 0;
+    else if (number > std::numeric_limits<time_t>::max())
         throw std::invalid_argument("Date is too big!");
 
     //number -= _timezone;
@@ -60,10 +50,51 @@ time_t CDate::Count() const
 
 CDate& CDate::SetYear(int y)
 {
+    _SetYear(y);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::SetMonth(int m)
+{
+    _SetMonth(m);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::SetDay(int d)
+{
+    _SetDay(d);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::SetHour(int h)
+{
+    _SetHour(h);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::SetMinute(int m)
+{
+    _SetMinute(m);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::SetSecond(int s)
+{
+    _SetSecond(s);
+    mktime(&m_Date);
+    return *this;
+}
+
+CDate& CDate::_SetYear(int y)
+{
     if (y >= 1970)
     {
         m_Date.tm_year = y - 1900;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -72,12 +103,11 @@ CDate& CDate::SetYear(int y)
     }
 }
 
-CDate& CDate::SetMonth(int m)
+CDate& CDate::_SetMonth(int m)
 {
     if (m > 0 && m < 13)
     {
         m_Date.tm_mon = m - 1;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -86,12 +116,11 @@ CDate& CDate::SetMonth(int m)
     }
 }
 
-CDate& CDate::SetDay(int d)
+CDate& CDate::_SetDay(int d)
 {
     if (d >= 1 && d <= MonthLength(GetMonth(), GetYear()))
     {
         m_Date.tm_mday = d;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -100,12 +129,11 @@ CDate& CDate::SetDay(int d)
     }
 }
 
-CDate& CDate::SetHour(int h)
+CDate& CDate::_SetHour(int h)
 {
     if (h >= 0 && h < 24)
     {
         m_Date.tm_hour = h;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -114,12 +142,11 @@ CDate& CDate::SetHour(int h)
     }
 }
 
-CDate& CDate::SetMinute(int m)
+CDate& CDate::_SetMinute(int m)
 {
     if (m >= 0 && m < 60)
     {
         m_Date.tm_min = m;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -128,12 +155,11 @@ CDate& CDate::SetMinute(int m)
     }
 }
 
-CDate& CDate::SetSecond(int s)
+CDate& CDate::_SetSecond(int s)
 {
     if (s >= 0 && s < 60)
     {
         m_Date.tm_sec = s;
-        mktime(&m_Date);
         return *this;
     }
     else
@@ -210,7 +236,6 @@ CDuration CDate::operator-(const CDate &d2) const
 
 CDate CDate::ReadDate(std::istream & s)
 {
-    tm tm = {};
     std::string line;
     getline(s, line);
     std::stringstream ss(line);
@@ -218,22 +243,22 @@ CDate CDate::ReadDate(std::istream & s)
     if (line.empty())
         throw EmptyLineException();
 
-    ss >> std::get_time(&tm, DATE_FORMAT);
+    int day, month, year;
+    char tmp;
 
-    tm.tm_hour = 0;
-    tm.tm_min = 0;
-    tm.tm_sec = 0;
+    if (   !(ss >> day) || !(ss >> tmp) || tmp != '.'
+        || !(ss >> month) || !(ss >> tmp) || tmp != '.'
+        || !(ss >> year))
+        throw std::invalid_argument("Invalid date! Date format: dd. mm. YYYY");
 
-    if (ss.fail())
-        throw std::invalid_argument("Invalid date! Date format: DD. MM. YYYY");
-
-    return CDate(tm);
+    CDate res;
+    res._SetHour(1)._SetMinute(0)._SetSecond(0)._SetYear(year)._SetMonth(month)._SetDay(day);
+    mktime(&res.m_Date);
+    return res;
 }
 
 CDate CDate::ReadTime(std::istream & s)
 {
-
-    tm tm = {};
     std::string line;
     getline(s, line);
     std::stringstream ss(line);
@@ -241,17 +266,42 @@ CDate CDate::ReadTime(std::istream & s)
     if (line.empty())
         throw EmptyLineException();
 
-    ss >> std::get_time(&tm, TIME_FORMAT);
+    int hour, minute;
+    char tmp;
 
-    tm.tm_sec = 0;
-    tm.tm_mon = 0;
-    tm.tm_mday = 2; // 2, because timestamp starts at 01:00, therefore anything before is unsupported.
-    tm.tm_year = 70; // 1970
+    if (!(ss >> hour) || !(ss >> tmp) || tmp != ':' || !(ss >> minute))
+        throw std::invalid_argument("Invalid date! Date format: HH:MM");
 
-    if (ss.fail())
-        throw std::invalid_argument("Invalid time! Supported time format: HH:MM");
+    CDate res;
+    res._SetYear(1970)._SetMonth(1)._SetDay(2)._SetHour(hour)._SetMinute(minute)._SetSecond(0);
+    mktime(&res.m_Date);
+    return res;
+}
 
-    return CDate(tm);
+CDate CDate::ReadWholeDate(std::istream & s)
+{
+    std::string line;
+    getline(s, line);
+    std::stringstream ss(line);
+
+    if (line.empty())
+        throw EmptyLineException();
+
+    int day, month, year, hour, minute;
+    char tmp;
+
+    if (   !(ss >> day) || !(ss >> tmp) || tmp != '.'
+           || !(ss >> month) || !(ss >> tmp) || tmp != '.'
+           || !(ss >> year)
+           || !(ss >> hour)
+           || !(ss >> tmp) || tmp != ':'
+           || !(ss >> minute))
+        throw std::invalid_argument("Invalid date! Date format: dd. mm. YYYY HH:MM");
+
+    CDate res;
+    res._SetYear(year)._SetMonth(month)._SetDay(day)._SetHour(hour)._SetMinute(minute)._SetSecond(0);
+    mktime(&res.m_Date);
+    return res;
 }
 
 CDate CDate::RequestDateFromUser(std::function<CDate (std::istream &)> fn, bool required)
@@ -332,14 +382,22 @@ CDate CDate::Now()
 std::string CDate::DateToStr() const
 {
     std::stringstream ss;
-    ss << std::put_time(&m_Date, DATE_FORMAT);
+    ss << ShortDateToStr() << " " << GetYear();
+
     return ss.str();
 }
 
 std::string CDate::ShortDateToStr() const
 {
     std::stringstream ss;
-    ss << std::put_time(&m_Date, SHORT_DATE_FORMAT);
+    if (GetDay() < 10)
+        ss << 0;
+    ss << GetDay() << ". ";
+
+    if (GetMonth() < 10)
+        ss << 0;
+    ss << GetMonth() << ".";
+
     return ss.str();
 }
 
@@ -347,13 +405,20 @@ std::string CDate::ShortDateToStr() const
 std::string CDate::TimeToStr() const
 {
     std::stringstream ss;
-    ss << std::put_time(&m_Date, TIME_FORMAT);
+    if (GetHour() < 10)
+        ss << 0;
+    ss << GetHour() << ":";
+
+    if (GetMinute() < 10)
+        ss << 0;
+    ss<< GetMinute();
+
     return ss.str();
 }
 
 std::ostream & operator << (std::ostream & stream, const CDate & date)
 {
-    return stream << std::put_time(&date.m_Date, CDate::WHOLE_FORMAT);
+    return stream << date.DateToStr() << " " << date.TimeToStr();
 }
 
 std::ostream & operator << (std::ostream & stream, const CDate::Interval & interval)
